@@ -7,49 +7,39 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+//import org.springframework.web.bind.annotation.RequestParam;
 
-import es.ucm.fdi.iw.matchandgo.controller.RootController.chatPersona.mensaje;
+import es.ucm.fdi.iw.matchandgo.mensajes.Mensaje;
 
 @Controller
 public class RootController {
 
     private static Logger log = LogManager.getLogger(RootController.class);
 
-    //CLASE AUXILIAR PARA LA PANTALLA "mensajes"
-    private class chatPersona {
-        private String persona;
 
-        private class mensaje {
-            private String contenido;
-            private String sender; //La persona que lo envía
+    // Crea unos chats de ejemplo para la vista "mensajes"
+    public Mensaje[] generarChatPorDefecto() {
+        Mensaje[] res = new Mensaje[2];
 
-            public mensaje(String c, String s) {
-                this.contenido = c;
-                this.sender = s;
-            }
-        }
-        private mensaje[] mensajes;
-
-        public chatPersona(String persona, mensaje[]mensajes) {
-            this.persona = persona;
-            this.mensajes = mensajes;
-        }
-    }
-
-
-    public chatPersona[] generarChatsPorDefecto() {
-        chatPersona[] res;
-        
-        //res[0] = chatPersona("Manuel", [{"Buenas tardes", "Pepe"}, ])
+        // Creamos el chat de ejemplo
+        res[0] = new Mensaje("Buenas tardes!", "Rodolfo");
+        res[1] = new Mensaje("Hombre, cuanto tiempo!", "Laura");
 
         return res;
     }
 
     @GetMapping("/mensajes")
-    public Object mostrarMensajes(Model model, @RequestParam String persona) {
+    public String mostrarMensajes(Model model, HttpSession session) {
 
-        chatPersona[] chats = generarChatsPorDefecto();
-        return null;
+        Mensaje[] mensajes = generarChatPorDefecto();
+        String[] contactos = new String[2];
+        contactos[0] = "Laura";
+        contactos[1] = "Samuel";
+
+        model.addAttribute("mensajes", mensajes);
+        model.addAttribute("contactos", contactos);
+        session.setAttribute("usuario", "Rodolfo");
+
+        return "mensajes";
     }
 }

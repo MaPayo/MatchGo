@@ -1,16 +1,34 @@
 <!DOCTYPE html>
 <html xmlns:th="http://thymeleaf.org" lang="es-ES">
     <head>
-        <link rel="stylesheet" href="" media="screen and (max-width: 1920)"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" media="screen and (max-width: 1920)"/>
+        <link rel="shortcut icon" type="image/png" th:href="@{/images/icon.png}">
+        <title>Mensajes</title>
+        <!-- <th:block th:replace="fragments/header ::header" /></th:block> -->
     </head>
     <body>
-        <script>
-            let codigo = "";
-            array.forEach(e => {
-                codigo += "<div class ='blabla'></div>"
-            });
-            ${body}.append(codigo);
-            //<!-- ${} -->asdfads
-        </script>
+        <nav th:replace="fragments/nav.html :: nav">
+            El navegador
+        </nav>
+
+        <div class="contenedorGeneral">
+            <div class="contenedorContactos" th:each="contacto: ${contactos}">
+                <div class="contenedorContacto">
+                    <p th:text="${ contacto }"></p>
+                </div>
+            </div>
+            <div class="contenedorMensajes" th:each="mensaje: ${mensajes}">
+                <!-- Si el mensaje es mio (el usuario) se muestra como tal -->
+                <div class="mensajeMio" th:if="${#{mensaje.sender} == ${session.usuario}}">
+                    <p th:text="#{mensaje.getContenido()}"></p>
+                </div>
+                <!-- Si el mensaje es de mi contacto se muestra como tal -->
+                <div class="mensajeContacto" th:unless="${#{mensaje.sender} == ${session.usuario}}">
+                    <p th:text="#{mensaje.getContenido()}"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- <footer th:replace="fragments/footer.html :: footer"> El Footer de la página </footer> -->
     </body>
 </html>
