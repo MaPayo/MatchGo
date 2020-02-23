@@ -11,6 +11,8 @@ nav{
     margin-left: 2em;
     margin-top:auto;
     height: 4em;
+    flex-direction: column;
+    background: linear-gradient(to bottom, green, lightgreen);
 }
 
 a{
@@ -57,4 +59,72 @@ header h1{
     margin-top:auto;
     margin-bottom: auto;
     font-family: 'Permanent Marker';
+}
+.principal{
+    margin-top: 9em;
+    height: 100%;
+    text-align: center;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+form{
+    border-radius: 3em;
+    background-color: rgba(129, 243, 76, 0.795);
+    width: 40%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1.5em;
+    border: 1px black solid;
+}
+.form_texto{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.form_texto label{
+    flex-grow: 1;
+    margin-right: auto;
+}
+
+.form_texto input{
+    flex-grow: 4;
+    height: 1.5em;
+    margin-right: 0.5em;
+}
+
+.boton{
+    padding-top:0.5em;
+    padding-bottom:0.5em;
+    padding-left: 2em;
+    padding-right: 2em;
+    border:1px solid black;
+    background: linear-gradient(to right, rgba(240, 108, 108, 0.774), rgba(247, 29, 66, 0.76));
+    text-decoration: none;
+    color:white;
+}
+.datosPerfil{
+    margin-top: 9em;
+    height: 30%;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+    justify-content: center;
+}
+
+
+
+.datosPerfil img{
+    width: 7em;
+    height: 7em;
+    border-radius: 50%;
+}
+.divBoton{
+    margin-top: 1em;
+    margin-left: auto;
+    margin-right: auto;
 }
