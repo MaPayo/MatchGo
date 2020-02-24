@@ -1,14 +1,12 @@
 *{
     margin:0;
     padding: 0;
-    /* border:1px solid red; */
 }
 
 nav{
     display: flex;
     flex-direction: row;
     width: 100%;
-    margin-left: 2em;
     margin-top:auto;
     height: 4em;
     flex-direction: column;
@@ -30,6 +28,10 @@ nav a{
     color:white;
     font-size: 1.7em;
     margin-top:auto;
+}
+
+nav > a > img {
+	width: 50px;
 }
 
 nav p{
@@ -67,16 +69,9 @@ header h1{
     width: 80%;
     margin-left: auto;
     margin-right: auto;
-}/*
-form{
-    border-radius: 3em;
-    background-color: rgba(129, 243, 76, 0.795);
-    width: 40%;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 1.5em;
-    border: 1px black solid;
-}*/
+
+}
+
 .form_texto{
     display: flex;
     flex-direction: row;
@@ -284,4 +279,7 @@ footer #imagenLarga {
 
 footer #imagenNormal {
     display: inline;
+
+li > a > img {
+	 width: 50px;
 }
