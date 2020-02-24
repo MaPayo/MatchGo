@@ -1,0 +1,65 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.placeImage{
+    width: 5%;
+    margin-right: 2em;
+}
+/*Añadido input y .busqueda*/
+.eventCard, input{
+    margin: 10px 10%;
+    border: 1px solid black;
+    box-shadow: 3px 3px 10px grey;
+    padding: 1em;
+    border-radius: 2em;
+}
+
+input{
+    margin-right: 10px !important;
+    justify-content: center;
+}
+.busqueda{
+    background-color: #ECECEC;
+    color: black!important;
+}
+.cardLowerContainer button, .busqueda{
+    width: 8em;
+    height: 3em;
+    border-radius: 0.5em;
+    display: inline-block;
+    color: white;
+}
+/*Fin de los cambios*/
+.cardUpperContainer {
+    display: flex;
+    border-bottom: 0.3px solid black;
+    padding-bottom: 1em;
+}
+
+.category{
+    background-color: #ECECEC;
+}
+.cardLowerContainer{
+    margin-top: 1em;
+    display: flex;
+    justify-content: space-between;
+}
+.localitation{
+    float: right;
+}
+
+
+.tag{
+    margin: 0.2em 0.2em;
+    border: 0.5px solid black;
+    padding: 0.2em;
+    border-radius: 0.5em;
+    display: inline-block;
+}
+
+
+.tagBox{
+    padding: 0.5em;
+}
