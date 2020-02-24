@@ -4,9 +4,17 @@
 <meta charset="UTF-8">
 <link rel="stylesheet" th:href="@{/css/styles.css}"/>
 <title>Insert title here</title>
+<link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" media="screen">
+<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" media="screen">
+<nav th:replace="fragments/nav.html :: nav">
+            El navegador
+        </nav>
 </head>
 <body>
-	<div class="eventCard">
+
+<div >
+
+	<div th:each="element: ${listnum}" class="eventCard" >
             <div class="cardUpperContainer">
                 <img th:src="@{/img/noImage.png}" alt="" class="placeImage">
                 <h2><span th:text="${titulo}"></span>
@@ -25,5 +33,12 @@
                 </div>
             </div>
         </div>
+
+
+
+</div>
+
+        
+      <footer th:replace="fragments/footer.html :: footer"> El Footer de la página </footer>
 </body>
 </html>
