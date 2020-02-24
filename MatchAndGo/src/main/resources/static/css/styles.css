@@ -101,3 +101,45 @@
 	margin: auto;
 }
 
+.margin{
+	margin-top: 1em;
+}
+
+nav{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin-left: 2em;
+    margin-top:auto;
+    height: 4em;
+    flex-direction: column;
+    background: linear-gradient(to bottom, green, lightgreen);
+}
+
+a{
+    text-decoration: none;
+    color:black;
+}
+
+a:visited{
+    color:black;
+}
+
+nav a{
+    margin-left: 1em;
+    /*text-decoration: none;*/
+    color:white;
+    font-size: 1.7em;
+    margin-top:auto;
+}
+
+nav p{
+    margin-left: 1em;
+    margin-bottom: auto;
+    margin-top: auto;
+}
+
+nav a:visited{
+    color:white;
+}
+
