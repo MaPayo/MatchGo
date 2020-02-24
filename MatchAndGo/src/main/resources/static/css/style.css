@@ -152,7 +152,7 @@ form{
     flex-basis: 1%;
     min-width: 1%;
     border-right: 1px lightgreen solid;
-    background-color:  rgba(161, 252, 5, 0.432);
+    background-color: whitesmoke;
 }
 
 .contenedorContacto {
@@ -174,7 +174,7 @@ form{
     flex-shrink: 3;
     flex-basis: 3%;
     min-width: 3%;
-    background-color: rgba(82, 198, 202, 0.397);
+    background-color: whitesmoke;
 }
 
 .mensajes {
