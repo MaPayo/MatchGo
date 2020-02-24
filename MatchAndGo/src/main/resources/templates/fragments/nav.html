@@ -9,7 +9,7 @@
 <body>
     <nav th:fragment="nav">
         <a class="logo" href="" th:href="@{/}">
-            <img id= imagenNormal src="/images/logo.jpg"></a>
+            <img id= imagenNormal src="/images/logo.png"></a>
         <!-- El menú cambiara en función del rol de usuario -->
         <div class="menu" th:if="${session.user}">
             <a th:href="@{/user/{id}(id=${session.user.id})}">Mi perfil</a>

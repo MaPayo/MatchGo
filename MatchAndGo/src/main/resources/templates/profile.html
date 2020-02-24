@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-16">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" media="screen">
+    <link rel="stylesheet" type="text/css" href="style.css" media="screen">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" type="image/png" th:href="@{/images/icon.png}" />
     <title>Registro</title>
@@ -20,23 +20,31 @@
         <div class="datosPerfil" th:if="${session.user}">
             <img th:src="@{/user/{id}/photo(id=${user.id})}">
             <div class="datos_texto">
-                <h2 id="nombre"> Nombre del usuario<span th:text="${user.nombre}">Pepito</span></h2>
+                <h2 id="nombre"> Nombre del usuario<span th:text="${user.nombre}"> Pepito</span></h2>
                 <p id="edad">Edad usuario <span th:text="${user.edad}"> 25</span></p>
                 <p id="sexo">Sexo usuario <span th:text="${user.sexo}"> Hombre</span></p>
                 <p id="valoracion">Valoración<span th:text="${user.valoracion}"> 3 estrellas</span></p>
             </div>
-            <div class="intereses_usuario">
-                <h2 class="centrado">Intereses:</h2>
-                <ul class="listaIntereses">
-                    <li th:each="tag: ${user.intereses}">
-                        <p><span th:text="${tag}">tag</span> Aqui van las tags cargadas del servidor</p>
-                    </li>
-                </ul>
-            </div>
+         
             <!-- Este div solo si es tu perfil-->
-            <div class="divBoton" th:if="(${session.user.id} eq ${user.id})">
-                <a class="boton" id="Modificar" th:href="@{/usuario/modificarPerfil}">Modificar perfil</a>
-            </div>
+          
+        </div>
+        <div class="divBoton" th:if="(${session.user.id} eq ${user.id})">
+            <a class="boton" id="Modificar" th:href="@{/usuario/modificarPerfil}">Modificar perfil</a>
+        </div>
+        <div class="intereses_usuario">
+            <h2 class="centrado">Intereses:</h2>
+            <ul class="listaIntereses">
+                <li th:each="tag: ${user.intereses}">
+                    <p><span th:text="${tag}">tag</span> Aqui van las tags cargadas del servidor</p>
+                </li>
+                <li th:each="tag: ${user.intereses}">
+                    <p><span th:text="${tag}">tag</span> Aqui van las tags cargadas del servidor</p>
+                </li>
+                <li th:each="tag: ${user.intereses}">
+                    <p><span th:text="${tag}">tag</span> Aqui van las tags cargadas del servidor</p>
+                </li>
+            </ul>
         </div>
         <!-- Este div solo se muestra si no hay session-->
         <div class="form_registro" th:unless="${session.user}">
