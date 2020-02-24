@@ -1,16 +1,50 @@
 <!DOCTYPE html>
 <html xmlns:th="http://thymeleaf.org" lang="es-ES">
     <head>
-        <link rel="stylesheet" href="" media="screen and (max-width: 1920)"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" media="screen"/>
+        <link rel="shortcut icon" type="image/png" th:href="@{/img/logo.png}">
+        <title>Mensajes</title>
+        <!-- <th:block th:replace="fragments/header :: header" /></th:block> -->
     </head>
     <body>
-        <script>
-            let codigo = "";
-            array.forEach(e => {
-                codigo += "<div class ='blabla'></div>"
-            });
-            ${body}.append(codigo);
-            //<!-- ${} -->
-        </script>
+        <nav th:replace="fragments/nav.html :: nav">
+            El navegador
+        </nav>
+
+        <div class="contenedorGeneral">
+            <div class="contenedorContactos">
+                <div class="contenedorContacto" th:each="contacto: ${contactos}">
+                    <p th:text="${ contacto }"></p>
+                </div>
+            </div>
+            <div class="contenedorMensajes">
+                <form class="escribirMensaje" action="" method="POST">
+                    <textarea name="textoMensaje" id="texto" class="mensaje" required></textarea>
+                    <!-- <input type="textarea" name="textoMensaje" id="texto" class="mensaje" required> -->
+                    <input type="submit" class="botonMensaje" name="boton" value="enviar">
+                </form>
+                <div class="mensajes">
+                    <div class="mensaje" th:each="mensaje: ${mensajes}">
+                        <div class="mensaje" th:switch="__${mensaje.getSender()}__">
+
+                            <!-- Si el mensaje es mio (el usuario) se muestra como tal -->
+                            <div class="mensajeMio" th:case="__${session.usuario}__">
+                                <pre th:text="${mensaje.getContenido()}"></pre>
+                            </div>
+
+                            <!-- Si el mensaje es de mi contacto se muestra como tal -->
+                            <div class="mensajeContacto" th:case="__${contacto}__">
+                                <pre th:text="${mensaje.getContenido()}"></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="contactoMensaje">
+                    <p th:text="${contacto}"></p>
+                </div>
+            </div>
+        </div>
+
+        <footer th:replace="fragments/footer.html :: footer"> El Footer de la página </footer>
     </body>
 </html>

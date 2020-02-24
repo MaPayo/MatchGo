@@ -1,3 +1,4 @@
+@charset "UTF-8";
 *{
     margin: 0;
     padding: 0;
@@ -7,6 +8,7 @@
     width: 5%;
     margin-right: 2em;
 }
+
 /*Añadido input y .busqueda*/
 .eventCard, input{
     margin: 10px 10%;
@@ -46,10 +48,14 @@ input{
     display: flex;
     justify-content: space-between;
 }
-.localitation{
-    float: right;
-}
 
+.cardLowerContainer button{
+    width: 8em;
+    height: 3em;
+    border-radius: 0.5em;
+    display: inline-block;
+    color: white;
+}
 
 .tag{
     margin: 0.2em 0.2em;
@@ -59,7 +65,97 @@ input{
     display: inline-block;
 }
 
+.acceptButton{
+    background-color: green;
+}
+
+.declineButton{
+    background-color: red;
+}
 
 .tagBox{
     padding: 0.5em;
+}
+
+.formEvento{
+	margin: 10% 18%;
+	border: 1px solid black;
+    padding: 2em;
+}
+
+.eventImg{
+	width: 7em;
+}
+
+.block > textarea{
+	display: block;
+    margin-top: 2em;
+    width: 20em;
+    height: 5em;
+}
+
+.block > input{
+	width: 20em;
+    height: 1.5em;
+}
+
+.block > select{
+	width: 20em;
+    height: 1.8em;
+}
+
+.block{
+	margin: 0em 2em;
+}
+
+.cardLowerContainer select{
+	width: 20em;
+    margin: 1em 2em;
+    height: 1.5em;
+}
+
+.marginAuto{
+	margin: auto;
+}
+
+.margin{
+	margin-top: 1em;
+}
+
+nav{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin-left: 2em;
+    margin-top:auto;
+    height: 4em;
+    flex-direction: column;
+    background: linear-gradient(to bottom, green, lightgreen);
+}
+
+a{
+    text-decoration: none;
+    color:black;
+}
+
+a:visited{
+    color:black;
+}
+
+nav a{
+    margin-left: 1em;
+    /*text-decoration: none;*/
+    color:white;
+    font-size: 1.7em;
+    margin-top:auto;
+}
+
+nav p{
+    margin-left: 1em;
+    margin-bottom: auto;
+    margin-top: auto;
+}
+
+nav a:visited{
+    color:white;
 }
