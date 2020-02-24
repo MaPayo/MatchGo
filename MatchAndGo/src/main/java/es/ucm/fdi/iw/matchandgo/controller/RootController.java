@@ -1,5 +1,7 @@
 package es.ucm.fdi.iw.matchandgo.controller;
 
+import java.util.ArrayList;
+
 import javax.servlet.http.HttpSession;
 
 import org.apache.logging.log4j.LogManager;
@@ -46,7 +48,56 @@ public class RootController {
     }
   
     @GetMapping("/busqueda")
-    public String getMethodName(Model model, HtttpSession session) {
+    public String getMethodName(Model model, HttpSession session) {
         return "busqueda";
-  }
+    }
+    
+    @GetMapping("/revisar") 
+	public String index(
+			Model model 
+			) { 
+			model.addAttribute("titulo", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."); // escribe en modelo
+			model.addAttribute("descripcion", "Orci a scelerisque purus semper eget duis at. Eleifend quam adipiscing vitae proin sagittis nisl rhoncus mattis rhoncus.");
+			model.addAttribute("tags", new ArrayList<String>() {{
+				add("tag");
+				add("tag1");
+				add("tag2");
+				add("tag3");
+				add("tag4");
+				add("tag5");
+			}});
+			model.addAttribute("listnum", new ArrayList<Integer>() {{
+				add(1);
+				add(2);
+				add(3);
+				add(4);
+				add(5);
+				add(6);
+			}});
+			return "matchAndGoVistaModerador"; 
+	}
+    
+    @GetMapping("/evento") 
+	public String showEvent(
+			Model model // comunicación con vist
+			) { // viene del formulario
+			return "matchAndGoEvento"; // vista resultante
+	}
+    
+    @GetMapping("/profile") 
+   	public String profile(
+   			Model model // comunicación con vist
+   			) { // viene del formulario
+        	model.addAttribute("session.user", "patata");
+   			return "profile"; // vista resultante
+   	}
+    
+    @GetMapping("/admin") 
+	public String admin(
+			Model model // comunicación con vist
+			) { // viene del formulario
+			return "admin_view"; // vista resultante
+	}
+    
+    
 }

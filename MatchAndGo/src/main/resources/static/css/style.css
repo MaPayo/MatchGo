@@ -199,8 +199,6 @@ header h1{
     
 }
 
-}
-
     /*     ESTILOS DE MENSAJES    */
 
 .contenedorGeneral {
@@ -356,6 +354,7 @@ footer #imagenLarga {
 
 footer #imagenNormal {
     display: inline;
+}
 
 li > a > img {
 	 width: 50px;
