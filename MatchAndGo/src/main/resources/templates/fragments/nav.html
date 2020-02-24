@@ -2,14 +2,14 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-16">
+    <meta charset="UTF-8">
     <title>Nav</title>
 </head>
 
 <body>
     <nav th:fragment="nav">
         <a class="logo" href="" th:href="@{/}">
-            <img id= imagenNormal src="/images/logo.png"></a>
+            <img id= imagenNormal src="/img/logo.png"></a>
         <!-- El menú cambiara en función del rol de usuario -->
         <div class="menu" th:if="${session.user}">
             <a th:href="@{/user/{id}(id=${session.user.id})}">Mi perfil</a>
