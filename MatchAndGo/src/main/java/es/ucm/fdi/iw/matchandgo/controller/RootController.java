@@ -86,8 +86,10 @@ public class RootController {
     
     @GetMapping("/profile") 
    	public String profile(
-   			Model model // comunicación con vist
-   			) { // viene del formulario
+			   Model model // comunicación con vist
+			   , HttpSession session
+			   ) { // viene del formulario
+				
         	model.addAttribute("session.user", "patata");
    			return "profile"; // vista resultante
    	}
