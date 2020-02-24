@@ -3,10 +3,16 @@
     padding: 0;
 }
 
+body{
+    
+    background-color: whitesmoke;
+}
+
 nav{
     display: flex;
     flex-direction: row;
     width: 100%;
+    margin-left: 2em;
     margin-top:auto;
     height: 4em;
     flex-direction: column;
@@ -29,6 +35,7 @@ nav a{
     font-size: 1.7em;
     margin-top:auto;
 }
+
 
 nav > a > img {
 	width: 50px;
@@ -63,19 +70,33 @@ header h1{
     font-family: 'Permanent Marker';
 }
 .principal{
-    margin-top: 9em;
+
     height: 100%;
     text-align: center;
-    width: 80%;
+    width: 100%;
     margin-left: auto;
     margin-right: auto;
-
+    background-color: whitesmoke;
+}
+.form_registro{
+    border-radius: 3em;
+    background-color: lightgreen;
+    width: 40%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1.5em;
+    border: 1px black solid;
+}
+.form_registro h1{
+   
+    margin-bottom: 1em;
 }
 
 .form_texto{
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    margin-bottom: 0.5em;
 }
 
 .form_texto label{
@@ -95,9 +116,10 @@ header h1{
     padding-left: 2em;
     padding-right: 2em;
     border:1px solid black;
-    background: linear-gradient(to right, rgba(240, 108, 108, 0.774), rgba(247, 29, 66, 0.76));
+
+    background: linear-gradient(to bottom, green, lightgreen);
     text-decoration: none;
-    color:white;
+    color:black;
 }
 .datosPerfil{
     margin-top: 9em;
@@ -111,17 +133,72 @@ header h1{
     justify-content: center;
 }
 
-
-
 .datosPerfil img{
-    width: 7em;
-    height: 7em;
+    width: 10em;
+    height: 10em;
     border-radius: 50%;
 }
+.datos_texto{
+    margin-left: 2em;
+}
+.datos_texto p{
+    margin-top: 0.5em;
+}
+#Modificar{
+    margin-top: 1em;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top:0.5em;
+    padding-bottom:0.5em;
+    padding-left: 2em;
+    padding-right: 2em;
+}
+
 .divBoton{
     margin-top: 1em;
     margin-left: auto;
     margin-right: auto;
+    padding-top:0.5em;
+    padding-bottom:0.5em;
+    padding-left: 2em;
+    padding-right: 2em;
+    width: 20%;
+    text-decoration: none;
+    color:white;
+}
+.intereses_usuario{
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2em;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    flex-direction: column;
+}
+.intereses_usuario h2{
+    border-top: 1 px solid lightgreen;   
+}
+.listaIntereses{
+    display:flex;
+    flex-direction: row;
+}
+.listaIntereses li{
+    display: flex; 
+    flex-direction: row;
+    margin-top: 0.5em;
+    border-bottom: 3px dotted gray;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 15px 25px;
+    border: 3px solid lightgreen;
+    border-radius: 30px;
+    color:black;
+    background: lightgreen;
+    
+}
+
 }
 
     /*     ESTILOS DE MENSAJES    */
