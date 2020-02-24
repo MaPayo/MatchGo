@@ -1,7 +1,7 @@
 *{
     margin:0;
     padding: 0;
-    border:1px solid red;
+    /* border:1px solid red; */
 }
 
 nav{
@@ -67,7 +67,7 @@ header h1{
     width: 80%;
     margin-left: auto;
     margin-right: auto;
-}
+}/*
 form{
     border-radius: 3em;
     background-color: rgba(129, 243, 76, 0.795);
@@ -76,7 +76,7 @@ form{
     margin-right: auto;
     padding: 1.5em;
     border: 1px black solid;
-}
+}*/
 .form_texto{
     display: flex;
     flex-direction: row;
@@ -127,4 +127,160 @@ form{
     margin-top: 1em;
     margin-left: auto;
     margin-right: auto;
+}
+
+    /*     ESTILOS DE MENSAJES    */
+
+.contenedorGeneral {
+    margin-top: 3%;
+    margin-bottom: 5%;
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+    height: 500px;
+    border: 1px black solid;
+    display: flex;
+    flex-direction: row;
+}
+
+.contenedorContactos {
+    display: flex;
+    flex-direction: column-reverse;
+    padding: 1%;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 1%;
+    min-width: 1%;
+    border-right: 1px lightgreen solid;
+    background-color: rgba(161, 252, 5, 0.432);
+}
+
+.contenedorContacto {
+    padding: 3px;
+    border-top: 1px lightblue solid;
+    text-align: center;
+}
+
+.contenedorContacto:hover {
+    background-color: aquamarine;
+}
+
+.contenedorMensajes {
+    display: flex;
+    flex-direction: column-reverse;
+    padding: 0%;
+    flex-grow: 3;
+    flex-shrink: 3;
+    flex-basis: 3%;
+    min-width: 3%;
+    background-color: rgba(82, 198, 202, 0.397);
+}
+
+.mensajes {
+    display: flex;
+    flex-direction: column-reverse;
+    padding: 3%;
+    padding-bottom: 0%;
+}
+
+.contactoMensaje {
+    margin-bottom: auto;    /* Con esto el contacto del chat está arriba */
+    align-self: center;
+    width: auto;
+    border-left: 2px lightgreen solid;
+    border-right: 2px lightgreen solid;
+    border-bottom: 2px lightgreen solid;
+    background-color: lightgreen;
+}
+
+form.escribirMensaje {
+    display: flex;
+    flex-direction: row;
+    border-top: 1px lightblue solid;
+    padding: 0.3%;
+    padding-top: 1%;
+    padding-left: 1%;
+    padding-right: 1%;
+    align-items: center;
+    height: 10%;
+    background-color: whitesmoke;
+}
+
+form.escribirMensaje input.mensaje {
+    width: 100%;
+    height: 100%;
+    margin-bottom: 1.4%;
+    margin-right: 1%;
+}
+
+form.escribirMensaje input.botonMensaje:hover {
+    background-color: yellowgreen;
+}
+
+.mensajes {
+    display: flex;
+    flex-direction: column;
+}
+
+.mensaje {
+    margin: 1%;
+    width: auto;
+    height: auto;
+}
+
+.mensajeMio {
+    text-align: right;
+}
+
+.mensajeContacto {
+    text-align: left;
+}
+
+#imagenNormal {
+    width: 100px;
+    height: auto;
+}
+
+nav {
+    margin-left: 0px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    flex-grow: 1px;
+    flex-shrink: 1px;
+    height: auto;
+    width: 100%;
+}
+
+nav .logo {
+    display: inline-block;
+    width: 200px;
+}
+
+nav .logo #imagenNormal {
+    width: 200px;
+    height: auto;
+}
+
+nav .menu {
+    justify-self: right;    /* ESTE HAY QUE ECHARLE UN OJO */
+}
+
+footer {
+    display: flex;
+    flex-direction: row;
+}
+
+footer * {
+    display: flex;
+    flex-direction: row;
+}
+
+footer #imagenLarga {
+    display: inline;
+}
+
+footer #imagenNormal {
+    display: inline;
 }

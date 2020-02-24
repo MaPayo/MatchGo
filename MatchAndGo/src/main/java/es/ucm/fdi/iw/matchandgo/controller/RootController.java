@@ -38,6 +38,7 @@ public class RootController {
 
         model.addAttribute("mensajes", mensajes);
         model.addAttribute("contactos", contactos);
+        model.addAttribute("contacto", "Laura");
         session.setAttribute("usuario", "Rodolfo");
 
         return "mensajes";
