@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import es.ucm.fdi.iw.matchandgo.mensajes.Mensaje;
 
+
 @Controller
 public class RootController {
 
@@ -43,4 +44,9 @@ public class RootController {
 
         return "mensajes";
     }
+  
+    @GetMapping("/busqueda")
+    public String getMethodName(Model model, HtttpSession session) {
+        return "busqueda";
+  }
 }
