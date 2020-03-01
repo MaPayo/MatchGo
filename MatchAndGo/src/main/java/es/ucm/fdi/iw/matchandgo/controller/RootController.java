@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 //import org.springframework.web.bind.annotation.RequestParam;
 
 import es.ucm.fdi.iw.matchandgo.mensajes.Mensaje;
+import es.ucm.fdi.iw.matchandgo.model.Usuario;
 
 
 @Controller
@@ -30,6 +31,13 @@ public class RootController {
 
         return res;
     }
+
+	@GetMapping("/profile")
+	public String getSignUp(Model model, HttpSession session) {
+		if(session.getAttribute("user") != null) 
+			return "redirect:/user/" + ((Usuario) session.getAttribute("user")).getId();
+		return "registro";
+	}
 
     @GetMapping("/mensajes")
     public String mostrarMensajes(Model model, HttpSession session) {
@@ -83,17 +91,6 @@ public class RootController {
 			) { // viene del formulario
 			return "matchAndGoEvento"; // vista resultante
 	}
-    
-    @GetMapping("/profile") 
-   	public String profile(
-			   Model model // comunicación con vist
-			   , HttpSession session
-			   ) { // viene del formulario
-				
-        	model.addAttribute("session.user", "patata");
-   			return "profile"; // vista resultante
-   	}
-    
     @GetMapping("/admin") 
 	public String admin(
 			Model model // comunicación con vist
