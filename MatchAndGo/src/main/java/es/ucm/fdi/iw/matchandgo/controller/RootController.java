@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 //import org.springframework.web.bind.annotation.RequestParam;
 
 import es.ucm.fdi.iw.matchandgo.mensajes.Mensaje;
+import es.ucm.fdi.iw.matchandgo.model.Evento;
 import es.ucm.fdi.iw.matchandgo.model.Test;
 
 
@@ -84,12 +85,8 @@ public class RootController {
 				add(6);
 			}});
 			
-			Test t = new Test(1, "test");
-			entityManager.persist(t);
-			entityManager.flush();
-			List<Test> us = entityManager.createNativeQuery("select * from test").getResultList();
-			System.out.println(us);
-			
+			Evento e = new Evento("e1");
+			this.entityManager.persist(e);
 			return "matchAndGoVistaModerador"; 
 	}
     

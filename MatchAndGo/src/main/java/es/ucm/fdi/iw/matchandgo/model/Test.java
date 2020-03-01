@@ -10,13 +10,15 @@ public class Test {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	private String name;
+	private int year;
 	
 	public Test() {}
 	
-	public Test(long id, String name) {
+	public Test(long id, String name, int year) {
 		super();
 		this.id = id;
 		this.name = name;
+		this.year = year;
 	}
 	
 	public long getId() {
@@ -35,8 +37,16 @@ public class Test {
 		this.name = name;
 	}
 
+	public int getYear() {
+		return year;
+	}
+
+	public void setYear(int year) {
+		this.year = year;
+	}
+
 	@Override
 	public String toString() {
-		return "Test [id=" + id + ", name=" + name + "]";
+		return "Test [id=" + id + ", name=" + name + ", year=" + year + "]";
 	}
 }
