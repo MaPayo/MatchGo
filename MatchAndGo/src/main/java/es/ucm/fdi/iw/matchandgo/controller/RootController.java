@@ -125,8 +125,8 @@ public class RootController {
 		Tags t = new Tags();
 		Tags t2 = new Tags();
 		Evento[] eventos = new Evento[2];
-		List<Tags> categoria1 = new List();
-		List<Tags> categoria2 = new List();
+		List<Tags> categoria1 = new ArrayList<Tags>();
+		List<Tags> categoria2 = new ArrayList<Tags>();
 		e.setNombre("Partido Benéfico de Fútbol");
 		e.setUbicacion("Para ayudar a la asociacion 'Afectados por IW'");
 

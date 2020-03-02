@@ -77,4 +77,16 @@ public class Tags {
 	public void setUsuarioSubscrito(List<Usuario> usuarioSubscrito) {
 		this.usuarioSubscrito = usuarioSubscrito;
 	}
+
+	@Override
+	public String toString() {
+		return "{" +
+			" id='" + getId() + "'" +
+			", contenido='" + getContenido() + "'" +
+			", categoriaTipoPorDefecto='" + isCategoriaTipoPorDefecto() + "'" +
+			", usuarioSubscrito='" + getUsuarioSubscrito() + "'" +
+			", events='" + getEvents() + "'" +
+			"}";
+	}
+	
 }
