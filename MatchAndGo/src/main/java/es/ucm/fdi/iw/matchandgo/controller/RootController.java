@@ -15,9 +15,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 //import org.springframework.web.bind.annotation.RequestParam;
 
+
 import es.ucm.fdi.iw.matchandgo.model.Mensaje;
 import es.ucm.fdi.iw.matchandgo.model.Evento;
 import es.ucm.fdi.iw.matchandgo.model.Test;
+import es.ucm.fdi.iw.matchandgo.model.Tags;
+import es.ucm.fdi.iw.matchandgo.model.Usuario;
+import es.ucm.fdi.iw.matchandgo.model.Valoracion;
+
 
 
 @Controller
@@ -40,7 +45,55 @@ public class RootController {
 
         return res;
     }
+/*
+	@GetMapping("/profile")
+	public String getSignUp(Model model, HttpSession session) {
+		if(session.getAttribute("user") != null) 
+			return "redirect:/user/" + ((Usuario) session.getAttribute("user")).getId();
+		return "registro";
+	}*/
 
+	
+	@GetMapping("/profile")
+	public String getProfile(Model model, HttpSession session) {
+		Usuario user = new Usuario();
+		Tags etiqueta1= new Tags();
+		etiqueta1.setCategoriaTipo("Deporte");
+		etiqueta1.setContenido("Futbol");
+
+		Tags etiqueta2= new Tags();
+		etiqueta2.setCategoriaTipo("Musica");
+		etiqueta2.setContenido("Concierto");
+		List<Tags> tags = new ArrayList<Tags>();
+		tags.add(etiqueta1);
+		tags.add(etiqueta2);
+		
+		user.setCorreo("pepe@ucm.es");
+		user.setPassword("1234");
+		user.setNombre("Pepe");
+		user.setApellidos("el del quinto");
+		user.setFecha_nac("05/03/1965");
+		user.setSexo("Hombre");
+		user.setImagen("");
+		user.setTags(tags);
+		user.setTags(tags);
+		user.setRoles("USER");
+		System.out.println("----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" );
+		System.out.println(user.getNombre());
+
+		session.setAttribute("user", user);
+
+		model.addAttribute("user", user);
+		model.addAttribute("nombre", user.getNombre());
+		model.addAttribute("edad", user.getFecha_nac());
+		model.addAttribute("sexo", user.getSexo());
+		model.addAttribute("valoracion", "3 estrellas");
+		model.addAttribute("tags", user.getTags());
+		
+		return "profile";
+	}
+	
+	
     @GetMapping("/mensajes")
     public String mostrarMensajes(Model model, HttpSession session) {
 
@@ -97,17 +150,6 @@ public class RootController {
 			) { // viene del formulario
 			return "matchAndGoEvento"; // vista resultante
 	}
-    
-    @GetMapping("/profile") 
-   	public String profile(
-			   Model model // comunicación con vist
-			   , HttpSession session
-			   ) { // viene del formulario
-				
-        	model.addAttribute("session.user", "patata");
-   			return "profile"; // vista resultante
-   	}
-    
     @GetMapping("/admin") 
 	public String admin(
 			Model model // comunicación con vist
