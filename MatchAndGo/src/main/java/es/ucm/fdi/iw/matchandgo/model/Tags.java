@@ -15,9 +15,8 @@ public class Tags {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-
 	private String contenido;
-	private String categoriaTipo;
+	private boolean categoriaTipoPorDefecto;
 
 	@ManyToMany(mappedBy="tags")
 	private List<Usuario> usuarioSubscrito;
@@ -42,11 +41,11 @@ public class Tags {
 	public void setContenido(String contenido) {
 		this.contenido = contenido;
 	}
-	public String getCategoriaTipo() {
-		return categoriaTipo;
+	public boolean getCategoriaTipo() {
+		return categoriaTipoPorDefecto;
 	}
-	public void setCategoriaTipo(String categoriaTipo) {
-		this.categoriaTipo = categoriaTipo;
+	public void setCategoriaTipo(boolean categoriaTipo) {
+		this.categoriaTipoPorDefecto = categoriaTipo;
 	}
 	
 	public List<Usuario> getUsuarioSubscrito() {

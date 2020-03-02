@@ -47,11 +47,11 @@ public class RootController {
 	public String getProfile(Model model, HttpSession session) {
 		Usuario user = new Usuario();
 		Tags etiqueta1= new Tags();
-		etiqueta1.setCategoriaTipo("Deporte");
+		etiqueta1.setCategoriaTipo(false);
 		etiqueta1.setContenido("Futbol");
 
 		Tags etiqueta2= new Tags();
-		etiqueta2.setCategoriaTipo("Musica");
+		etiqueta2.setCategoriaTipo(true);
 		etiqueta2.setContenido("Concierto");
 		List<Tags> tags = new ArrayList<Tags>();
 		tags.add(etiqueta1);
