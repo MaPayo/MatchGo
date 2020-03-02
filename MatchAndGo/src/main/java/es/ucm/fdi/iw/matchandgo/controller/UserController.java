@@ -81,7 +81,7 @@ public class UserController {
 			
 			//
 		//	user.setTags(new ArrayList<form_tags>());
-			user.setValoracion(new ArrayList<Valoracion>());
+			//user.setValoracion(new ArrayList<Valoracion>());
 			user.setRoles("USER");
 
 			entityManager.persist(user);

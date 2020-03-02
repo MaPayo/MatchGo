@@ -17,36 +17,54 @@ import javax.persistence.OneToMany;
 import es.ucm.fdi.iw.matchandgo.mensajes.Mensaje;
 
 @Entity
-@NamedQueries({
+/*@NamedQueries({
 	@NamedQuery(name="User.ByEmail", query= "SELECT u form Usuario u WHERE"
 			+ "u.email= :email")
-})
+})*/
 
 public class Usuario {
 
 	public enum Role{
 		USER,ADMIN, MOD
 	}
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	private String nombre;
 	private String apellidos;
+
+	@Column(unique=true)
 	private String correo;
+
+	@Column(nullable = false)
 	private String password;
 	private String fecha_nac;
 	private String sexo;
 	private String roles;
 	private String imagen;
 	
+	@OneToMany(mappedBy="idValorado")
+	private List<Valoracion> valoracionesRecibidas;
+
+	@OneToMany(mappedBy="idValorante")
+	private List<Valoracion> valoracionesDadas;
 	
-	private List<Valoracion> valoracion= new ArrayList<Valoracion>();
+	@OneToMany(mappedBy="sender")
+	private List<Mensaje> listaMensajesEnviados;
 	
-	private List<Mensaje> listaMensajes = new ArrayList<Mensaje>();
+	@OneToMany(mappedBy="receiver")
+	private List<Mensaje> listaMensajesRecibidos;
+
+	@ManyToMany
+	private List<Tags> tags;
 	
-	private List<Tags> tags = new ArrayList<Tags>();
+	
+	public Usuario() {
+		super();
+	}
 	
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public long getId() {
 		return id;
 	}
@@ -71,7 +89,6 @@ public class Usuario {
 		this.apellidos = apellidos;
 	}
 	
-	@Column(unique=true)
 	public String getCorreo() {
 		return correo;
 	}
@@ -80,7 +97,6 @@ public class Usuario {
 		this.correo = correo;
 	}
 	
-	@Column(nullable = false)
 	public String getPassword() {
 		return password;
 	}
@@ -121,33 +137,46 @@ public class Usuario {
 		this.imagen = img;
 	}
 	
-	@OneToMany(targetEntity=Valoracion.class)
-	@JoinColumn(name="idValorado")
-	public List<Valoracion> getValoracion() {
-		return valoracion;
-	}
-	
-	public void setValoracion(List<Valoracion> valoracion) {
-		this.valoracion = valoracion;
-	}
-	
-	@OneToMany(targetEntity=Mensaje.class)
-	@JoinColumn(name="sender")
-	public List<Mensaje> getListaMensajes() {
-		return listaMensajes;
-	}
-	
-	public void setListaMensajes(List<Mensaje> listaMensajes) {
-		this.listaMensajes = listaMensajes;
-	}
 
-	@ManyToMany(targetEntity=Tags.class)
+	public List<Valoracion> getValoracionesRecibidas() {
+		return valoracionesRecibidas;
+	}
+	
+	public void setValoracionesRecibidas(List<Valoracion> valoracion) {
+		this.valoracionesRecibidas = valoracion;
+	}
+	
+	public List<Valoracion> getValoracionesDadas() {
+		return valoracionesDadas;
+	}
+	
+	public void setValoracionesDadas(List<Valoracion> valoracion) {
+		this.valoracionesDadas = valoracion;
+	}
+	
+
 	public List<Tags> getTags() {
 		return tags;
 	}
 
 	public void setTags(List<Tags> tags) {
 		this.tags = tags;
+	}
+
+	public List<Mensaje> getListaMensajesEnviados() {
+		return listaMensajesEnviados;
+	}
+
+	public void setListaMensajesEnviados(List<Mensaje> listaMensajesEnviados) {
+		this.listaMensajesEnviados = listaMensajesEnviados;
+	}
+
+	public List<Mensaje> getListaMensajesRecibidos() {
+		return listaMensajesRecibidos;
+	}
+
+	public void setListaMensajesRecibidos(List<Mensaje> listaMensajesRecibidos) {
+		this.listaMensajesRecibidos = listaMensajesRecibidos;
 	}
 	
 

@@ -9,15 +9,25 @@ import javax.persistence.ManyToOne;
 @Entity
 public class Valoracion {
 
+	
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private long id;
+
+	@ManyToOne
 	private Usuario idValorante;
+	
+	@ManyToOne
 	private Usuario idValorado;
 	private double puntuacion;
 	private String comentario;
 	
+	public Valoracion() {
+		super();
+	}
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	
 	public long getId() {
 		return id;
 	}
@@ -34,7 +44,6 @@ public class Valoracion {
 		this.puntuacion = puntuacion;
 	}
 	
-	@ManyToOne(targetEntity=Usuario.class)
 	public Usuario getIdValorado() {
 		return idValorado;
 	}
@@ -43,7 +52,6 @@ public class Valoracion {
 		this.idValorado = idValorado;
 	}
 	
-	@ManyToOne(targetEntity=Usuario.class)
 	public Usuario getiDValorante() {
 		return idValorante;
 	}
