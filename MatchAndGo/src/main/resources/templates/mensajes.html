@@ -25,7 +25,7 @@
                 </form>
                 <div class="mensajes">
                     <div class="mensaje" th:each="mensaje: ${mensajes}">
-                        <div class="mensaje" th:switch="__${mensaje.getSender()}__">
+                        <div class="mensaje" th:switch="__${mensaje.getSender().getNombre()}__">
 
                             <!-- Si el mensaje es mio (el usuario) se muestra como tal -->
                             <div class="mensajeMio" th:case="__${session.usuario}__">

@@ -3,34 +3,45 @@ package es.ucm.fdi.iw.matchandgo.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 //import org.springframework.web.bind.annotation.RequestParam;
 
-import es.ucm.fdi.iw.matchandgo.mensajes.Mensaje;
+
+import es.ucm.fdi.iw.matchandgo.model.Mensaje;
+import es.ucm.fdi.iw.matchandgo.model.Evento;
+import es.ucm.fdi.iw.matchandgo.model.Test;
 import es.ucm.fdi.iw.matchandgo.model.Tags;
 import es.ucm.fdi.iw.matchandgo.model.Usuario;
 import es.ucm.fdi.iw.matchandgo.model.Valoracion;
+
 
 
 @Controller
 public class RootController {
 
     private static Logger log = LogManager.getLogger(RootController.class);
+    
+    @Autowired
+    private EntityManager entityManager;
 
 
     // Crea unos chats de ejemplo para la vista "mensajes"
     public Mensaje[] generarChatPorDefecto() {
         Mensaje[] res = new Mensaje[2];
 
-        // Creamos el chat de ejemplo
-        res[0] = new Mensaje("Buenas tardes!", "Rodolfo");
-        res[1] = new Mensaje("Hombre, cuanto tiempo!", "Laura");
+		// Creamos el chat de ejemplo
+		res[0] = new Mensaje("Buenas tardes!", new Usuario()/*Rodolfo*/, new Usuario()/*Laura*/, new Date());
+		res[1] = new Mensaje("Hombre, cuanto tiempo!", new Usuario()/*Laura*/,
+				new Usuario()/*Rodolfo*/, new Date());
 
         return res;
     }
@@ -104,6 +115,7 @@ public class RootController {
         return "busqueda";
     }
     
+    @Transactional
     @GetMapping("/revisar") 
 	public String index(
 			Model model 
@@ -126,6 +138,9 @@ public class RootController {
 				add(5);
 				add(6);
 			}});
+			
+			Evento e = new Evento("e1");
+			this.entityManager.persist(e);
 			return "matchAndGoVistaModerador"; 
 	}
     
