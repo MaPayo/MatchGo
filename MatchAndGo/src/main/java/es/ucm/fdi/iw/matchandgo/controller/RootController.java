@@ -100,32 +100,60 @@ public class RootController {
 		}});
 
 		return "profile";
-	}
+  }
+	
+    @GetMapping("/mensajes")
+    public String mostrarMensajes(Model model, HttpSession session) {
 
+        Mensaje[] mensajes = generarChatPorDefecto();
+        String[] contactos = new String[2];
+        contactos[0] = "Laura";
+        contactos[1] = "Samuel";
 
-	@GetMapping("/mensajes")
-	public String mostrarMensajes(Model model, HttpSession session) {
+        model.addAttribute("mensajes", mensajes);
+        model.addAttribute("contactos", contactos);
+        model.addAttribute("contacto", "Laura");
+        session.setAttribute("usuario", "Rodolfo");
 
-		Mensaje[] mensajes = generarChatPorDefecto();
-		String[] contactos = new String[2];
-		contactos[0] = "Laura";
-		contactos[1] = "Samuel";
+        return "mensajes";
+    }
+  
+    @GetMapping("/busqueda")
+    public String searching(Model model) {
+		Evento e = new Evento();
+		Evento e2 = new Evento();
+		Tags t = new Tags();
+		Tags t2 = new Tags();
+		Evento[] eventos = new Evento[2];
+		List<Tags> categoria1 = new List();
+		List<Tags> categoria2 = new List();
+		e.setNombre("Partido Benéfico de Fútbol");
+		e.setUbicacion("Para ayudar a la asociacion 'Afectados por IW'");
 
-		model.addAttribute("mensajes", mensajes);
-		model.addAttribute("contactos", contactos);
-		model.addAttribute("contacto", "Laura");
-		session.setAttribute("usuario", "Rodolfo");
+		e2.setNombre("Visita al Museo del Jamon");
+		e2.setDescripcion("Nos lo vamos a pasar super bien");
 
-		return "mensajes";
-	}
+		t.setContenido("Deportivo");
+		t.setCategoriaTipo(true);
 
-	@GetMapping("/busqueda")
-	public String getMethodName(Model model, HttpSession session) {
-		return "busqueda";
-	}
+		t2.setContenido("Cultural");
+		t2.setCategoriaTipo(true);
 
-	@Transactional
-	@GetMapping("/revisar") 
+		categoria1.add(t);
+		categoria2.add(t2);
+		e.setTags(categoria1);
+		e2.setTags(categoria2);
+
+		eventos[0]= e;
+		eventos[1]= e2;
+
+		model.addAttribute("event", eventos);
+
+        return "busqueda";
+    }
+    
+    @Transactional
+    @GetMapping("/revisar") 
 	public String index(
 			Model model 
 			) { 

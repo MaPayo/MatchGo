@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -59,7 +60,33 @@ public class Usuario {
 	@ManyToMany
 	private List<Tags> tags;
 	
+	@ManyToMany(mappedBy = "participantes")
+	private List<Evento> joinedEvents;
 	
+	@OneToMany(mappedBy="creador")
+	private List<Evento> createdEvents;
+	
+	
+	public List<Evento> getJoinedEvents() {
+		return joinedEvents;
+	}
+
+
+	public void setJoinedEvents(List<Evento> joinedEvents) {
+		this.joinedEvents = joinedEvents;
+	}
+
+
+	public List<Evento> getCreatedEvents() {
+		return createdEvents;
+	}
+
+
+	public void setCreatedEvents(List<Evento> createdEvents) {
+		this.createdEvents = createdEvents;
+	}
+
+
 	public Usuario() {
 		super();
 	}
