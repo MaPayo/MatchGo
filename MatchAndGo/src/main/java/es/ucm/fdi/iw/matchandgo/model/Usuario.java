@@ -92,6 +92,17 @@ public class Usuario {
 	}
 	
 	
+	public Usuario(long id, String nombre, String apellidos, String correo, String password, String fecha_nac, String sexo, String roles) {
+		this.id = id;
+		this.nombre = nombre;
+		this.apellidos = apellidos;
+		this.roles = roles;
+		this.password = password;
+		this.correo = correo;
+		this.fecha_nac = fecha_nac;
+		this.sexo = sexo;
+	}
+
 	public long getId() {
 		return id;
 	}
