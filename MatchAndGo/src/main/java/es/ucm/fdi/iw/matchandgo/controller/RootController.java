@@ -120,7 +120,36 @@ public class RootController {
     }
   
     @GetMapping("/busqueda")
-    public String getMethodName(Model model, HttpSession session) {
+    public String searching(Model model) {
+		Evento e = new Evento();
+		Evento e2 = new Evento();
+		Tags t = new Tags();
+		Tags t2 = new Tags();
+		Evento[] eventos = new Evento[2];
+		List<Tags> categoria1 = new List();
+		List<Tags> categoria2 = new List();
+		e.setNombre("Partido Benéfico de Fútbol");
+		e.setUbicacion("Para ayudar a la asociacion 'Afectados por IW'");
+
+		e2.setNombre("Visita al Museo del Jamon");
+		e2.setDescripcion("Nos lo vamos a pasar super bien");
+
+		t.setContenido("Deportivo");
+		t.setCategoriaTipo(true);
+
+		t2.setContenido("Cultural");
+		t2.setCategoriaTipo(true);
+
+		categoria1.add(t);
+		categoria2.add(t2);
+		e.setTags(categoria1);
+		e2.setTags(categoria2);
+
+		eventos[0]= e;
+		eventos[1]= e2;
+
+		model.addAttribute("event", eventos);
+
         return "busqueda";
     }
     
