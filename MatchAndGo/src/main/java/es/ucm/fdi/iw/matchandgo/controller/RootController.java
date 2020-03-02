@@ -1,23 +1,32 @@
 package es.ucm.fdi.iw.matchandgo.controller;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.EntityManager;
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 //import org.springframework.web.bind.annotation.RequestParam;
 
 import es.ucm.fdi.iw.matchandgo.mensajes.Mensaje;
+import es.ucm.fdi.iw.matchandgo.model.Evento;
+import es.ucm.fdi.iw.matchandgo.model.Test;
 
 
 @Controller
 public class RootController {
 
     private static Logger log = LogManager.getLogger(RootController.class);
+    
+    @Autowired
+    private EntityManager entityManager;
 
 
     // Crea unos chats de ejemplo para la vista "mensajes"
@@ -52,6 +61,7 @@ public class RootController {
         return "busqueda";
     }
     
+    @Transactional
     @GetMapping("/revisar") 
 	public String index(
 			Model model 
@@ -74,6 +84,9 @@ public class RootController {
 				add(5);
 				add(6);
 			}});
+			
+			Evento e = new Evento("e1");
+			this.entityManager.persist(e);
 			return "matchAndGoVistaModerador"; 
 	}
     
