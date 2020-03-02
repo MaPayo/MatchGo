@@ -14,7 +14,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
-import es.ucm.fdi.iw.matchandgo.mensajes.Mensaje;
+import es.ucm.fdi.iw.matchandgo.model.Mensaje;
 
 @Entity
 /*@NamedQueries({
