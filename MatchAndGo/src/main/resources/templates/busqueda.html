@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" lang="es-ES">
+
+<head>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" media="screen" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" media="screen" />
+    <link rel="shortcut icon" type="image/png" th:href="@{/img/logo.png}">
+    <title>Busqueda</title>
+    <!-- <th:block th:replace="fragments/header :: header" /></th:block> -->
+</head>
+
+<body>
+    <nav th:replace="fragments/nav.html :: nav">
+        El navegador
+    </nav>
+
+    <input type="search"> <button type="button" class="busqueda">Buscar</button>
+    <div class="eventCard">
+        <div class="cardUpperContainer">
+            <img th:src="@{/img/noImage.png}" alt="" class="placeImage">
+            <h2><span th:text="${titulo}">Partido de Baloncesto benefico</span>
+            </h2>
+        </div>
+        <div class="cardLowerContainer">
+            <div>
+                <div><span th:text="${descripcion}">Description</span></div>
+                <div class="tagBox">
+                    <span class="tag category"> Deportivo </span><span class="tag" th:each="tag: ${tags}"><span th:text="${tag}">Benefico</span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="eventCard">
+        <div class="cardUpperContainer">
+            <img th:src="@{/img/noImage.png}" alt="" class="placeImage">
+            <h2><span th:text="${titulo}">Partido de Baloncesto benefico</span>
+            </h2>
+        </div>
+        <div class="cardLowerContainer">
+            <div>
+                <div><span th:text="${descripcion}">Description</span></div>
+                <div class="tagBox">
+                    <span class="tag category"> Deportivo </span><span class="tag" th:each="tag: ${tags}"><span th:text="${tag}">Benefico</span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="eventCard">
+        <div class="cardUpperContainer">
+            <img th:src="@{/img/noImage.png}" alt="" class="placeImage">
+            <h2><span th:text="${titulo}">Partido de Baloncesto benefico</span>
+            </h2>
+        </div>
+        <div class="cardLowerContainer">
+            <div>
+                <div><span th:text="${descripcion}">Description</span></div>
+                <div class="tagBox">
+                    <span class="tag category"> Deportivo </span><span class="tag" th:each="tag: ${tags}"><span th:text="${tag}">Benefico</span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="eventCard">
+        <div class="cardUpperContainer">
+            <img th:src="@{/img/noImage.png}" alt="" class="placeImage">
+            <h2><span th:text="${titulo}">Partido de Baloncesto benefico</span>
+            </h2>
+        </div>
+        <div class="cardLowerContainer">
+            <div>
+                <div><span th:text="${descripcion}">Description</span></div>
+                <div class="tagBox">
+                    <span class="tag category"> Deportivo </span><span class="tag" th:each="tag: ${tags}"><span th:text="${tag}">Benefico</span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="eventCard">
+        <div class="cardUpperContainer">
+            <img th:src="@{/img/noImage.png}" alt="" class="placeImage">
+            <h2><span th:text="${titulo}">Partido de Baloncesto benefico</span>
+            </h2>
+        </div>
+        <div class="cardLowerContainer">
+            <div>
+                <div><span th:text="${descripcion}">Description</span></div>
+                <div class="tagBox">
+                    <span class="tag category"> Deportivo </span><span class="tag" th:each="tag: ${tags}"><span th:text="${tag}">Benefico</span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <footer th:replace="fragments/footer.html :: footer"> El Footer de la página </footer>
+</body>
+
+</html>

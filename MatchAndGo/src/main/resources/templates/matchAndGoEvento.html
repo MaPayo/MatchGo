@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" th:href="@{/css/styles.css}" />
+<link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+
+	<nav th:replace="fragments/nav.html :: nav">Nav goes here</nav>
+
+	<form class="eventContainer formEvento">
+		<div class="cardUpperContainer">
+			<img th:src="@{/img/noImage.png}" alt="" class="eventImg">
+			<div class="block">
+				<input type="text">
+				<textarea></textarea>
+			</div>
+			<div class="block">
+				<select id="cars">
+					<option value="v1">v1</option>
+					<option value="v2">v2</option>
+					<option value="v3">v3</option>
+					<option value="v4">v4</option>
+				</select>
+				<textarea></textarea>
+			</div>
+		</div>
+
+		<div class="cardLowerContainer">
+			<div>
+				<p>Seleccione los campos que desea mantener en privado hasta que
+					el usuario se une al evento</p>
+				<div class="margin">
+					<input type="checkbox">Fecha: <input type="date" /> </input>
+				</div>
+				<div class="margin">
+					<input type="checkbox">Dirección: <input type="text" /></input>
+				</div>
+			</div>
+			<div>
+				<select id="cars">
+					<option value="v1">v1</option>
+					<option value="v2">v2</option>
+					<option value="v3">v3</option>
+					<option value="v4">v4</option>
+				</select> <select id="cars">
+					<option value="v1">v1</option>
+					<option value="v2">v2</option>
+					<option value="v3">v3</option>
+					<option value="v4">v4</option>
+				</select>
+			</div>
+			<button type="button" class="acceptButton marginAuto">Crear</button>
+		</div>
+	</form>
+
+	<footer th:replace="fragments/footer.html :: footer"> Footer
+		goes here </footer>
+</body>
+</html>

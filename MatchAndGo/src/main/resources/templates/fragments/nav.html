@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Nav</title>
+</head>
+
+<body>
+    <nav th:fragment="nav">
+        <a class="logo" href="" th:href="@{/}">
+            <img id= imagenNormal src="/img/logo.png"></a>
+        <!-- El menú cambiara en función del rol de usuario -->
+        <div class="menu" th:if="${session.user}">
+            <a th:href="@{/user/{id}(id=${session.user.id})}">Mi perfil</a>
+            <a  th:href="@{/eventos/}">Eventos</a>
+            <a  th:href="@{/mensajes/}">Mensajes</a>
+            <a th:if="${session.user.hasRole('mod')}" th:href="@{/mod/}">Moderador</a>
+            <a th:if="${session.user.hasRole('admin')}" th:href="@{/admin/}">Admin</a>
+            <a th:href="@{/logout}" href="/logout">Salir</a>
+        </div>
+        <div class="menu" th:unless="${session.user}">
+            <a th:href="@{/login}" href="/login">Iniciar sesión</a>
+            <a th:href="@{/signup}" href="/signup">Registrarse</a>
+        </div>
+    </nav>
+</body>
+
+</html>
