@@ -41,16 +41,15 @@ public class Evento {
 		this.publicada = publicada;
 	}
 
-	/*
-	@ManyToMany(mappedBy = "tags")
-	private List<Tag> tags;
+	
+	@ManyToMany
+	private List<Tags> tags;
 	
 	@ManyToMany
 	private List<Usuario> participantes;
 	
 	@ManyToOne
 	private Usuario creador;
-	*/
 	
 	public long getId() {
 	return id;
@@ -100,12 +99,12 @@ public class Evento {
 	public void setPublicada(Date publicada) {
 		this.publicada = publicada;
 	}
-/*
-	public List<Tag> getTags() {
+
+	public List<Tags> getTags() {
 		return tags;
 	}
 
-	public void setTags(List<Tag> tags) {
+	public void setTags(List<Tags> tags) {
 		this.tags = tags;
 	}
 
@@ -125,6 +124,6 @@ public class Evento {
 		this.creador = creador;
 	}
 
-*/
+
 
 }
