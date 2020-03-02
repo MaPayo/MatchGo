@@ -20,9 +20,9 @@
         <div class="datosPerfil"> <!--th:if="${session.user}"  -->
          <img th:src="@{/img/noImage.png}">   <!-- "@{/user/{id}/photo(id=${user.id})}" -->            
             <div class="datos_texto">
-                <h2 id="nombre"> Nombre del usuario <span th:text="${user.getNombre()}"></span></h2>      
-                <p id="edad">Edad usuario <span th:text="${user.getEdad()}"></span></p>	   
-                <p id="sexo">Sexo usuario <span th:text="${user.getSexo()}"></span></p>	 
+                <h2 id="nombre"> Nombre del usuario <span th:text="${nombre}"></span></h2>      
+                <p id="edad">Edad usuario <span th:text="${edad}"></span></p>	   
+                <p id="sexo">Sexo usuario <span th:text="${sexo}"></span></p>	 
                 <p id="valoracion">Valoración<span th:text="${valoracion}"></span></p>	   
             </div>
         </div>
@@ -38,8 +38,8 @@
         <div class="intereses_usuario">
             <h2 class="centrado">Intereses:</h2>
             <ul class="listaIntereses">
-                <li th:each="tag: ${user.getTags()}">
-                    <p><span th:text="${tag.getCategoriaTipo()}">tag</span></p>
+                <li th:each="tag: ${tags}">
+                    <p><span th:text="${tag}">tag</span></p>
                 </li>
             </ul>
         </div>

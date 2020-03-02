@@ -40,9 +40,13 @@ public class RootController {
         Mensaje[] res = new Mensaje[2];
 
 		// Creamos el chat de ejemplo
-		res[0] = new Mensaje("Buenas tardes!", new Usuario()/*Rodolfo*/, new Usuario()/*Laura*/, new Date());
-		res[1] = new Mensaje("Hombre, cuanto tiempo!", new Usuario()/*Laura*/,
-				new Usuario()/*Rodolfo*/, new Date());
+		Usuario user1 = new Usuario();
+		user1.setNombre("Rodolfo");
+		Usuario user2 = new Usuario();
+		user2.setNombre("Laura");
+		res[0] = new Mensaje("Buenas tardes!", user1, user2, new Date());
+		res[1] = new Mensaje("Hombre, cuanto tiempo!", user2,
+				user1, new Date());
 
         return res;
     }
@@ -65,9 +69,7 @@ public class RootController {
 		Tags etiqueta2= new Tags();
 		etiqueta2.setCategoriaTipo(true);
 		etiqueta2.setContenido("Concierto");
-		List<Tags> tags = new ArrayList<Tags>();
-		tags.add(etiqueta1);
-		tags.add(etiqueta2);
+		
 		
 		user.setCorreo("pepe@ucm.es");
 		user.setPassword("1234");
@@ -76,20 +78,26 @@ public class RootController {
 		user.setFecha_nac("05/03/1965");
 		user.setSexo("Hombre");
 		user.setImagen("");
-		user.setTags(tags);
-		user.setTags(tags);
+		// user.setTags(tags);
 		user.setRoles("USER");
 		System.out.println("----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" );
 		System.out.println(user.getNombre());
 
-		session.setAttribute("user", user);
-
+		// session.setAttribute("user", user);
+		
 		model.addAttribute("user", user);
 		model.addAttribute("nombre", user.getNombre());
 		model.addAttribute("edad", user.getFecha_nac());
 		model.addAttribute("sexo", user.getSexo());
 		model.addAttribute("valoracion", "3 estrellas");
-		model.addAttribute("tags", user.getTags());
+		model.addAttribute("tags", new ArrayList<String>() {{
+			add("tag");
+			add("tag1");
+			add("tag2");
+			add("tag3");
+			add("tag4");
+			add("tag5");
+		}});
 		
 		return "profile";
 	}
