@@ -15,7 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 //import org.springframework.web.bind.annotation.RequestParam;
 
-import es.ucm.fdi.iw.matchandgo.mensajes.Mensaje;
+import es.ucm.fdi.iw.matchandgo.model.Mensaje;
 import es.ucm.fdi.iw.matchandgo.model.Evento;
 import es.ucm.fdi.iw.matchandgo.model.Test;
 
@@ -33,9 +33,10 @@ public class RootController {
     public Mensaje[] generarChatPorDefecto() {
         Mensaje[] res = new Mensaje[2];
 
-        // Creamos el chat de ejemplo
-        res[0] = new Mensaje("Buenas tardes!", "Rodolfo");
-        res[1] = new Mensaje("Hombre, cuanto tiempo!", "Laura");
+		// Creamos el chat de ejemplo
+		res[0] = new Mensaje("Buenas tardes!", new Usuario()/*Rodolfo*/, new Usuario()/*Laura*/, new Date());
+		res[1] = new Mensaje("Hombre, cuanto tiempo!", new Usuario()/*Laura*/,
+				new Usuario()/*Rodolfo*/, new Date());
 
         return res;
     }
