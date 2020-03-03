@@ -45,10 +45,8 @@ public class RootController {
 		user1.setNombre("Rodolfo");
 		Usuario user2 = new Usuario();
 		user2.setNombre("Laura");
-		res[0] = new Mensaje("Buenas tardes!", user1, user2, new LocalDateTime(new LocalDate(0, 0, 0),
-				new LocalTime(0, 0, 0, 0)));
-		res[1] = new Mensaje("Hombre, cuanto tiempo!", user2,
-				user1, new LocalDateTime());
+		res[0] = new Mensaje("Buenas tardes!", user1, user2, LocalDateTime.now());
+		res[1] = new Mensaje("Hombre, cuanto tiempo!", user2, user1, LocalDateTime.now());
 
 		return res;
 	}
@@ -204,11 +202,10 @@ public class RootController {
 		allUsers[6] = new Usuario(7, "nombre 7", "apellidos 7", "correo 7", "password 7", "fecha_nac 7", "String sexo 7", "String roles 7");
 	
 		Evento [] allEvents = new Evento[4];
-		Date dat = new Date();
-		allEvents[0]= new Evento(0,"nombre evento", "descripcion evento", "ubicacion evento", dat, dat);
-		allEvents[1]= new Evento(1,"nombre evento 1", "descripcion evento 1", "ubicacion evento 1", dat, dat);
-		allEvents[2]= new Evento(2,"nombre evento 2", "descripcion evento 2", "ubicacion evento 2", dat, dat);
-		allEvents[3]= new Evento(3,"nombre evento 3", "descripcion evento 3", "ubicacion evento 3", dat, dat);
+		allEvents[0]= new Evento(0,"nombre evento", "descripcion evento", "ubicacion evento", LocalDateTime.now(), LocalDateTime.now());
+		allEvents[1]= new Evento(1,"nombre evento 1", "descripcion evento 1", "ubicacion evento 1", LocalDateTime.now(), LocalDateTime.now());
+		allEvents[2]= new Evento(2,"nombre evento 2", "descripcion evento 2", "ubicacion evento 2", LocalDateTime.now(), LocalDateTime.now());
+		allEvents[3]= new Evento(3,"nombre evento 3", "descripcion evento 3", "ubicacion evento 3", LocalDateTime.now(), LocalDateTime.now());
 
 		model.addAttribute("allUsers", allUsers);
 		model.addAttribute("allEvents", allEvents);
