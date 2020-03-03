@@ -1,7 +1,9 @@
 package es.ucm.fdi.iw.matchandgo.controller;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -19,7 +21,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import es.ucm.fdi.iw.matchandgo.model.Mensaje;
 import es.ucm.fdi.iw.matchandgo.model.Evento;
-import es.ucm.fdi.iw.matchandgo.model.Test;
 import es.ucm.fdi.iw.matchandgo.model.Tags;
 import es.ucm.fdi.iw.matchandgo.model.Usuario;
 import es.ucm.fdi.iw.matchandgo.model.Valoracion;
@@ -44,9 +45,10 @@ public class RootController {
 		user1.setNombre("Rodolfo");
 		Usuario user2 = new Usuario();
 		user2.setNombre("Laura");
-		res[0] = new Mensaje("Buenas tardes!", user1, user2, new Date());
+		res[0] = new Mensaje("Buenas tardes!", user1, user2, new LocalDateTime(new LocalDate(0, 0, 0),
+				new LocalTime(0, 0, 0, 0)));
 		res[1] = new Mensaje("Hombre, cuanto tiempo!", user2,
-				user1, new Date());
+				user1, new LocalDateTime());
 
 		return res;
 	}
