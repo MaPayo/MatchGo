@@ -128,7 +128,7 @@ public class RootController {
 		List<Tags> categoria1 = new ArrayList<Tags>();
 		List<Tags> categoria2 = new ArrayList<Tags>();
 		e.setNombre("Partido Benéfico de Fútbol");
-		e.setUbicacion("Para ayudar a la asociacion 'Afectados por IW'");
+		e.setDescripcion("Para ayudar a la asociacion 'Afectados por IW'");
 
 		e2.setNombre("Visita al Museo del Jamon");
 		e2.setDescripcion("Nos lo vamos a pasar super bien");

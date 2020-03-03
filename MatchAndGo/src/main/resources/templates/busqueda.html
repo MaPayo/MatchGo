@@ -25,7 +25,7 @@
             <div>
                 <div><span th:text="${evento.getDescripcion()}">Description</span></div>
                 <div class="tagBox">
-                    <!-- <span class="tag category" th:text="${evento.getTags().get(0)}"> Deportivo </span>--><span class="tag" th:each="tag: ${evento.getTags()}"><span th:text="${tag}">Benefico</span></span>
+                    <!-- <span class="tag category" th:text="${}"> Deportivo </span>--><span class="tag" th:each="tag: ${evento.getTags()}"><span th:text="${tag.getContenido()}">Benefico</span></span>
                 </div>
             </div>
         </div>
