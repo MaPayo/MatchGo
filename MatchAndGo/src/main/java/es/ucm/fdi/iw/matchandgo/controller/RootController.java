@@ -1,9 +1,7 @@
 package es.ucm.fdi.iw.matchandgo.controller;
 
 import java.util.ArrayList;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -23,7 +21,7 @@ import es.ucm.fdi.iw.matchandgo.model.Mensaje;
 import es.ucm.fdi.iw.matchandgo.model.Evento;
 import es.ucm.fdi.iw.matchandgo.model.Tags;
 import es.ucm.fdi.iw.matchandgo.model.Usuario;
-import es.ucm.fdi.iw.matchandgo.model.Valoracion;
+
 
 
 
