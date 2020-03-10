@@ -1,4 +1,4 @@
-package es.ucm.fdi.iw.matchandgo.model;
+package es.ucm.fdi.iw.model;
 
 import java.time.LocalDateTime;
 
@@ -8,10 +8,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-import es.ucm.fdi.iw.matchandgo.model.enums.EstadoMensaje;
-
 @Entity
 public class Mensaje {
+
+	public enum EstadoMensaje {
+		LEIDO, PENDIENTE
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
