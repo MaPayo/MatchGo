@@ -1,4 +1,4 @@
-package es.ucm.fdi.iw.matchandgo.model;
+package es.ucm.fdi.iw.model;
 
 import java.time.LocalDateTime;
 

@@ -1,4 +1,4 @@
-package es.ucm.fdi.iw.matchandgo.model;
+package es.ucm.fdi.iw.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
