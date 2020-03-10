@@ -1,6 +1,5 @@
-package es.ucm.fdi.iw.matchandgo.model;
+package es.ucm.fdi.iw.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -8,13 +7,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
-import es.ucm.fdi.iw.matchandgo.mensajes.Mensaje;
+
 
 @Entity
 /*@NamedQueries({
@@ -44,10 +40,10 @@ public class Usuario {
 	private String roles;
 	private String imagen;
 	
-	@OneToMany(mappedBy="idValorado")
+	@OneToMany(mappedBy="valorado")
 	private List<Valoracion> valoracionesRecibidas;
 
-	@OneToMany(mappedBy="idValorante")
+	@OneToMany(mappedBy="valorante")
 	private List<Valoracion> valoracionesDadas;
 	
 	@OneToMany(mappedBy="sender")
@@ -59,12 +55,49 @@ public class Usuario {
 	@ManyToMany
 	private List<Tags> tags;
 	
+	@ManyToMany(mappedBy = "participantes")
+	private List<Evento> joinedEvents;
 	
+	@OneToMany(mappedBy="creador")
+	private List<Evento> createdEvents;
+	
+	
+	public List<Evento> getJoinedEvents() {
+		return joinedEvents;
+	}
+
+
+	public void setJoinedEvents(List<Evento> joinedEvents) {
+		this.joinedEvents = joinedEvents;
+	}
+
+
+	public List<Evento> getCreatedEvents() {
+		return createdEvents;
+	}
+
+
+	public void setCreatedEvents(List<Evento> createdEvents) {
+		this.createdEvents = createdEvents;
+	}
+
+
 	public Usuario() {
 		super();
 	}
 	
 	
+	public Usuario(long id, String nombre, String apellidos, String correo, String password, String fecha_nac, String sexo, String roles) {
+		this.id = id;
+		this.nombre = nombre;
+		this.apellidos = apellidos;
+		this.roles = roles;
+		this.password = password;
+		this.correo = correo;
+		this.fecha_nac = fecha_nac;
+		this.sexo = sexo;
+	}
+
 	public long getId() {
 		return id;
 	}

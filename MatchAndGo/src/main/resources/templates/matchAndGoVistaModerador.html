@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="UTF-8">
-<link rel="stylesheet" th:href="@{/css/styles.css}"/>
-<title>Insert title here</title>
-<link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" media="screen">
-<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" media="screen">
-<nav th:replace="fragments/nav.html :: nav">
-            El navegador
-        </nav>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <title>Moderar</title>
+    <!--<link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" media="screen">-->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" media="screen">
+    <nav th:replace="fragments/nav.html :: nav">
+        El navegador
+    </nav>
 </head>
+
 <body>
 
-<div >
+    <div>
 
-	<div th:each="element: ${listnum}" class="eventCard" >
+        <div th:each="element: ${listnum}" class="eventCard">
             <div class="cardUpperContainer">
                 <img th:src="@{/img/noImage.png}" alt="" class="placeImage">
                 <h2><span th:text="${titulo}"></span>
@@ -23,9 +25,9 @@
             <div class="cardLowerContainer">
                 <div>
                     <div><span th:text="${descripcion}"></span></div>
-                <div class="tagBox">
-                    <span class="tag" th:each="tag: ${tags}"><span th:text="${tag}">aliquam</span></span>
-                </div>
+                    <div class="tagBox">
+                        <span class="tag" th:each="tag: ${tags}"><span th:text="${tag}">aliquam</span></span>
+                    </div>
                 </div>
                 <div>
                     <button type="button" class="acceptButton">Aceptar</button>
@@ -36,9 +38,10 @@
 
 
 
-</div>
+    </div>
 
-        
-      <footer th:replace="fragments/footer.html :: footer"> El Footer de la página </footer>
+
+    <footer th:replace="fragments/footer.html :: footer"> El Footer de la página </footer>
 </body>
+
 </html>

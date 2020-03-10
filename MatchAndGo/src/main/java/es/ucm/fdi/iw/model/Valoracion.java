@@ -1,4 +1,4 @@
-package es.ucm.fdi.iw.matchandgo.model;
+package es.ucm.fdi.iw.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,10 +16,10 @@ public class Valoracion {
 	private long id;
 
 	@ManyToOne
-	private Usuario idValorante;
+	private Usuario valorante;
 	
 	@ManyToOne
-	private Usuario idValorado;
+	private Usuario valorado;
 	private double puntuacion;
 	private String comentario;
 	
@@ -44,20 +44,20 @@ public class Valoracion {
 		this.puntuacion = puntuacion;
 	}
 	
-	public Usuario getIdValorado() {
-		return idValorado;
+	public Usuario getValorado() {
+		return valorado;
 	}
 	
-	public void setIdValorado(Usuario idValorado) {
-		this.idValorado = idValorado;
+	public void setValorado(Usuario valorado) {
+		this.valorado = valorado;
 	}
 	
-	public Usuario getiDValorante() {
-		return idValorante;
+	public Usuario getValorante() {
+		return valorante;
 	}
 	
-	public void setiDValorante(Usuario iDValorante) {
-		this.idValorante = iDValorante;
+	public void setValorante(Usuario valorante) {
+		this.valorante = valorante;
 	}
 	
 	public String getComentario() {
