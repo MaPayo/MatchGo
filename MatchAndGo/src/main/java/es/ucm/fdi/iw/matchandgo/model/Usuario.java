@@ -40,10 +40,10 @@ public class Usuario {
 	private String roles;
 	private String imagen;
 	
-	@OneToMany(mappedBy="idValorado")
+	@OneToMany(mappedBy="valorado")
 	private List<Valoracion> valoracionesRecibidas;
 
-	@OneToMany(mappedBy="idValorante")
+	@OneToMany(mappedBy="valorante")
 	private List<Valoracion> valoracionesDadas;
 	
 	@OneToMany(mappedBy="sender")

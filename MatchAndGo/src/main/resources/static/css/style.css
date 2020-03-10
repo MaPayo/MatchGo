@@ -2,7 +2,33 @@
     margin: 0;
     padding: 0;
 }
-
+.bgblue{
+	background-color:#e9f5ff;
+}
+.brtop{
+	border-radius:35px 35px 0 0;
+}
+.bgwhite{
+	background-color:white;
+}
+.noliststyle{
+	list-style:none;
+}
+.displayflex{
+	display:flex;
+}
+.margintop150px{
+	margin-top:150px;
+}
+.padding30{
+	padding:30px;
+}
+.overflowhd{
+	overflow:hidden;
+}
+.width100{
+	width:100%;
+}
 body {
     background-color: whitesmoke;
 }
