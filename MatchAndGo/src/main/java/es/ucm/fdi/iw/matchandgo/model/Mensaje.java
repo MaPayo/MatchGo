@@ -1,6 +1,6 @@
 package es.ucm.fdi.iw.matchandgo.model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,14 +20,14 @@ public class Mensaje {
 	private Usuario sender;			// La persona que lo envía
 	@ManyToOne(targetEntity = Usuario.class)
 	private Usuario receiver;		// La persona que lo recibe
-	private Date fecha;				// Hay que tener en cuenta el tipo java.sql.Date para las query SQL
+	private LocalDateTime fecha;				// Hay que tener en cuenta el tipo java.sql.Date para las query SQL
 	private EstadoMensaje estado;
 
 	public Mensaje() {
 		super();
 	}
 
-    public Mensaje(long id, String c, Usuario s, Usuario r, Date f, EstadoMensaje e) {
+    public Mensaje(long id, String c, Usuario s, Usuario r,LocalDateTime f, EstadoMensaje e) {
 		super();
 		this.id = id;
         this.contenido = c;
@@ -37,7 +37,7 @@ public class Mensaje {
 		this.estado = e;
 	}
 	
-	public Mensaje(String c, Usuario s, Usuario r, Date f) {
+	public Mensaje(String c, Usuario s, Usuario r, LocalDateTime f) {
 		super();
 		this.contenido = c;
 		this.sender = s;
@@ -70,7 +70,6 @@ public class Mensaje {
 	/**
      * @return the sender
      */
-	@ManyToOne(targetEntity = Usuario.class)
     public Usuario getSender() {
 		return sender;
 	}
@@ -93,11 +92,11 @@ public class Mensaje {
 	/**
      * @return the fecha
      */
-	public Date getFecha() {
+	public LocalDateTime getFecha() {
 		return this.fecha;
 	}
 
-	public void setFecha(Date fecha) {
+	public void setFecha(LocalDateTime fecha) {
 		this.fecha = fecha;
 	}
 

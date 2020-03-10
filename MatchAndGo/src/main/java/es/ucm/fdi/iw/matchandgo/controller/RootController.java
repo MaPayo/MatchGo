@@ -1,7 +1,7 @@
 package es.ucm.fdi.iw.matchandgo.controller;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -19,46 +19,44 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import es.ucm.fdi.iw.matchandgo.model.Mensaje;
 import es.ucm.fdi.iw.matchandgo.model.Evento;
-import es.ucm.fdi.iw.matchandgo.model.Test;
 import es.ucm.fdi.iw.matchandgo.model.Tags;
 import es.ucm.fdi.iw.matchandgo.model.Usuario;
-import es.ucm.fdi.iw.matchandgo.model.Valoracion;
+
 
 
 
 @Controller
 public class RootController {
 
-    private static Logger log = LogManager.getLogger(RootController.class);
-    
-    @Autowired
-    private EntityManager entityManager;
+	private static Logger log = LogManager.getLogger(RootController.class);
+
+	@Autowired
+	private EntityManager entityManager;
 
 
-    // Crea unos chats de ejemplo para la vista "mensajes"
-    public Mensaje[] generarChatPorDefecto() {
-        Mensaje[] res = new Mensaje[2];
+	// Crea unos chats de ejemplo para la vista "mensajes"
+	public Mensaje[] generarChatPorDefecto() {
+		Mensaje[] res = new Mensaje[2];
 
 		// Creamos el chat de ejemplo
 		Usuario user1 = new Usuario();
 		user1.setNombre("Rodolfo");
 		Usuario user2 = new Usuario();
 		user2.setNombre("Laura");
-		res[0] = new Mensaje("Buenas tardes!", user1, user2, new Date());
-		res[1] = new Mensaje("Hombre, cuanto tiempo!", user2,
-				user1, new Date());
+		res[0] = new Mensaje("Buenas tardes!", user1, user2, LocalDateTime.now());
+		res[1] = new Mensaje("Hombre, cuanto tiempo!", user2, user1, LocalDateTime.now());
 
-        return res;
-    }
-/*
-	@GetMapping("/profile")
-	public String getSignUp(Model model, HttpSession session) {
-		if(session.getAttribute("user") != null) 
-			return "redirect:/user/" + ((Usuario) session.getAttribute("user")).getId();
-		return "registro";
-	}*/
+		return res;
+	}
+	/*
+	   @GetMapping("/profile")
+	   public String getSignUp(Model model, HttpSession session) {
+	   if(session.getAttribute("user") != null) 
+	   return "redirect:/user/" + ((Usuario) session.getAttribute("user")).getId();
+	   return "registro";
+	   }*/
 
-	
+
 	@GetMapping("/profile")
 	public String getProfile(Model model, HttpSession session) {
 		Usuario user = new Usuario();
@@ -69,8 +67,8 @@ public class RootController {
 		Tags etiqueta2= new Tags();
 		etiqueta2.setCategoriaTipo(true);
 		etiqueta2.setContenido("Concierto");
-		
-		
+
+
 		user.setCorreo("pepe@ucm.es");
 		user.setPassword("1234");
 		user.setNombre("Pepe");
@@ -84,7 +82,7 @@ public class RootController {
 		System.out.println(user.getNombre());
 
 		// session.setAttribute("user", user);
-		
+
 		model.addAttribute("user", user);
 		model.addAttribute("nombre", user.getNombre());
 		model.addAttribute("edad", user.getFecha_nac());
@@ -98,10 +96,9 @@ public class RootController {
 			add("tag4");
 			add("tag5");
 		}});
-		
+
 		return "profile";
-	}
-	
+  }
 	
     @GetMapping("/mensajes")
     public String mostrarMensajes(Model model, HttpSession session) {
@@ -120,7 +117,36 @@ public class RootController {
     }
   
     @GetMapping("/busqueda")
-    public String getMethodName(Model model, HttpSession session) {
+    public String searching(Model model) {
+		Evento e = new Evento();
+		Evento e2 = new Evento();
+		Tags t = new Tags();
+		Tags t2 = new Tags();
+		Evento[] eventos = new Evento[2];
+		List<Tags> categoria1 = new ArrayList<Tags>();
+		List<Tags> categoria2 = new ArrayList<Tags>();
+		e.setNombre("Partido Benéfico de Fútbol");
+		e.setDescripcion("Para ayudar a la asociacion 'Afectados por IW'");
+
+		e2.setNombre("Visita al Museo del Jamon");
+		e2.setDescripcion("Nos lo vamos a pasar super bien");
+
+		t.setContenido("Deportivo");
+		t.setCategoriaTipo(true);
+
+		t2.setContenido("Cultural");
+		t2.setCategoriaTipo(true);
+
+		categoria1.add(t);
+		categoria2.add(t2);
+		e.setTags(categoria1);
+		e2.setTags(categoria2);
+
+		eventos[0]= e;
+		eventos[1]= e2;
+
+		model.addAttribute("event", eventos);
+
         return "busqueda";
     }
     
@@ -129,42 +155,60 @@ public class RootController {
 	public String index(
 			Model model 
 			) { 
-			model.addAttribute("titulo", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."); // escribe en modelo
-			model.addAttribute("descripcion", "Orci a scelerisque purus semper eget duis at. Eleifend quam adipiscing vitae proin sagittis nisl rhoncus mattis rhoncus.");
-			model.addAttribute("tags", new ArrayList<String>() {{
-				add("tag");
-				add("tag1");
-				add("tag2");
-				add("tag3");
-				add("tag4");
-				add("tag5");
-			}});
-			model.addAttribute("listnum", new ArrayList<Integer>() {{
-				add(1);
-				add(2);
-				add(3);
-				add(4);
-				add(5);
-				add(6);
-			}});
-			
-			Evento e = new Evento("e1");
-			this.entityManager.persist(e);
-			return "matchAndGoVistaModerador"; 
-	}
-    
-    @GetMapping("/evento") 
+		model.addAttribute("titulo", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."); // escribe en modelo
+		model.addAttribute("descripcion", "Orci a scelerisque purus semper eget duis at. Eleifend quam adipiscing vitae proin sagittis nisl rhoncus mattis rhoncus.");
+		model.addAttribute("tags", new ArrayList<String>() {{
+			add("tag");
+			add("tag1");
+			add("tag2");
+			add("tag3");
+			add("tag4");
+			add("tag5");
+		}});
+		model.addAttribute("listnum", new ArrayList<Integer>() {{
+			add(1);
+			add(2);
+			add(3);
+			add(4);
+			add(5);
+			add(6);
+		}});
+
+		Evento e = new Evento("e1");
+		this.entityManager.persist(e);
+		return "matchAndGoVistaModerador"; 
+			}
+
+	@GetMapping("/evento") 
 	public String showEvent(
 			Model model // comunicación con vist
 			) { // viene del formulario
-			return "matchAndGoEvento"; // vista resultante
-	}
-    @GetMapping("/admin") 
+		return "matchAndGoEvento"; // vista resultante
+			}
+	@GetMapping("/admin") 
 	public String admin(
 			Model model // comunicación con vist
 			) { // viene del formulario
-			return "admin_view"; // vista resultante
-	}
-    
-    
+	
+		Usuario [] allUsers = new Usuario[7];
+		allUsers[0] = new Usuario(1, "nombre 2", "apellidos 2", "correo 2", "password 2", "fecha_nac 2", "String sexo 2", "String roles 2");
+		allUsers[1] = new Usuario(2, "nombre", "apellidos", "correo", "password", "fecha_nac", "String sexo", "String roles");
+		allUsers[2] = new Usuario(3, "nombre 3", "apellidos 3", "correo 3", "password 3", "fecha_nac 3", "String sexo 3", "String roles 3");
+		allUsers[3] = new Usuario(4, "nombre 4", "apellidos 4", "correo 4", "password 4", "fecha_nac 4", "String sexo 4", "String roles 4");
+		allUsers[4] = new Usuario(5, "nombre 5", "apellidos 5", "correo 5", "password 5", "fecha_nac 5", "String sexo 5", "String roles 5");
+		allUsers[5] = new Usuario(6, "nombre 6", "apellidos 6", "correo 6", "password 6", "fecha_nac 6", "String sexo 6", "String roles 6");
+		allUsers[6] = new Usuario(7, "nombre 7", "apellidos 7", "correo 7", "password 7", "fecha_nac 7", "String sexo 7", "String roles 7");
+	
+		Evento [] allEvents = new Evento[4];
+		allEvents[0]= new Evento(0,"nombre evento", "descripcion evento", "ubicacion evento", LocalDateTime.now(), LocalDateTime.now());
+		allEvents[1]= new Evento(1,"nombre evento 1", "descripcion evento 1", "ubicacion evento 1", LocalDateTime.now(), LocalDateTime.now());
+		allEvents[2]= new Evento(2,"nombre evento 2", "descripcion evento 2", "ubicacion evento 2", LocalDateTime.now(), LocalDateTime.now());
+		allEvents[3]= new Evento(3,"nombre evento 3", "descripcion evento 3", "ubicacion evento 3", LocalDateTime.now(), LocalDateTime.now());
+
+		model.addAttribute("allUsers", allUsers);
+		model.addAttribute("allEvents", allEvents);
+		return "admin_view"; // vista resultante
+			}
+
+
 }

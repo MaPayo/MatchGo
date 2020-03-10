@@ -21,11 +21,34 @@ public class Tags {
 	@ManyToMany(mappedBy="tags")
 	private List<Usuario> usuarioSubscrito;
 	
+	@ManyToMany(mappedBy="tags")
+	private List<Evento> events;
+	
 	public Tags() {
 		super();
 	}
 	
 	
+	public boolean isCategoriaTipoPorDefecto() {
+		return categoriaTipoPorDefecto;
+	}
+
+
+	public void setCategoriaTipoPorDefecto(boolean categoriaTipoPorDefecto) {
+		this.categoriaTipoPorDefecto = categoriaTipoPorDefecto;
+	}
+
+
+	public List<Evento> getEvents() {
+		return events;
+	}
+
+
+	public void setEvents(List<Evento> events) {
+		this.events = events;
+	}
+
+
 	public long getId() {
 		return id;
 	}
@@ -54,4 +77,16 @@ public class Tags {
 	public void setUsuarioSubscrito(List<Usuario> usuarioSubscrito) {
 		this.usuarioSubscrito = usuarioSubscrito;
 	}
+
+	@Override
+	public String toString() {
+		return "{" +
+			" id='" + getId() + "'" +
+			", contenido='" + getContenido() + "'" +
+			", categoriaTipoPorDefecto='" + isCategoriaTipoPorDefecto() + "'" +
+			", usuarioSubscrito='" + getUsuarioSubscrito() + "'" +
+			", events='" + getEvents() + "'" +
+			"}";
+	}
+	
 }

@@ -1,6 +1,6 @@
 package es.ucm.fdi.iw.matchandgo.model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -9,7 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 @Entity
 public class Evento {
@@ -19,8 +18,8 @@ public class Evento {
 	private String nombre;
 	private String descripcion;
 	private String ubicacion;
-	private Date fecha;
-	private Date publicada;
+	private LocalDateTime fecha;
+	private LocalDateTime publicada;
 	
 	public Evento() {
 		super();
@@ -31,7 +30,7 @@ public class Evento {
 		this.nombre = nombre;
 	}
 
-	public Evento(long id, String nombre, String descripcion, String ubicacion, Date fecha, Date publicada) {
+	public Evento(long id, String nombre, String descripcion, String ubicacion, LocalDateTime fecha, LocalDateTime publicada) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
@@ -41,16 +40,15 @@ public class Evento {
 		this.publicada = publicada;
 	}
 
-	/*
-	@ManyToMany(mappedBy = "tags")
-	private List<Tag> tags;
+	
+	@ManyToMany
+	private List<Tags> tags;
 	
 	@ManyToMany
 	private List<Usuario> participantes;
 	
 	@ManyToOne
 	private Usuario creador;
-	*/
 	
 	public long getId() {
 	return id;
@@ -85,27 +83,27 @@ public class Evento {
 		this.ubicacion = ubicacion;
 	}
 
-	public Date getFecha() {
+	public LocalDateTime getFecha() {
 		return fecha;
 	}
 
-	public void setFecha(Date fecha) {
+	public void setFecha(LocalDateTime fecha) {
 		this.fecha = fecha;
 	}
 
-	public Date getPublicada() {
+	public LocalDateTime getPublicada() {
 		return publicada;
 	}
 
-	public void setPublicada(Date publicada) {
+	public void setPublicada(LocalDateTime publicada) {
 		this.publicada = publicada;
 	}
-/*
-	public List<Tag> getTags() {
+
+	public List<Tags> getTags() {
 		return tags;
 	}
 
-	public void setTags(List<Tag> tags) {
+	public void setTags(List<Tags> tags) {
 		this.tags = tags;
 	}
 
@@ -125,6 +123,6 @@ public class Evento {
 		this.creador = creador;
 	}
 
-*/
+
 
 }

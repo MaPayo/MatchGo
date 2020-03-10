@@ -6,39 +6,48 @@
 		<title>Admin</title>
 		<!-- <th:block th:replace="fragments/header :: header" /></th:block> -->
 	</head>
-	<body>
-		<nav th:replace="fragments/nav.html :: nav">
-			El navegador
-		</nav>
-
-		<div class="contenedorGeneral">
-			<div id="contEvents" class="" hidden>
-
-				<div class="eventCard" th:each="prd: ${allEvents}">
+	<body class="bgwhite">
+		<header>
+			<nav th:replace="fragments/nav.html :: nav">
+			El navegado
+			</nav>
+		</header>
+		<div class="margintop150px bgblue">
+			<div class="container bgwhite">
+				<ul class="noliststyle displayflex">
+					<li class="bgblue brtop padding30"><a th:onclick="|javascript:changeData(true)|">Usuarios</a></li>
+					<li class="padding30"><a  th:onclick="|javascript:changeData(false)|">Eventos</a></li>
+				</ul>
+			</div> 
+			<div id="contEvents" class="width100" hidden>
+				<div class="eventCard bgwhite" th:each="event: ${allEvents}">
 					<div class="cardUpperContainer">
-						<img th:src="@{/img/noImage.png}" alt="" class="placeImage">
-						<h2 th:text="${titulo}">Partido de Baloncesto benefico</h2>
+						<img th:src="@{/img/{id}.png(id=${event.getId()})}" alt="" class="placeImage">
+						<h2 th:text="${event.getNombre()}"></h2>
 					</div>
 					<div class="cardLowerContainer">
 						<div>
-							<div><span th:text="${descripcion}">Description</span></div>
+							<div><span th:text="${event.getDescripcion()}"></span></div>
+							<!--<button type="button" class="acceptButton">Aceptar</button>-->
+							<button type="button" class="declineButton"  th:onclick="|javascript:blockEvent(__${event.getId()}__)|">Eliminar</button>
 							<div class="tagBox">
-								<span class="tag category"> Deportivo </span><span class="tag" th:each="tag: ${tags}"><span th:text="${tag}">Benefico</span></span>
+								<!--	<span class="tag category"> Deportivo </span><span class="tag" th:each="tag: ${event.getTags()}"><span th:text="${tag.getNombre()}">Benefico</span></span>-->
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div id="contUsers" class="">
+			<div id="contUsers" class="width100">
 
-				<div class="userCard" th:each="prd: ${allUsers}">
+				<div class="eventCard bgwhite" th:each="user: ${allUsers}">
 					<div class="cardUpperContainer">
-						<h2 id="nombre"> Nombre del usuario<span th:text="${user.nombre}"> Pepito</span></h2>
+						<h2 id="nombre"><span th:text="${user.getNombre()}"></span></h2>
 					</div>
 					<div class="cardLowerContainer">
-						<p id="edad">Edad usuario <span th:text="${user.edad}"> 25</span></p>
-						<p id="sexo">Sexo usuario <span th:text="${user.sexo}"> Hombre</span></p>
-						<p id="valoracion">Valoración<span th:text="${user.valoracion}"> 3 estrellas</span></p>
+						<p id="edad"><span th:text="${user.getFecha_nac()}"></span></p>
+						<p id="sexo"><span th:text="${user.getSexo()}"></span></p>
+						<!--	<p id="valoracion">Valoración<span th:text="${user.valoracion}"> 3 estrellas</span></p>-->
+						<button type="button" class="declineButton" th:onclick="|javascript:blockEvent(__${user.getId()}__)|">Bloquear</button>
 					</div>
 				</div>
 			</div>
