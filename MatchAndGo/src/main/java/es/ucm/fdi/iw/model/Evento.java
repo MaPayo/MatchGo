@@ -30,14 +30,14 @@ public class Evento {
 		this.nombre = nombre;
 	}
 
-	public Evento(long id, String nombre, String descripcion, String ubicacion, LocalDateTime fecha, LocalDateTime publicada) {
+	public Evento(long id, String nombre, String descripcion, String ubicacion) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
 		this.descripcion = descripcion;
 		this.ubicacion = ubicacion;
-		this.fecha = fecha;
-		this.publicada = publicada;
+		this.fecha = LocalDateTime.now();
+		this.publicada = LocalDateTime.now();
 	}
 
 	
