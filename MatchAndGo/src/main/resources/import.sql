@@ -52,21 +52,27 @@ INSERT INTO usuario(id,nombre,apellidos,correo,password,fecha_nac,sexo,roles) VA
 	'USER'
 );
 
-INSERT INTO evento(id,nombre,descripcion,ubicacion) VALUES (
+INSERT INTO evento(id,nombre,descripcion,ubicacion,fecha,publicada) VALUES (
 	1,
 	'Nombre Evento',
 	'Descripcion Evnto',
-	'El retiro'
+	'El retiro',
+	NOW(),
+	NOW()
 );
-INSERT INTO evento(id,nombre,descripcion,ubicacion) VALUES (
+INSERT INTO evento(id,nombre,descripcion,ubicacion,fecha,publicada) VALUES (
 	2,
 	'Nombre Evento 2',
 	'Descripcion Evnto 2',
-	'El retiro'
+	'El retiro',
+	NOW(),
+	NOW()
 );
-INSERT INTO evento(id,nombre,descripcion,ubicacion) VALUES (
+INSERT INTO evento(id,nombre,descripcion,ubicacion,fecha,publicada) VALUES (
 	3,
 	'Nombre Evento 3',
 	'Descripcion Evnto 3',
-	'El retiro'
+	'El retiro',
+	NOW(),
+	NOW()
 );

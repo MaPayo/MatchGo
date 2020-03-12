@@ -5,18 +5,34 @@
 		<link rel="shortcut icon" type="image/png" th:href="@{/img/logo.png}">
 		<title>Admin</title>
 		<!-- <th:block th:replace="fragments/header :: header" /></th:block> -->
+		<script>
+			window.onload = function(){
+				document.getElementById("listEvents").addEventListener("click",function() {
+					document.getElementById("listEvents").classList.add("bgblue");
+					document.getElementById("listUsers").classList.remove("bgblue");
+					document.getElementById("contEvents").hidden = false;
+					document.getElementById("contUsers").hidden = true;
+				});
+				document.getElementById("listUsers").addEventListener("click",function() {
+					document.getElementById("listEvents").classList.remove("bgblue");
+					document.getElementById("listUsers").classList.add("bgblue");
+					document.getElementById("contUsers").hidden = false;
+					document.getElementById("contEvents").hidden = true;
+				});
+			};
+		</script>
 	</head>
 	<body class="bgwhite">
 		<header>
 			<nav th:replace="fragments/nav.html :: nav">
-			El navegado
+				El navegado
 			</nav>
 		</header>
 		<div class="margintop150px bgblue">
 			<div class="container bgwhite">
 				<ul class="noliststyle displayflex">
-					<li class="bgblue brtop padding30"><a th:onclick="|javascript:changeData(true)|">Usuarios</a></li>
-					<li class="padding30"><a  th:onclick="|javascript:changeData(false)|">Eventos</a></li>
+					<li id="listUsers" class="bgblue brtop padding30"><a>Usuarios</a></li>
+					<li id="listEvents" class="brtop padding30"><a>Eventos</a></li>
 				</ul>
 			</div> 
 			<div id="contEvents" class="width100" hidden>
@@ -27,7 +43,7 @@
 					</div>
 					<div class="cardLowerContainer">
 						<div>
-							<div><span th:text="${event.getDescripcion()}"></span></div>
+							<div><span th:text="${event.getDescripcion()}"></span> Para: <span th:text="${event.getFecha()}"></span> Publicada: <span th:text="${event.getPublicada()}"></span></div>
 							<!--<button type="button" class="acceptButton">Aceptar</button>-->
 							<button type="button" class="declineButton"  th:onclick="|javascript:blockEvent(__${event.getId()}__)|">Eliminar</button>
 							<div class="tagBox">
