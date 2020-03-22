@@ -41,7 +41,7 @@ import es.ucm.fdi.iw.model.User.Role;
  * @author mfreire
  */
 @Controller()
-@RequestMapping("user")
+@RequestMapping("profile")
 public class UserController {
 	
 	private static final Logger log = LogManager.getLogger(UserController.class);
@@ -59,7 +59,7 @@ public class UserController {
 	public String getUser(@PathVariable long id, Model model, HttpSession session) {
 		User u = entityManager.find(User.class, id);
 		model.addAttribute("user", u);
-		return "user";
+		return "profile";
 	}
 
 	@PostMapping("/{id}")
@@ -85,7 +85,7 @@ public class UserController {
 			target.setPassword(passwordEncoder.encode(edited.getPassword()));
 		}		
 		target.setUsername(edited.getUsername());
-		return "user";
+		return "profile";
 	}	
 	
 	@GetMapping(value="/{id}/photo")
@@ -120,7 +120,7 @@ public class UserController {
 				! requester.hasRole(Role.ADMIN)) {
 			response.sendError(HttpServletResponse.SC_FORBIDDEN, 
 					"No eres administrador, y éste no es tu perfil");
-			return "user";
+			return "profile";
 		}
 		
 		log.info("Updating photo for user {}", id);
@@ -137,6 +137,6 @@ public class UserController {
 			}
 			log.info("Successfully uploaded photo for {} into {}!", id, f.getAbsolutePath());
 		}
-		return "user";
+		return "profile";
 	}
 }
