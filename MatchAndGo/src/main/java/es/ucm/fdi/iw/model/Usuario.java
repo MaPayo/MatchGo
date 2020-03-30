@@ -25,7 +25,7 @@ public class Usuario {
 
 	public enum Role{
 		USER,ADMIN, MOD
-	}
+	}	
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -66,6 +66,15 @@ public class Usuario {
 	@OneToMany(mappedBy="creador")
 	private List<Evento> createdEvents;
 	
+	@Override
+	public int hashCode() {
+		return Long.hashCode(getId());
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		return ((Usuario)o).getId() == getId();
+	}
 	
 	/**
 	 * Checks whether this user has a given role.
