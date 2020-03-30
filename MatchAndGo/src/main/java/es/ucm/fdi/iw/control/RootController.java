@@ -1,7 +1,7 @@
 package es.ucm.fdi.iw.control;
 
-import java.util.ArrayList;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -56,17 +56,17 @@ public class RootController {
 	   }*/
 
 
-	@GetMapping("/profile")
-	public String getProfile(Model model, HttpSession session) {
+	public Usuario pasoDeModificarElImportSql() {
 		Usuario user = new Usuario();
 		Tags etiqueta1= new Tags();
 		etiqueta1.setCategoriaTipo(false);
 		etiqueta1.setContenido("Futbol");
-
+		entityManager.persist(etiqueta1);
+		
 		Tags etiqueta2= new Tags();
 		etiqueta2.setCategoriaTipo(true);
 		etiqueta2.setContenido("Concierto");
-
+		entityManager.persist(etiqueta2);
 
 		user.setCorreo("pepe@ucm.es");
 		user.setPassword("1234");
@@ -75,10 +75,26 @@ public class RootController {
 		user.setFecha_nac("05/03/1965");
 		user.setSexo("Hombre");
 		user.setImagen("");
+		user.setEnabled(true);
 		// user.setTags(tags);
 		user.setRoles("USER");
-		System.out.println("----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" );
-		System.out.println(user.getNombre());
+		entityManager.persist(user);
+		entityManager.flush();
+		return user;
+	}
+	
+	@GetMapping("/profile")
+	@Transactional
+	public String getProfile(Model model, HttpSession session) {
+
+		Usuario user = null;
+		try {
+			user = (Usuario)entityManager.createNamedQuery("Usuario.byUsername", Usuario.class)
+	                .setParameter("username", "Pepe")
+	                .getSingleResult();
+		} catch (Exception e) {
+			user = pasoDeModificarElImportSql();
+		}	
 
 		// session.setAttribute("user", user);
 

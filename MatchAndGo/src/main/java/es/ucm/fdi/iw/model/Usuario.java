@@ -1,5 +1,6 @@
 package es.ucm.fdi.iw.model;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -8,15 +9,17 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
 
 
 @Entity
-/*@NamedQueries({
-	@NamedQuery(name="User.ByEmail", query= "SELECT u form Usuario u WHERE"
-			+ "u.email= :email")
-})*/
+@NamedQueries({
+	@NamedQuery(name="Usuario.byUsername", query= "SELECT u from Usuario u WHERE "
+			+ "u.nombre = :username")
+})
 
 public class Usuario {
 
@@ -40,6 +43,8 @@ public class Usuario {
 	private String roles;
 	private String imagen;
 	
+	private boolean enabled;
+	
 	@OneToMany(mappedBy="valorado")
 	private List<Valoracion> valoracionesRecibidas;
 
@@ -60,6 +65,18 @@ public class Usuario {
 	
 	@OneToMany(mappedBy="creador")
 	private List<Evento> createdEvents;
+	
+	
+	/**
+	 * Checks whether this user has a given role.
+	 * @param role to check
+	 * @return true iff this user has that role.
+	 */
+	public boolean hasRole(Role role) {
+		String roleName = role.name();
+		return Arrays.stream(roles.split(","))
+				.anyMatch(r -> r.equals(roleName));
+	}
 	
 	
 	public List<Evento> getJoinedEvents() {
@@ -210,6 +227,16 @@ public class Usuario {
 
 	public void setListaMensajesRecibidos(List<Mensaje> listaMensajesRecibidos) {
 		this.listaMensajesRecibidos = listaMensajesRecibidos;
+	}
+
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
 	}
 	
 

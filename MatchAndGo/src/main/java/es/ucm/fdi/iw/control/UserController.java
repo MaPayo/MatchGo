@@ -10,7 +10,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import javax.persistence.EntityManager;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
@@ -32,8 +31,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import es.ucm.fdi.iw.LocalData;
-import es.ucm.fdi.iw.model.User;
-import es.ucm.fdi.iw.model.User.Role;
+import es.ucm.fdi.iw.model.Usuario;
+import es.ucm.fdi.iw.model.Usuario.Role;
 
 /**
  * User-administration controller
@@ -57,7 +56,7 @@ public class UserController {
 
 	@GetMapping("/{id}")
 	public String getUser(@PathVariable long id, Model model, HttpSession session) {
-		User u = entityManager.find(User.class, id);
+		Usuario u = entityManager.find(Usuario.class, id);
 		model.addAttribute("user", u);
 		return "profile";
 	}
@@ -67,13 +66,13 @@ public class UserController {
 	public String postUser(
 			HttpServletResponse response,
 			@PathVariable long id, 
-			@ModelAttribute User edited, 
+			@ModelAttribute Usuario edited, 
 			@RequestParam(required=false) String pass2,
 			Model model, HttpSession session) throws IOException {
-		User target = entityManager.find(User.class, id);
+		Usuario target = entityManager.find(Usuario.class, id);
 		model.addAttribute("user", target);
 		
-		User requester = (User)session.getAttribute("u");
+		Usuario requester = (Usuario)session.getAttribute("u");
 		if (requester.getId() != target.getId() &&
 				! requester.hasRole(Role.ADMIN)) {			
 			response.sendError(HttpServletResponse.SC_FORBIDDEN, 
@@ -84,7 +83,7 @@ public class UserController {
 			// save encoded version of password
 			target.setPassword(passwordEncoder.encode(edited.getPassword()));
 		}		
-		target.setUsername(edited.getUsername());
+		target.setNombre(edited.getNombre());
 		return "profile";
 	}	
 	
@@ -111,11 +110,11 @@ public class UserController {
 			HttpServletResponse response,
 			@RequestParam("photo") MultipartFile photo,
 			@PathVariable("id") String id, Model model, HttpSession session) throws IOException {
-		User target = entityManager.find(User.class, Long.parseLong(id));
+		Usuario target = entityManager.find(Usuario.class, Long.parseLong(id));
 		model.addAttribute("user", target);
 		
 		// check permissions
-		User requester = (User)session.getAttribute("u");
+		Usuario requester = (Usuario)session.getAttribute("u");
 		if (requester.getId() != target.getId() &&
 				! requester.hasRole(Role.ADMIN)) {
 			response.sendError(HttpServletResponse.SC_FORBIDDEN, 

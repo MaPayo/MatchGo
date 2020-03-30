@@ -16,7 +16,7 @@
 			<a th:href="@{/logout}" href="/logout">logout</a>
 			<a th:href="@{/user/{id}(id=${session.u.id})}">
 				<img class="userthumb" th:src="@{/user/{id}/photo(id=${session.u.id})}">
-				<span th:text="${session.u.username}">Pepe</span></a>						
+				<span th:text="${session.u.nombre}">Pepe</span></a>						
 		</div>
 		<div class="logx" th:unless="${session.u}">
 			<a th:href="@{/login}" href="/login">login</a>
@@ -27,14 +27,14 @@
 			*/-->
 			<div class="debug" th:if="${application.debug}">
 				<form th:action="@{/login}" method="post">
-					<input type="hidden" name="username" value="a">
+					<input type="hidden" name="username" value="nombre">
 					<input type="hidden" name="password" value="aa">
 					<button type="submit">a</button>
   				</form>				
 				<form th:action="@{/login}" method="post">
-					<input type="hidden" name="username" value="b">
+					<input type="hidden" name="username" value="nombre 2">
 					<input type="hidden" name="password" value="aa">
-					<button type="submit">z</button>
+					<button type="submit">b</button>
   				</form> 
   			</div>
 		</div>		
