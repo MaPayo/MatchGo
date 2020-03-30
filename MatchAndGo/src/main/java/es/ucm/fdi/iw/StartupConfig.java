@@ -2,6 +2,7 @@ package es.ucm.fdi.iw;
 
 import java.text.SimpleDateFormat;
 
+import javax.persistence.EntityManager;
 import javax.servlet.ServletContext;
 
 import org.apache.logging.log4j.LogManager;
@@ -27,9 +28,12 @@ public class StartupConfig {
 
 	@Autowired
 	private ServletContext context;
-	
+
+	@Autowired
+	private EntityManager entityManager;
+		
 	@EventListener(ContextRefreshedEvent.class)
-	public void contextRefreshedEvent() {
+	public void contextRefreshedEvent() {	
 		String debugProperty = env.getProperty("es.ucm.fdi.debug");
 		context.setAttribute("debug", debugProperty != null 
 				&& Boolean.parseBoolean(debugProperty.toLowerCase()));
@@ -41,4 +45,5 @@ public class StartupConfig {
 		context.setAttribute("dateFormatter", 
 				new SimpleDateFormat("YYYY-MM-DD'T'HH:mm:ss.sssZ"));
 	}
+
 }

@@ -1,7 +1,6 @@
 package es.ucm.fdi.iw.control;
 
 import java.io.File;
-import java.time.LocalDateTime;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
@@ -18,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import es.ucm.fdi.iw.LocalData;
-import es.ucm.fdi.iw.model.User;
-import es.ucm.fdi.iw.model.Evento;
 import es.ucm.fdi.iw.model.Usuario;
 
 /**
@@ -48,7 +45,7 @@ public class AdminController {
 		model.addAttribute("basePath", env.getProperty("es.ucm.fdi.base-path"));
 
 		model.addAttribute("users", entityManager.createQuery(
-				"SELECT u FROM User u").getResultList());
+				"SELECT u FROM Usuario u").getResultList());
 		
 		model.addAttribute("allUsers", entityManager.createQuery(
 				"SELECT u FROM Usuario u").getResultList());
@@ -61,18 +58,18 @@ public class AdminController {
 	@PostMapping("/toggleuser")
 	@Transactional
 	public String delUser(Model model,	@RequestParam long id) {
-		User target = entityManager.find(User.class, id);
-		if (target.getEnabled() == 1) {
+		Usuario target = entityManager.find(Usuario.class, id);
+		if (target.isEnabled()) {
 			// disable
 			File f = localData.getFile("user", ""+id);
 			if (f.exists()) {
 				f.delete();
 			}
 			// disable user
-			target.setEnabled((byte)0); 
+			target.setEnabled(false); 
 		} else {
 			// enable user
-			target.setEnabled((byte)1);
+			target.setEnabled(true);
 		}
 		return index(model);
 	}	
