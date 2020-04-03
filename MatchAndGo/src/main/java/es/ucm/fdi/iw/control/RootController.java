@@ -39,9 +39,9 @@ public class RootController {
 
 		// Creamos el chat de ejemplo
 		User user1 = new User();
-		user1.setName("Rodolfo");
+		user1.setFirstName("Rodolfo");
 		User user2 = new User();
-		user2.setName("Laura");
+		user2.setFirstName("Laura");
 		res[0] = new Message("Buenas tardes!", user1, user2, LocalDateTime.now());
 		res[1] = new Message("Hombre, cuanto tiempo!", user2, user1, LocalDateTime.now());
 
@@ -70,7 +70,7 @@ public class RootController {
 
 		user.setEmail("pepe@ucm.es");
 		user.setPassword("1234");
-		user.setName("Pepe");
+		user.setFirstName("Pepe");
 		user.setLastName("el del quinto");
 		user.setBirthDate("05/03/1965");
 		user.setSexo("Hombre");
@@ -99,7 +99,7 @@ public class RootController {
 		// session.setAttribute("user", user);
 
 		model.addAttribute("user", user);
-		model.addAttribute("nombre", user.getName());
+		model.addAttribute("nombre", user.getFirstName());
 		model.addAttribute("edad", user.getBirthDate());
 		model.addAttribute("sexo", user.getGender());
 		model.addAttribute("valoracion", "3 estrellas");

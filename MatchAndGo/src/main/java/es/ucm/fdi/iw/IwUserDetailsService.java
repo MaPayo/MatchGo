@@ -37,7 +37,7 @@ public class IwUserDetailsService implements UserDetailsService {
 		        log.info("Roles for " + username + " include " + roles.get(roles.size()-1));
 	        }
 	        return new org.springframework.security.core.userdetails.User(
-	        		u.getName(), u.getPassword(), roles); 
+	        		u.getUsername(), u.getPassword(), roles); 
 	    } catch (Exception e) {
     		log.info("No such user: " + username + "(e = " + e.getMessage() + ")");
     		throw new UsernameNotFoundException(username);
