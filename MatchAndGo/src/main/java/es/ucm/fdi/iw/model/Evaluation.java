@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class Valoracion {
+public class Evaluation {
 
 	
 
@@ -16,14 +16,14 @@ public class Valoracion {
 	private long id;
 
 	@ManyToOne
-	private Usuario valorante;
+	private User valorante;
 	
 	@ManyToOne
-	private Usuario valorado;
+	private User valorado;
 	private double puntuacion;
 	private String comentario;
 	
-	public Valoracion() {
+	public Evaluation() {
 		super();
 	}
 	
@@ -44,19 +44,19 @@ public class Valoracion {
 		this.puntuacion = puntuacion;
 	}
 	
-	public Usuario getValorado() {
+	public User getValorado() {
 		return valorado;
 	}
 	
-	public void setValorado(Usuario valorado) {
+	public void setValorado(User valorado) {
 		this.valorado = valorado;
 	}
 	
-	public Usuario getValorante() {
+	public User getValorante() {
 		return valorante;
 	}
 	
-	public void setValorante(Usuario valorante) {
+	public void setValorante(User valorante) {
 		this.valorante = valorante;
 	}
 	

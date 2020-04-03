@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import es.ucm.fdi.iw.model.Usuario;
+import es.ucm.fdi.iw.model.User;
 
 public class IwUserDetailsService implements UserDetailsService {
 
@@ -27,17 +27,17 @@ public class IwUserDetailsService implements UserDetailsService {
 
     public UserDetails loadUserByUsername(String username){
     	try {
-	        Usuario u = entityManager.createNamedQuery("Usuario.byUsername", Usuario.class)
+	        User u = entityManager.createNamedQuery("Usuario.byUsername", User.class)
                     .setParameter("username", username)
                     .getSingleResult();
 	        // build UserDetails object
 	        ArrayList<SimpleGrantedAuthority> roles = new ArrayList<>();
-	        for (String r : u.getRoles().split("[,]")) {
+	        for (String r : u.getRole().split("[,]")) {
 	        	roles.add(new SimpleGrantedAuthority("ROLE_" + r));
 		        log.info("Roles for " + username + " include " + roles.get(roles.size()-1));
 	        }
 	        return new org.springframework.security.core.userdetails.User(
-	        		u.getNombre(), u.getPassword(), roles); 
+	        		u.getName(), u.getPassword(), roles); 
 	    } catch (Exception e) {
     		log.info("No such user: " + username + "(e = " + e.getMessage() + ")");
     		throw new UsernameNotFoundException(username);

@@ -19,7 +19,7 @@ public class Tags {
 	private boolean categoriaTipoPorDefecto;
 
 	@ManyToMany(mappedBy="tags")
-	private List<Usuario> usuarioSubscrito;
+	private List<User> usuarioSubscrito;
 	
 	@ManyToMany(mappedBy="tags")
 	private List<Evento> events;
@@ -71,10 +71,10 @@ public class Tags {
 		this.categoriaTipoPorDefecto = categoriaTipo;
 	}
 	
-	public List<Usuario> getUsuarioSubscrito() {
+	public List<User> getUsuarioSubscrito() {
 		return usuarioSubscrito;
 	}
-	public void setUsuarioSubscrito(List<Usuario> usuarioSubscrito) {
+	public void setUsuarioSubscrito(List<User> usuarioSubscrito) {
 		this.usuarioSubscrito = usuarioSubscrito;
 	}
 

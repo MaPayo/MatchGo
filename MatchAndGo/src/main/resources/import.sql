@@ -3,8 +3,9 @@
 -- 		application-default ó application-externaldb en modo 'create'
 --
 
-INSERT INTO usuario(id,nombre,apellidos,correo,password,fecha_nac,sexo,roles,enabled) VALUES (
+INSERT INTO usuario(id, username, nombre,apellidos,correo,password,fecha_nac,sexo,roles,enabled) VALUES (
 	1, 
+	'n',
 	'nombre',
 	'apellidos',
 	'correo',
@@ -14,8 +15,9 @@ INSERT INTO usuario(id,nombre,apellidos,correo,password,fecha_nac,sexo,roles,ena
 	'ADMIN',true
 );
 
-INSERT INTO usuario(id,nombre,apellidos,correo,password,fecha_nac,sexo,roles,enabled) VALUES (
+INSERT INTO usuario(id,username, nombre,apellidos,correo,password,fecha_nac,sexo,roles,enabled) VALUES (
 	2, 
+	'n2',
 	'nombre 2',
 	'apellidos 2',
 	'correo 2',
@@ -25,8 +27,9 @@ INSERT INTO usuario(id,nombre,apellidos,correo,password,fecha_nac,sexo,roles,ena
 	'USER',true
 );
 
-INSERT INTO usuario(id,nombre,apellidos,correo,password,fecha_nac,sexo,roles,enabled) VALUES (
+INSERT INTO usuario(id,username, nombre,apellidos,correo,password,fecha_nac,sexo,roles,enabled) VALUES (
 	3, 
+	'n3',
 	'nombre 3',
 	'apellidos 3',
 	'correo 3',
