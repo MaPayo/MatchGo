@@ -115,7 +115,7 @@ public class RootController {
 		return "profile";
   }
 	
-  @GetMapping("/busqueda")
+  @GetMapping("/search")
   public String searching(Model model) {
 	  Evento e = new Evento();
 	  Evento e2 = new Evento();
@@ -146,7 +146,7 @@ public class RootController {
 
 	  model.addAttribute("event", eventos);
 
-	  return "busqueda";
+	  return "search";
   }
 
 	@GetMapping("/error")

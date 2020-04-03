@@ -25,10 +25,12 @@
                 <p id="sexo">Sexo usuario <span th:text="${sexo}"></span></p>	 
                 <p id="valoracion">Valoración<span th:text="${valoracion}"></span></p>	   
             </div>
+
         </div>
 	</div>
 	<!-- Este div solo si es tu perfil-->
 <!--
+
         </div>
         <div class="divBoton" th:if="(${session.user.id} eq ${user.id})">
             <a class="boton" id="Modificar" th:href="@{/user/modificarPerfil(id=${user.id})}">Modificar perfil</a>
