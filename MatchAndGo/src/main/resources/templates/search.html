@@ -13,6 +13,7 @@
         El navegador
     </nav>
 
+<<<<<<< Updated upstream:MatchAndGo/src/main/resources/templates/busqueda.html
     <input type="search"> <button type="button" class="busqueda">Buscar</button>
     <div class="eventCard">
         <div class="cardUpperContainer">
@@ -30,6 +31,10 @@
         </div>
     </div>
     <div class="eventCard">
+=======
+    <input type="search"> <button type="button" class="search">Buscar</button>
+    <div th:each="evento: ${event}" class="eventCard">
+>>>>>>> Stashed changes:MatchAndGo/src/main/resources/templates/search.html
         <div class="cardUpperContainer">
             <img th:src="@{/img/noImage.png}" alt="" class="placeImage">
             <h2><span th:text="${titulo}">Partido de Baloncesto benefico</span>
