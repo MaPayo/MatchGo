@@ -16,12 +16,12 @@ public class Evaluation {
 	private long id;
 
 	@ManyToOne
-	private Usuario evaluator; //valorador
+	private User valorante;
 	
 	@ManyToOne
-	private Usuario evaluated; //valorado
-	private double score;
-	private String review;
+	private User valorado;
+	private double puntuacion;
+	private String comentario;
 	
 	public Evaluation() {
 		super();
@@ -36,35 +36,35 @@ public class Evaluation {
 		this.id = id;
 	}
 	
-	public double getScore() {
-		return score;
+	public double getPuntuacion() {
+		return puntuacion;
 	}
 	
-	public void setScore(double score) {
-		this.score = score;
+	public void setPuntuacion(double puntuacion) {
+		this.puntuacion = puntuacion;
 	}
 	
-	public Usuario getEvaluated() {
-		return evaluated;
+	public User getValorado() {
+		return valorado;
 	}
 	
-	public void setEvaluated(Usuario evaluated) {
-		this.evaluated = evaluated;
+	public void setValorado(User valorado) {
+		this.valorado = valorado;
 	}
 	
-	public Usuario getEvaluator() {
-		return evaluator;
+	public User getValorante() {
+		return valorante;
 	}
 	
-	public void setValorante(Usuario evaluator) {
-		this.evaluator = evaluator;
+	public void setValorante(User valorante) {
+		this.valorante = valorante;
 	}
 	
-	public String getReview() {
-		return review;
+	public String getComentario() {
+		return comentario;
 	}
 	
-	public void setReview(String review) {
-		this.review = review;
+	public void setComentario(String comentario) {
+		this.comentario = comentario;
 	}
 }

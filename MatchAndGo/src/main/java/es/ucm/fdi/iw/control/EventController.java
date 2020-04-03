@@ -31,9 +31,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import es.ucm.fdi.iw.LocalData;
-import es.ucm.fdi.iw.model.Usuario;
+import es.ucm.fdi.iw.model.User;
 import es.ucm.fdi.iw.model.Evento;
-import es.ucm.fdi.iw.model.Usuario.Role;
+import es.ucm.fdi.iw.model.User.Role;
 
 /**
  * User-administration controller
@@ -60,8 +60,8 @@ public class EventController {
 		
 		Evento e = entityManager.find(Evento.class, id);
 		
-		Usuario requester = (Usuario)session.getAttribute("u");
-		requester = entityManager.find(Usuario.class, requester.getId());
+		User requester = (User)session.getAttribute("u");
+		requester = entityManager.find(User.class, requester.getId());
 
 		model.addAttribute("access", e.checkAccess(requester));
 		model.addAttribute("event", e);
@@ -78,7 +78,7 @@ public class EventController {
 		Evento target = entityManager.find(Evento.class, id);
 		model.addAttribute("event", target);
 		
-		Usuario requester = (Usuario)session.getAttribute("u");
+		User requester = (User)session.getAttribute("u");
 		if (requester.getId() != target.getCreador().getId() &&
 				! requester.hasRole(Role.ADMIN)) {			
 			response.sendError(HttpServletResponse.SC_FORBIDDEN, 
@@ -113,11 +113,11 @@ public class EventController {
 			HttpServletResponse response,
 			@RequestParam("photo") MultipartFile photo,
 			@PathVariable("id") String id, Model model, HttpSession session) throws IOException {
-		Usuario target = entityManager.find(Usuario.class, Long.parseLong(id));
+		User target = entityManager.find(User.class, Long.parseLong(id));
 		model.addAttribute("event", target);
 		
 		// check permissions
-		Usuario requester = (Usuario)session.getAttribute("u");
+		User requester = (User)session.getAttribute("u");
 		if (requester.getId() != target.getId() &&
 				! requester.hasRole(Role.ADMIN)) {
 			response.sendError(HttpServletResponse.SC_FORBIDDEN, 

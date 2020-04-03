@@ -31,8 +31,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import es.ucm.fdi.iw.LocalData;
-import es.ucm.fdi.iw.model.Usuario;
-import es.ucm.fdi.iw.model.Usuario.Role;
+import es.ucm.fdi.iw.model.User;
+import es.ucm.fdi.iw.model.User.Role;
 
 /**
  * User-administration controller
@@ -56,7 +56,7 @@ public class UserController {
 
 	@GetMapping("/{id}")
 	public String getUser(@PathVariable long id, Model model, HttpSession session) {
-		Usuario u = entityManager.find(Usuario.class, id);
+		User u = entityManager.find(User.class, id);
 		model.addAttribute("user", u);
 		return "profile";
 	}
@@ -66,13 +66,13 @@ public class UserController {
 	public String postUser(
 			HttpServletResponse response,
 			@PathVariable long id, 
-			@ModelAttribute Usuario edited, 
+			@ModelAttribute User edited, 
 			@RequestParam(required=false) String pass2,
 			Model model, HttpSession session) throws IOException {
-		Usuario target = entityManager.find(Usuario.class, id);
+		User target = entityManager.find(User.class, id);
 		model.addAttribute("user", target);
 		
-		Usuario requester = (Usuario)session.getAttribute("u");
+		User requester = (User)session.getAttribute("u");
 		if (requester.getId() != target.getId() &&
 				! requester.hasRole(Role.ADMIN)) {			
 			response.sendError(HttpServletResponse.SC_FORBIDDEN, 
@@ -83,7 +83,7 @@ public class UserController {
 			// save encoded version of password
 			target.setPassword(passwordEncoder.encode(edited.getPassword()));
 		}		
-		target.setNombre(edited.getNombre());
+		target.setName(edited.getName());
 		return "profile";
 	}	
 	
@@ -110,11 +110,11 @@ public class UserController {
 			HttpServletResponse response,
 			@RequestParam("photo") MultipartFile photo,
 			@PathVariable("id") String id, Model model, HttpSession session) throws IOException {
-		Usuario target = entityManager.find(Usuario.class, Long.parseLong(id));
+		User target = entityManager.find(User.class, Long.parseLong(id));
 		model.addAttribute("user", target);
 		
 		// check permissions
-		Usuario requester = (Usuario)session.getAttribute("u");
+		User requester = (User)session.getAttribute("u");
 		if (requester.getId() != target.getId() &&
 				! requester.hasRole(Role.ADMIN)) {
 			response.sendError(HttpServletResponse.SC_FORBIDDEN, 

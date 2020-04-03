@@ -15,7 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import es.ucm.fdi.iw.model.Usuario;
+import es.ucm.fdi.iw.model.User;
 
 /**
  * Called when a user is first authenticated (via login).
@@ -49,7 +49,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 	    
 	    // add a 'u' session variable, accessible from thymeleaf via ${session.u}
 	    log.info("Storing user info for {} in session {}", username, session.getId());
-		Usuario u = entityManager.createNamedQuery("Usuario.byUsername", Usuario.class)
+		User u = entityManager.createNamedQuery("User.byUsername", User.class)
 		        .setParameter("username", username)
 		        .getSingleResult();		
 		session.setAttribute("u", u);
@@ -60,7 +60,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 				.replaceFirst("/[^/]*$", "/ws"));	// .../foo		 => .../ws
 		
 		// redirects to 'admin' or 'user/{id}', depending on the user
-		response.sendRedirect(u.hasRole(Usuario.Role.ADMIN) ? 
+		response.sendRedirect(u.hasRole(User.Role.ADMIN) ? 
 				"admin/" :
 				"profile/" + u.getId());
 	}     

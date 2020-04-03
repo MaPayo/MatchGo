@@ -19,7 +19,11 @@ public class Tags {
 	private boolean isCategory;
 
 	@ManyToMany(mappedBy="tags")
+<<<<<<< HEAD
 	private List<User> subscribers;
+=======
+	private List<User> usuarioSubscrito;
+>>>>>>> origin/merche
 	
 	@ManyToMany(mappedBy="tags")
 	private List<Event> events;
@@ -72,11 +76,19 @@ public class Tags {
 		this.isCategory = categoriaTipo;
 	}
 	
+<<<<<<< HEAD
 	public List<User> getSubscribers() {
 		return subscribers;
 	}
 	public void setSubscribers(List<User> subscribers) {
 		this.subscribers = subscribers;
+=======
+	public List<User> getUsuarioSubscrito() {
+		return usuarioSubscrito;
+	}
+	public void setUsuarioSubscrito(List<User> usuarioSubscrito) {
+		this.usuarioSubscrito = usuarioSubscrito;
+>>>>>>> origin/merche
 	}
 
 	@Override

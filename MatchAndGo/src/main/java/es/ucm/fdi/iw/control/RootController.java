@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 //import org.springframework.web.bind.annotation.RequestParam;
 
 import es.ucm.fdi.iw.model.Evento;
-import es.ucm.fdi.iw.model.Mensaje;
+import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.Tags;
-import es.ucm.fdi.iw.model.Usuario;
+import es.ucm.fdi.iw.model.User;
 
 
 
@@ -34,16 +34,16 @@ public class RootController {
 
 
 	// Crea unos chats de ejemplo para la vista "mensajes"
-	public Mensaje[] generarChatPorDefecto() {
-		Mensaje[] res = new Mensaje[2];
+	public Message[] generarChatPorDefecto() {
+		Message[] res = new Message[2];
 
 		// Creamos el chat de ejemplo
-		Usuario user1 = new Usuario();
-		user1.setNombre("Rodolfo");
-		Usuario user2 = new Usuario();
-		user2.setNombre("Laura");
-		res[0] = new Mensaje("Buenas tardes!", user1, user2, LocalDateTime.now());
-		res[1] = new Mensaje("Hombre, cuanto tiempo!", user2, user1, LocalDateTime.now());
+		User user1 = new User();
+		user1.setName("Rodolfo");
+		User user2 = new User();
+		user2.setName("Laura");
+		res[0] = new Message("Buenas tardes!", user1, user2, LocalDateTime.now());
+		res[1] = new Message("Hombre, cuanto tiempo!", user2, user1, LocalDateTime.now());
 
 		return res;
 	}
@@ -56,8 +56,8 @@ public class RootController {
 	   }*/
 
 
-	public Usuario pasoDeModificarElImportSql() {
-		Usuario user = new Usuario();
+	public User pasoDeModificarElImportSql() {
+		User user = new User();
 		Tags etiqueta1= new Tags();
 		etiqueta1.setCategoriaTipo(false);
 		etiqueta1.setContenido("Futbol");
@@ -68,16 +68,16 @@ public class RootController {
 		etiqueta2.setContenido("Concierto");
 		entityManager.persist(etiqueta2);
 
-		user.setCorreo("pepe@ucm.es");
+		user.setEmail("pepe@ucm.es");
 		user.setPassword("1234");
-		user.setNombre("Pepe");
-		user.setApellidos("el del quinto");
-		user.setFecha_nac("05/03/1965");
+		user.setName("Pepe");
+		user.setLastName("el del quinto");
+		user.setBirthDate("05/03/1965");
 		user.setSexo("Hombre");
-		user.setImagen("");
+		user.setPhoto("");
 		user.setEnabled(true);
 		// user.setTags(tags);
-		user.setRoles("USER");
+		user.setRole("USER");
 		entityManager.persist(user);
 		entityManager.flush();
 		return user;
@@ -87,9 +87,9 @@ public class RootController {
 	@Transactional
 	public String getProfile(Model model, HttpSession session) {
 
-		Usuario user = null;
+		User user = null;
 		try {
-			user = (Usuario)entityManager.createNamedQuery("Usuario.byUsername", Usuario.class)
+			user = (User)entityManager.createNamedQuery("Usuario.byUsername", User.class)
 	                .setParameter("username", "Pepe")
 	                .getSingleResult();
 		} catch (Exception e) {
@@ -99,9 +99,9 @@ public class RootController {
 		// session.setAttribute("user", user);
 
 		model.addAttribute("user", user);
-		model.addAttribute("nombre", user.getNombre());
-		model.addAttribute("edad", user.getFecha_nac());
-		model.addAttribute("sexo", user.getSexo());
+		model.addAttribute("nombre", user.getName());
+		model.addAttribute("edad", user.getBirthDate());
+		model.addAttribute("sexo", user.getGender());
 		model.addAttribute("valoracion", "3 estrellas");
 		model.addAttribute("tags", new ArrayList<String>() {{
 			add("tag");

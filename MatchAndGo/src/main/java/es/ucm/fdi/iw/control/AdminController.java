@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import es.ucm.fdi.iw.LocalData;
-import es.ucm.fdi.iw.model.Usuario;
+import es.ucm.fdi.iw.model.User;
 
 /**
  * Admin-only controller
@@ -45,10 +45,10 @@ public class AdminController {
 		model.addAttribute("basePath", env.getProperty("es.ucm.fdi.base-path"));
 
 		model.addAttribute("users", entityManager.createQuery(
-				"SELECT u FROM Usuario u").getResultList());
+				"SELECT u FROM User u").getResultList());
 		
 		model.addAttribute("allUsers", entityManager.createQuery(
-				"SELECT u FROM Usuario u").getResultList());
+				"SELECT u FROM User u").getResultList());
 		model.addAttribute("allEvents", entityManager.createQuery(
 				"SELECT u FROM Evento u").getResultList());
 	
@@ -58,7 +58,7 @@ public class AdminController {
 	@PostMapping("/toggleuser")
 	@Transactional
 	public String delUser(Model model,	@RequestParam long id) {
-		Usuario target = entityManager.find(Usuario.class, id);
+		User target = entityManager.find(User.class, id);
 		if (target.isEnabled()) {
 			// disable
 			File f = localData.getFile("user", ""+id);
