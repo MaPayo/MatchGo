@@ -1,57 +1,81 @@
-*{
-    margin:0;
+* {
+    margin: 0;
     padding: 0;
 }
-
-body{
-    
+.bgblue{
+	background-color:#e9f5ff;
+}
+.brtop{
+	border-radius:35px 35px 0 0;
+}
+.bgwhite{
+	background-color:white;
+}
+.noliststyle{
+	list-style:none;
+}
+.displayflex{
+	display:flex;
+}
+.margintop150px{
+	margin-top:150px;
+}
+.padding30{
+	padding:30px;
+}
+.overflowhd{
+	overflow:hidden;
+}
+.width100{
+	width:100%;
+}
+body {
     background-color: whitesmoke;
 }
 
-nav{
+nav {
     display: flex;
     flex-direction: row;
     width: 100%;
     margin-left: 2em;
-    margin-top:auto;
+    margin-top: auto;
     height: 4em;
     flex-direction: column;
     background: linear-gradient(to bottom, green, lightgreen);
 }
 
-a{
+a {
     text-decoration: none;
-    color:black;
+    color: black;
 }
 
-a:visited{
-    color:black;
+a:visited {
+    color: black;
 }
 
-nav a{
+nav a {
     margin-left: 1em;
     /*text-decoration: none;*/
-    color:white;
+    color: white;
     font-size: 1.7em;
-    margin-top:auto;
+    margin-top: auto;
 }
 
-
-nav > a > img {
-	width: 50px;
+nav>a>img {
+    width: 50px;
 }
 
-nav p{
+nav p {
     margin-left: 1em;
     margin-bottom: auto;
     margin-top: auto;
 }
 
-nav a:visited{
-    color:white;
+nav a:visited {
+    color: white;
 }
 
-header{
+header {
     position: fixed;
     width: 100%;
     height: 8em;
@@ -59,18 +83,148 @@ header{
     flex-direction: column;
     background: linear-gradient(to bottom, green, lightgreen);
     text-align: center;
-    top:0;
+    top: 0;
     left: 0;
     z-index: 100;
 }
 
-header h1{
-    margin-top:auto;
+header h1 {
+    margin-top: auto;
     margin-bottom: auto;
     font-family: 'Permanent Marker';
 }
-.principal{
 
+.placeImage {
+    width: 5%;
+    margin-right: 2em;
+}
+
+.eventCard,
+input {
+    margin: 10px 10%;
+    border: 1px solid black;
+    box-shadow: 3px 3px 10px grey;
+    padding: 1em;
+    border-radius: 2em;
+}
+
+input {
+    margin-right: 10px !important;
+    justify-content: center;
+}
+
+.busqueda {
+    background-color: #ECECEC;
+    color: black!important;
+}
+
+.cardLowerContainer button,
+.busqueda {
+    width: 8em;
+    height: 3em;
+    border-radius: 0.5em;
+    display: inline-block;
+    color: white;
+}
+
+.cardUpperContainer {
+    display: flex;
+    border-bottom: 0.3px solid black;
+    padding-bottom: 1em;
+}
+
+.category {
+    background-color: #ECECEC;
+}
+
+.cardLowerContainer {
+    margin-top: 1em;
+    display: flex;
+    justify-content: space-between;
+}
+
+.tag {
+    margin: 0.2em 0.2em;
+    border: 0.5px solid black;
+    padding: 0.2em;
+    border-radius: 0.5em;
+    display: inline-block;
+}
+
+.acceptButton {
+    background-color: green;
+}
+
+.declineButton {
+    background-color: red;
+}
+
+.tagBox {
+    padding: 0.5em;
+}
+
+.tag {
+    margin: 0.2em 0.2em;
+    border: 0.5px solid black;
+    padding: 0.2em;
+    border-radius: 0.5em;
+    display: inline-block;
+}
+
+.acceptButton {
+    background-color: green;
+}
+
+.declineButton {
+    background-color: red;
+}
+
+.formEvento {
+    margin: 10% 18%;
+    border: 1px solid black;
+    padding: 2em;
+}
+
+.eventImg {
+    width: 7em;
+}
+
+.block>textarea {
+    display: block;
+    margin-top: 2em;
+    width: 20em;
+    height: 5em;
+}
+
+.block>input {
+    width: 20em;
+    height: 1.5em;
+}
+
+.block>select {
+    width: 20em;
+    height: 1.8em;
+}
+
+.block {
+    margin: 0em 2em;
+}
+
+.cardLowerContainer select {
+    width: 20em;
+    margin: 1em 2em;
+    height: 1.5em;
+}
+
+.marginAuto {
+    margin: auto;
+}
+
+.margin {
+    margin-top: 1em;
+}
+
+.principal {
     height: 100%;
     text-align: center;
     width: 100%;
@@ -78,7 +232,8 @@ header h1{
     margin-right: auto;
     background-color: whitesmoke;
 }
-.form_registro{
+
+.form_registro {
     border-radius: 3em;
     background-color: lightgreen;
     width: 40%;
@@ -87,41 +242,41 @@ header h1{
     padding: 1.5em;
     border: 1px black solid;
 }
-.form_registro h1{
-   
+
+.form_registro h1 {
     margin-bottom: 1em;
 }
 
-.form_texto{
+.form_texto {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     margin-bottom: 0.5em;
 }
 
-.form_texto label{
+.form_texto label {
     flex-grow: 1;
     margin-right: auto;
 }
 
-.form_texto input{
+.form_texto input {
     flex-grow: 4;
     height: 1.5em;
     margin-right: 0.5em;
 }
 
-.boton{
-    padding-top:0.5em;
-    padding-bottom:0.5em;
+.boton {
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
     padding-left: 2em;
     padding-right: 2em;
-    border:1px solid black;
-
+    border: 1px solid black;
     background: linear-gradient(to bottom, green, lightgreen);
     text-decoration: none;
-    color:black;
+    color: black;
 }
-.datosPerfil{
+
+.datosPerfil {
     margin-top: 9em;
     height: 30%;
     text-align: center;
@@ -133,40 +288,44 @@ header h1{
     justify-content: center;
 }
 
-.datosPerfil img{
+.datosPerfil img {
     width: 10em;
     height: 10em;
     border-radius: 50%;
 }
-.datos_texto{
+
+.datos_texto {
     margin-left: 2em;
 }
-.datos_texto p{
+
+.datos_texto p {
     margin-top: 0.5em;
 }
-#Modificar{
+
+#Modificar {
     margin-top: 1em;
     margin-left: auto;
     margin-right: auto;
-    padding-top:0.5em;
-    padding-bottom:0.5em;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
     padding-left: 2em;
     padding-right: 2em;
 }
 
-.divBoton{
+.divBoton {
     margin-top: 1em;
     margin-left: auto;
     margin-right: auto;
-    padding-top:0.5em;
-    padding-bottom:0.5em;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
     padding-left: 2em;
     padding-right: 2em;
     width: 20%;
     text-decoration: none;
-    color:white;
+    color: white;
 }
-.intereses_usuario{
+
+.intereses_usuario {
     width: 90%;
     margin-left: auto;
     margin-right: auto;
@@ -176,15 +335,18 @@ header h1{
     justify-content: center;
     flex-direction: column;
 }
-.intereses_usuario h2{
-    border-top: 1 px solid lightgreen;   
+
+.intereses_usuario h2 {
+    border-top: 1 px solid lightgreen;
 }
-.listaIntereses{
-    display:flex;
+
+.listaIntereses {
+    display: flex;
     flex-direction: row;
 }
-.listaIntereses li{
-    display: flex; 
+
+.listaIntereses li {
+    display: flex;
     flex-direction: row;
     margin-top: 0.5em;
     border-bottom: 3px dotted gray;
@@ -194,14 +356,12 @@ header h1{
     padding: 15px 25px;
     border: 3px solid lightgreen;
     border-radius: 30px;
-    color:black;
+    color: black;
     background: lightgreen;
-    
 }
 
-}
 
-    /*     ESTILOS DE MENSAJES    */
+/*     ESTILOS DE MENSAJES    */
 
 .contenedorGeneral {
     margin-top: 3%;
@@ -257,7 +417,8 @@ header h1{
 }
 
 .contactoMensaje {
-    margin-bottom: auto;    /* Con esto el contacto del chat está arriba */
+    margin-bottom: auto;
+    /* Con esto el contacto del chat está arriba */
     align-self: center;
     width: auto;
     border-left: 2px lightgreen solid;
@@ -337,7 +498,8 @@ nav .logo #imagenNormal {
 }
 
 nav .menu {
-    justify-self: right;    /* ESTE HAY QUE ECHARLE UN OJO */
+    justify-self: right;
+    /* ESTE HAY QUE ECHARLE UN OJO */
 }
 
 footer {
@@ -356,7 +518,8 @@ footer #imagenLarga {
 
 footer #imagenNormal {
     display: inline;
+}
 
-li > a > img {
-	 width: 50px;
+li>a>img {
+    width: 50px;
 }

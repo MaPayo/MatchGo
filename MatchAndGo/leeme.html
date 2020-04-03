@@ -1,31 +1,80 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-	<meta charset="utf-8">
-	<title>Leeme: Match&Go</title>
-	<style type="text/css">
-		/* .nota { color: gray; } */
-	</style>
+    <meta charset="utf-8">
+    <title>Leeme: Match&Go</title>
+    <style type="text/css">
+        /* .nota { color: gray; } */
+    </style>
 </head>
+
 <body>
     <h1>Match&Go</h1>
     <h2>1.- Propuesta</h2>
-        <p></p>
-    <h2>2.- Enlaces a las vistas</h2>
+    <p>
+        ¿Cansado de ir al cine solo? ¿Quieres ir a una exposición de arte acompañado para compartir opinión? ¿Tu grupo planea ir a jugar al tenis pero sois impares? Con Match&Go puedes buscar a esa persona que falta para realizar tu plan ideal o unirte a una
+        actividad de tu interés planteada por otros usuarios. Gracias a esta plataforma, quedarse en casa por falta de acompañante ya nunca será una excusa.
+    </p>
+
+    <p>
+        Soporta los siguientes roles:
         <ul>
-            <li><a href="localhost:8080/perfil"> localhost:8080/perfil </a></li>
-            <li><a href="localhost:8080/buscador"> localhost:8080/buscador </a></li>
-            <li><a href="localhost:8080/mod"> localhost:8080/mod </a></li>
-            <li><a href="localhost:8080/mensajes"> localhost:8080/mensajes </a></li>
-            <li><a href="localhost:8080/evento"> localhost:8080/evento </a></li>
-            <li><a href="localhost:8080/admin"> localhost:8080/admin </a></li>
+            <li>
+                El <b>administrador</b>. Los altos mandos de la plataforma. Solo actúa cuando se notifican muchos reportes a una persona o evento en concreto (pueden haber fallado los filtros de los moderadores). Son los que pueden eliminar a usuarios
+                de forma temporal o permanente de la aplicación, se encargan de nombrar o retirar moderadores y pueden eliminar eventos ya publicados.
+            </li>
+            <li>
+                El <b>moderador</b>. Son usuarios de la aplicación que debido a su alto nivel de puntuación dada por los demás y su antigüedad, son considerados para actuar de moderadores en la aplicación. Ellos se encargan de ver todos los eventos que
+                se suben a la plataforma y son los responsables de aceptarlos o rechazarlos. Si los rechazan, pasan a los administradores con un mensaje de por qué se ha rechazado, para que ellos tengan la última palabra.
+            </li>
+            <li>
+                El <b>usuario registrado</b>.Estos usuarios poseen un perfil propio que les permite:
+                <ul>
+                    <li>Crear eventos.</li>
+                    <li>Unirse a eventos.</li>
+                    <li>Reportar usuarios y/o eventos, luego los administradores comprobarán la respectiva cuenta/evento y tomarán las medidas oportunas.</li>
+                    <li>Puntuar a los miembros de la actividad a la que estén apuntados una vez se haya realizado la misma.</li>
+                </ul>
+                Una vez unidos a un evento, tienen la posibilidad de acceder a un chat interno de la aplicación donde pueden mensajearse con otros miembros. Si has creado un evento, la gente te envía peticiones para entrar al evento, nunca va a entrar alguien que no
+                se haya aceptado previamente. Cuando se envía una petición, el solicitante puede empezar una conversación con el dueño de tal manera que puedan acordar algunos detalles o resolver dudas antes de formar parte del evento. Cuando creas un
+                evento, este lo verá antes un super usuario y él dará el visto bueno antes de publicarlo.
+            </li>
+            <li>
+                El <b>usuario no registrado</b> Sólo tendrá una visión global de la aplicación, siendo incapaz de unirse a eventos creados ni de acceder a perfiles de otros usuarios. También podrá buscar eventos pero no puede ver información concreta
+                (Dirección, fecha, enlaces de los perfiles de la gente que va, ...) a menos que se registre.
+            </li>
         </ul>
+    </p>
+
+    <h2>2.- Enlaces a las vistas</h2>
+    <p>DISCLAIMER: Tenemos un problema con la vista "profile" y "admin" ya que empezamos a integrar el JPA en la app. Para la siguiente entrega estará solucionado. En el caso de "admin" se muestra el contenedor general, pero está vacío.
+    </p>
+    <ul>
+        <li><a href="http://localhost:8080/profile"> localhost:8080/profile </a>
+            Muestra un perfil, y un montón de tags vaciós
+        </li>
+        <li><a href="http://localhost:8080/busqueda"> localhost:8080/busqueda </a>
+            Muestra un único resultado
+        </li>
+        <li><a href="http://localhost:8080/revisar"> localhost:8080/revisar </a>
+            Vista de moderador (para ver si un evento es buen o no)
+        </li>
+        <li><a href="http://localhost:8080/mensajes"> localhost:8080/mensajes </a>
+            Mensajería para 1 usuario. Muestra sus contactos y los mensajes con cada uno.
+        </li>
+        <li><a href="http://localhost:8080/evento"> localhost:8080/evento </a>
+            Falta casi todo por hacer
+        </li>
+        <li><a href="http://localhost:8080/admin"> localhost:8080/admin </a>
+            Ahora todo son Usuario (y no User)
+        </li>
+    </ul>
     <h2>3.- Recursos Externos</h2>
     <h3> El logo </h3>
-    <p>En el logo se utilizan varias imágenes de internet, el enlace a su creador es el siguiente: 
-        <a href="https://www.flaticon.com/authors/freepik">https://www.flaticon.com/authors/freepik</a> y
-        tenemos permiso a usarlo mientras que incluyamos un enlace a su obra. Dicho enlace se puede ver en el
-        footer de cada página.
+    <p>En el logo se utilizan varias imágenes de internet, el enlace a su creador es el siguiente:
+        <a href="https://www.flaticon.com/authors/freepik">https://www.flaticon.com/authors/freepik</a> y tenemos permiso a usarlo mientras que incluyamos un enlace a su obra. Dicho enlace se puede ver en el footer de cada página.
     </p>
 </body>
+
 </html>

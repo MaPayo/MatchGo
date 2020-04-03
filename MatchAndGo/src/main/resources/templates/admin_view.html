@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" lang="es-ES">
+	<head>
+		<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" media="screen"/>
+		<link rel="shortcut icon" type="image/png" th:href="@{/img/logo.png}">
+		<title>Admin</title>
+		<!-- <th:block th:replace="fragments/header :: header" /></th:block> -->
+		<script>
+			window.onload = function(){
+				document.getElementById("listEvents").addEventListener("click",function() {
+					document.getElementById("listEvents").classList.add("bgblue");
+					document.getElementById("listUsers").classList.remove("bgblue");
+					document.getElementById("contEvents").hidden = false;
+					document.getElementById("contUsers").hidden = true;
+				});
+				document.getElementById("listUsers").addEventListener("click",function() {
+					document.getElementById("listEvents").classList.remove("bgblue");
+					document.getElementById("listUsers").classList.add("bgblue");
+					document.getElementById("contUsers").hidden = false;
+					document.getElementById("contEvents").hidden = true;
+				});
+			};
+		</script>
+	</head>
+	<body class="bgwhite">
+		<header>
+			<nav th:replace="fragments/nav.html :: nav">
+				El navegado
+			</nav>
+		</header>
+		<div class="margintop150px bgblue">
+			<div class="container bgwhite">
+				<ul class="noliststyle displayflex">
+					<li id="listUsers" class="bgblue brtop padding30"><a>Usuarios</a></li>
+					<li id="listEvents" class="brtop padding30"><a>Eventos</a></li>
+				</ul>
+			</div> 
+			<div id="contEvents" class="width100" hidden>
+				<div class="eventCard bgwhite" th:each="event: ${allEvents}">
+					<div class="cardUpperContainer">
+						<img th:src="@{/img/{id}.png(id=${event.getId()})}" alt="" class="placeImage">
+						<h2 th:text="${event.getNombre()}"></h2>
+					</div>
+					<div class="cardLowerContainer">
+						<div>
+							<div><span th:text="${event.getDescripcion()}"></span> Para: <span th:text="${event.getFecha()}"></span> Publicada: <span th:text="${event.getPublicada()}"></span></div>
+							<!--<button type="button" class="acceptButton">Aceptar</button>-->
+							<button type="button" class="declineButton"  th:onclick="|javascript:blockEvent(__${event.getId()}__)|">Eliminar</button>
+							<div class="tagBox">
+								<!--	<span class="tag category"> Deportivo </span><span class="tag" th:each="tag: ${event.getTags()}"><span th:text="${tag.getNombre()}">Benefico</span></span>-->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="contUsers" class="width100">
+
+				<div class="eventCard bgwhite" th:each="user: ${allUsers}">
+					<div class="cardUpperContainer">
+						<h2 id="nombre"><span th:text="${user.getNombre()}"></span></h2>
+					</div>
+					<div class="cardLowerContainer">
+						<p id="edad"><span th:text="${user.getFecha_nac()}"></span></p>
+						<p id="sexo"><span th:text="${user.getSexo()}"></span></p>
+						<!--	<p id="valoracion">Valoración<span th:text="${user.valoracion}"> 3 estrellas</span></p>-->
+						<button type="button" class="declineButton" th:onclick="|javascript:blockEvent(__${user.getId()}__)|">Bloquear</button>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+		<footer th:replace="fragments/footer.html :: footer"> El Footer de la página </footer>
+	</body>
+</html>

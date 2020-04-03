@@ -2,52 +2,52 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-16">
-    <link rel="stylesheet" type="text/css" href="style.css" media="screen">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" media="screen">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" type="image/png" th:href="@{/images/icon.png}" />
+    <link rel="shortcut icon" type="image/png" th:href="@{/img/icon.png}">
     <title>Registro</title>
-    <th:block th:replace="fragments/header ::header" />
-    </th:block>
+  <!--    <th:block th:replace="fragments/header ::header" />   </th:block> -->
 </head>
 
 <body>
+
     <nav th:replace="fragments/nav.html :: nav">
         Nav goes here
     </nav>
+  
     <div class="principal">
-        <!-- Si hay sesión iniciada muestra datosPerfil, si no el registro -->
-        <div class="datosPerfil" th:if="${session.user}">
-            <img th:src="@{/user/{id}/photo(id=${user.id})}">
+        <div class="datosPerfil"> <!--th:if="${session.user}"  -->
+         <img th:src="@{/img/noImage.png}">   <!-- "@{/user/{id}/photo(id=${user.id})}" -->            
             <div class="datos_texto">
-                <h2 id="nombre"> Nombre del usuario<span th:text="${user.nombre}"> Pepito</span></h2>
-                <p id="edad">Edad usuario <span th:text="${user.edad}"> 25</span></p>
-                <p id="sexo">Sexo usuario <span th:text="${user.sexo}"> Hombre</span></p>
-                <p id="valoracion">Valoración<span th:text="${user.valoracion}"> 3 estrellas</span></p>
+                <h2 id="nombre"> Nombre del usuario <span th:text="${nombre}"></span></h2>      
+                <p id="edad">Edad usuario <span th:text="${edad}"></span></p>	   
+                <p id="sexo">Sexo usuario <span th:text="${sexo}"></span></p>	 
+                <p id="valoracion">Valoración<span th:text="${valoracion}"></span></p>	   
             </div>
 
-            <!-- Este div solo si es tu perfil-->
+        </div>
+	</div>
+	<!-- Este div solo si es tu perfil-->
+<!--
 
         </div>
         <div class="divBoton" th:if="(${session.user.id} eq ${user.id})">
-            <a class="boton" id="Modificar" th:href="@{/usuario/modificarPerfil}">Modificar perfil</a>
+            <a class="boton" id="Modificar" th:href="@{/user/modificarPerfil(id=${user.id})}">Modificar perfil</a>
         </div>
+-->
+ 
         <div class="intereses_usuario">
             <h2 class="centrado">Intereses:</h2>
             <ul class="listaIntereses">
-                <li th:each="tag: ${user.intereses}">
-                    <p><span th:text="${tag}">tag</span> Aqui van las tags cargadas del servidor</p>
-                </li>
-                <li th:each="tag: ${user.intereses}">
-                    <p><span th:text="${tag}">tag</span> Aqui van las tags cargadas del servidor</p>
-                </li>
-                <li th:each="tag: ${user.intereses}">
-                    <p><span th:text="${tag}">tag</span> Aqui van las tags cargadas del servidor</p>
+                <li th:each="tag: ${tags}">
+                    <p><span th:text="${tag}">tag</span></p>
                 </li>
             </ul>
         </div>
-        <!-- Este div solo se muestra si no hay session-->
-        <div class="form_registro" th:unless="${session.user}">
+    
+       	 <!-- Este div solo se muestra si no hay session-->
+  <!--        <div class="form_registro" th:unless="${session.user}">
             <h1>Registro</h1>
             <form th:action="@{/signup}" method="POST" enctype="multipart/form-data">
                 <div class="form_texto">
@@ -59,8 +59,12 @@
                     <input type="password" minlength="6" maxlength="15" name="password" id="txt_password" required>
                 </div>
                 <div class="form_texto">
-                    <label for="txt_name">Nombre completo:</label>
+                    <label for="txt_name">Nombre:</label>
                     <input type="text" minlength="4" maxlength="30" name="name" id="txt_name" required>
+                </div>
+                 <div class="form_texto">
+                    <label for="txt_name">Apellidos:</label>
+                    <input type="text" minlength="4" maxlength="30" name="apellidos" id="txt_apellidos" required>
                 </div>
                 <div class="form_texto">
                     <label>Sexo:</label>
@@ -88,12 +92,15 @@
                 </div>
             </form>
         </div>
+         
     </div>
+-->
+<!-- 
 
     <footer th:replace="fragments/footer.html :: footer">
         Footer goes here
     </footer>
-
+ -->
 </body>
 
 </html>
