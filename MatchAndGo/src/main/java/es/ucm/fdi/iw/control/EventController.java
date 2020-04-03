@@ -32,6 +32,7 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 
 import es.ucm.fdi.iw.LocalData;
 import es.ucm.fdi.iw.model.Usuario;
+import es.ucm.fdi.iw.model.Evento;
 import es.ucm.fdi.iw.model.Usuario.Role;
 
 /**
@@ -40,10 +41,10 @@ import es.ucm.fdi.iw.model.Usuario.Role;
  * @author mfreire
  */
 @Controller()
-@RequestMapping("profile")
-public class UserController {
+@RequestMapping("event")
+public class EventController {
 	
-	private static final Logger log = LogManager.getLogger(UserController.class);
+	private static final Logger log = LogManager.getLogger(EventController.class);
 	
 	@Autowired 
 	private EntityManager entityManager;
@@ -55,41 +56,43 @@ public class UserController {
 	private PasswordEncoder passwordEncoder;
 
 	@GetMapping("/{id}")
-	public String getUser(@PathVariable long id, Model model, HttpSession session) {
-		Usuario u = entityManager.find(Usuario.class, id);
-		model.addAttribute("user", u);
-		return "profile";
+	public String getEvent(@PathVariable long id, Model model, HttpSession session) {
+		
+		Evento e = entityManager.find(Evento.class, id);
+		
+		Usuario requester = (Usuario)session.getAttribute("u");
+		requester = entityManager.find(Usuario.class, requester.getId());
+
+		model.addAttribute("access", e.checkAccess(requester));
+		model.addAttribute("event", e);
+		return "matchAndGoEvento";
 	}
 
 	@PostMapping("/{id}")
 	@Transactional
-	public String postUser(
+	public String postEvent(
 			HttpServletResponse response,
 			@PathVariable long id, 
-			@ModelAttribute Usuario edited, 
-			@RequestParam(required=false) String pass2,
+			@ModelAttribute Evento edited, 
 			Model model, HttpSession session) throws IOException {
-		Usuario target = entityManager.find(Usuario.class, id);
-		model.addAttribute("user", target);
+		Evento target = entityManager.find(Evento.class, id);
+		model.addAttribute("event", target);
 		
 		Usuario requester = (Usuario)session.getAttribute("u");
-		if (requester.getId() != target.getId() &&
+		if (requester.getId() != target.getCreador().getId() &&
 				! requester.hasRole(Role.ADMIN)) {			
 			response.sendError(HttpServletResponse.SC_FORBIDDEN, 
-					"No eres administrador, y éste no es tu perfil");
+					"No eres administrador, y éste no es tu evento");
 		}
 		
-		if (edited.getPassword() != null && edited.getPassword().equals(pass2)) {
-			// save encoded version of password
-			target.setPassword(passwordEncoder.encode(edited.getPassword()));
-		}		
-		target.setNombre(edited.getNombre());
-		return "profile";
+		// copiar todos los campos cambiados de edited a target
+
+		return "matchAndGoEvento";
 	}	
 	
 	@GetMapping(value="/{id}/photo")
 	public StreamingResponseBody getPhoto(@PathVariable long id, Model model) throws IOException {		
-		File f = localData.getFile("user", ""+id);
+		File f = localData.getFile("event", ""+id);
 		InputStream in;
 		if (f.exists()) {
 			in = new BufferedInputStream(new FileInputStream(f));
@@ -111,7 +114,7 @@ public class UserController {
 			@RequestParam("photo") MultipartFile photo,
 			@PathVariable("id") String id, Model model, HttpSession session) throws IOException {
 		Usuario target = entityManager.find(Usuario.class, Long.parseLong(id));
-		model.addAttribute("user", target);
+		model.addAttribute("event", target);
 		
 		// check permissions
 		Usuario requester = (Usuario)session.getAttribute("u");
@@ -136,6 +139,6 @@ public class UserController {
 			}
 			log.info("Successfully uploaded photo for {} into {}!", id, f.getAbsolutePath());
 		}
-		return "profile";
+		return "matchAndGoEvento";
 	}
 }

@@ -33,3 +33,4 @@ build/
 
 ### DB Files ###
 db/
+MatchAndGo/bin/**
