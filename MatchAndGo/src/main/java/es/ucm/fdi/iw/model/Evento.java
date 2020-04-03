@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
+import es.ucm.fdi.iw.model.Usuario.Role;
+
 @Entity
 public class Evento {
 	@Id
@@ -21,6 +23,12 @@ public class Evento {
 	private LocalDateTime fecha;
 	private LocalDateTime publicada;
 	
+	public enum Access {
+		CREATOR,
+		PARTICIPANT,
+		MINIMAL		
+	};
+
 	public Evento() {
 		super();
 	}
@@ -30,17 +38,23 @@ public class Evento {
 		this.nombre = nombre;
 	}
 
-	public Evento(long id, String nombre, String descripcion, String ubicacion, LocalDateTime fecha, LocalDateTime publicada) {
+	public Evento(long id, String nombre, String descripcion, String ubicacion) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
 		this.descripcion = descripcion;
 		this.ubicacion = ubicacion;
-		this.fecha = fecha;
-		this.publicada = publicada;
+		this.fecha = LocalDateTime.now();
+		this.publicada = LocalDateTime.now();
 	}
 
-	
+	public Access checkAccess(Usuario u) {
+		if (u.getId() == creador.getId()) return Access.CREATOR;
+		if (u.hasRole(Role.ADMIN) || participantes.contains(u)) return Access.PARTICIPANT;
+		return Access.MINIMAL;
+	}
+
+
 	@ManyToMany
 	private List<Tags> tags;
 	

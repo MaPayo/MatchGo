@@ -1,7 +1,7 @@
 package es.ucm.fdi.iw.control;
 
-import java.util.ArrayList;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -56,17 +56,17 @@ public class RootController {
 	   }*/
 
 
-	@GetMapping("/profile")
-	public String getProfile(Model model, HttpSession session) {
+	public Usuario pasoDeModificarElImportSql() {
 		Usuario user = new Usuario();
 		Tags etiqueta1= new Tags();
 		etiqueta1.setCategoriaTipo(false);
 		etiqueta1.setContenido("Futbol");
-
+		entityManager.persist(etiqueta1);
+		
 		Tags etiqueta2= new Tags();
 		etiqueta2.setCategoriaTipo(true);
 		etiqueta2.setContenido("Concierto");
-
+		entityManager.persist(etiqueta2);
 
 		user.setCorreo("pepe@ucm.es");
 		user.setPassword("1234");
@@ -75,10 +75,26 @@ public class RootController {
 		user.setFecha_nac("05/03/1965");
 		user.setSexo("Hombre");
 		user.setImagen("");
+		user.setEnabled(true);
 		// user.setTags(tags);
 		user.setRoles("USER");
-		System.out.println("----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" );
-		System.out.println(user.getNombre());
+		entityManager.persist(user);
+		entityManager.flush();
+		return user;
+	}
+	
+	@GetMapping("/profile")
+	@Transactional
+	public String getProfile(Model model, HttpSession session) {
+
+		Usuario user = null;
+		try {
+			user = (Usuario)entityManager.createNamedQuery("Usuario.byUsername", Usuario.class)
+	                .setParameter("username", "Pepe")
+	                .getSingleResult();
+		} catch (Exception e) {
+			user = pasoDeModificarElImportSql();
+		}	
 
 		// session.setAttribute("user", user);
 
@@ -99,6 +115,40 @@ public class RootController {
 		return "profile";
   }
 	
+  @GetMapping("/busqueda")
+  public String searching(Model model) {
+	  Evento e = new Evento();
+	  Evento e2 = new Evento();
+	  Tags t = new Tags();
+	  Tags t2 = new Tags();
+	  Evento[] eventos = new Evento[2];
+	  List<Tags> categoria1 = new ArrayList<Tags>();
+	  List<Tags> categoria2 = new ArrayList<Tags>();
+	  e.setNombre("Partido Benéfico de Fútbol");
+	  e.setDescripcion("Para ayudar a la asociacion 'Afectados por IW'");
+
+	  e2.setNombre("Visita al Museo del Jamon");
+	  e2.setDescripcion("Nos lo vamos a pasar super bien");
+
+	  t.setContenido("Deportivo");
+	  t.setCategoriaTipo(true);
+
+	  t2.setContenido("Cultural");
+	  t2.setCategoriaTipo(true);
+
+	  categoria1.add(t);
+	  categoria2.add(t2);
+	  e.setTags(categoria1);
+	  e2.setTags(categoria2);
+
+	  eventos[0]= e;
+	  eventos[1]= e2;
+
+	  model.addAttribute("event", eventos);
+
+	  return "busqueda";
+  }
+
 	@GetMapping("/error")
 	public String error(Model model) {
 		return "error";
