@@ -18,7 +18,7 @@ import javax.persistence.OneToMany;
 @Entity
 @NamedQueries({
 	@NamedQuery(name="User.byUsername", query= "SELECT u from User u WHERE "
-			+ "u.name = :username")
+			+ "u.username = :username")
 })
 
 public class User {
@@ -51,7 +51,7 @@ public class User {
 	@OneToMany(mappedBy="evaluated")
 	private List<Evaluation> receivedEvaluation;
 
-	@OneToMany(mappedBy="evaluater")
+	@OneToMany(mappedBy="evaluator")
 	private List<Evaluation> senderEvaluation;
 	
 	@OneToMany(mappedBy="sender")
@@ -64,10 +64,10 @@ public class User {
 	private List<Tags> tags;
 	
 	@ManyToMany(mappedBy = "participants")
-	private List<Evento> joinedEvents;
+	private List<Event> joinedEvents;
 	
 	@OneToMany(mappedBy="creator")
-	private List<Evento> createdEvents;
+	private List<Event> createdEvents;
 	
 	@Override
 	public int hashCode() {
@@ -91,22 +91,22 @@ public class User {
 	}
 	
 	
-	public List<Evento> getJoinedEvents() {
+	public List<Event> getJoinedEvents() {
 		return joinedEvents;
 	}
 
 
-	public void setJoinedEvents(List<Evento> joinedEvents) {
+	public void setJoinedEvents(List<Event> joinedEvents) {
 		this.joinedEvents = joinedEvents;
 	}
 
 
-	public List<Evento> getCreatedEvents() {
+	public List<Event> getCreatedEvents() {
 		return createdEvents;
 	}
 
 
-	public void setCreatedEvents(List<Evento> createdEvents) {
+	public void setCreatedEvents(List<Event> createdEvents) {
 		this.createdEvents = createdEvents;
 	}
 

@@ -15,36 +15,36 @@ public class Tags {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	private String contenido;
-	private boolean categoriaTipoPorDefecto;
+	private String tag;
+	private boolean isCategory;
 
 	@ManyToMany(mappedBy="tags")
-	private List<User> usuarioSubscrito;
+	private List<User> subscribers;
 	
 	@ManyToMany(mappedBy="tags")
-	private List<Evento> events;
+	private List<Event> events;
 	
 	public Tags() {
 		super();
 	}
 	
 	
-	public boolean isCategoriaTipoPorDefecto() {
-		return categoriaTipoPorDefecto;
+	public boolean isCategory() {
+		return isCategory;
 	}
 
 
-	public void setCategoriaTipoPorDefecto(boolean categoriaTipoPorDefecto) {
-		this.categoriaTipoPorDefecto = categoriaTipoPorDefecto;
+	public void setisCategory(boolean isCategory) {
+		this.isCategory = isCategory;
 	}
 
 
-	public List<Evento> getEvents() {
+	public List<Event> getEvents() {
 		return events;
 	}
 
 
-	public void setEvents(List<Evento> events) {
+	public void setEvents(List<Event> events) {
 		this.events = events;
 	}
 
@@ -58,33 +58,34 @@ public class Tags {
 		this.id = id;
 	}
 	
-	public String getContenido() {
-		return contenido;
+	public String getTag() {
+		return tag;
 	}
-	public void setContenido(String contenido) {
-		this.contenido = contenido;
+	public void setTag(String tag) {
+		this.tag = tag;
 	}
-	public boolean getCategoriaTipo() {
-		return categoriaTipoPorDefecto;
+
+	public boolean getIsCategory() {
+		return isCategory;
 	}
-	public void setCategoriaTipo(boolean categoriaTipo) {
-		this.categoriaTipoPorDefecto = categoriaTipo;
+	public void setIsCategory(boolean categoriaTipo) {
+		this.isCategory = categoriaTipo;
 	}
 	
-	public List<User> getUsuarioSubscrito() {
-		return usuarioSubscrito;
+	public List<User> getSubscribers() {
+		return subscribers;
 	}
-	public void setUsuarioSubscrito(List<User> usuarioSubscrito) {
-		this.usuarioSubscrito = usuarioSubscrito;
+	public void setSubscribers(List<User> subscribers) {
+		this.subscribers = subscribers;
 	}
 
 	@Override
 	public String toString() {
 		return "{" +
 			" id='" + getId() + "'" +
-			", contenido='" + getContenido() + "'" +
-			", categoriaTipoPorDefecto='" + isCategoriaTipoPorDefecto() + "'" +
-			", usuarioSubscrito='" + getUsuarioSubscrito() + "'" +
+			", tag='" + getTag() + "'" +
+			", isCategory='" + isCategory() + "'" +
+			", subscribers='" + getSubscribers() + "'" +
 			", events='" + getEvents() + "'" +
 			"}";
 	}

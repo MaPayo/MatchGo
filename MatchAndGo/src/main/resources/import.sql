@@ -3,7 +3,7 @@
 -- 		application-default ó application-externaldb en modo 'create'
 --
 
-INSERT INTO usuario(id, username, nombre,apellidos,correo,password,fecha_nac,sexo,roles,enabled) VALUES (
+INSERT INTO user(id,username, firstName,lastName,email,password,birthDate,gender,userRole,enabled) VALUES (
 	1, 
 	'n',
 	'nombre',
@@ -15,7 +15,7 @@ INSERT INTO usuario(id, username, nombre,apellidos,correo,password,fecha_nac,sex
 	'ADMIN',true
 );
 
-INSERT INTO usuario(id,username, nombre,apellidos,correo,password,fecha_nac,sexo,roles,enabled) VALUES (
+INSERT INTO user(id,username, firstName,lastName,email,password,birthDate,gender,userRole,enabled) VALUES (
 	2, 
 	'n2',
 	'nombre 2',
@@ -27,7 +27,7 @@ INSERT INTO usuario(id,username, nombre,apellidos,correo,password,fecha_nac,sexo
 	'USER',true
 );
 
-INSERT INTO usuario(id,username, nombre,apellidos,correo,password,fecha_nac,sexo,roles,enabled) VALUES (
+INSERT INTO user(id,username, firstName,lastName,email,password,birthDate,gender,userRole,enabled) VALUES (
 	3, 
 	'n3',
 	'nombre 3',
@@ -39,7 +39,7 @@ INSERT INTO usuario(id,username, nombre,apellidos,correo,password,fecha_nac,sexo
 	'USER',true
 );
 
-INSERT INTO evento(id,nombre,descripcion,ubicacion,fecha,publicada) VALUES (
+INSERT INTO event(id,name,description,location,date,publicationDate) VALUES (
 	1,
 	'Nombre Evento',
 	'Descripcion Evnto',
@@ -47,7 +47,7 @@ INSERT INTO evento(id,nombre,descripcion,ubicacion,fecha,publicada) VALUES (
 	NOW(),
 	NOW()
 );
-INSERT INTO evento(id,nombre,descripcion,ubicacion,fecha,publicada) VALUES (
+INSERT INTO event(id,name,description,location,date,publicationDate) VALUES (
 	2,
 	'Nombre Evento 2',
 	'Descripcion Evnto 2',
@@ -55,7 +55,7 @@ INSERT INTO evento(id,nombre,descripcion,ubicacion,fecha,publicada) VALUES (
 	NOW(),
 	NOW()
 );
-INSERT INTO evento(id,nombre,descripcion,ubicacion,fecha,publicada) VALUES (
+INSERT INTO event(id,name,description,location,date,publicationDate) VALUES (
 	3,
 	'Nombre Evento 3',
 	'Descripcion Evnto 3',
