@@ -1,13 +1,17 @@
 package es.ucm.fdi.iw.control;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.io.File;
 import javax.servlet.http.HttpSession;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
@@ -19,8 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.ucm.fdi.iw.LocalData;
-import es.ucm.fdi.iw.model.User;
-
+import es.ucm.fdi.iw.model.Usuario;
 /**
  * Admin-only controller
  * @author mfreire
@@ -31,12 +34,15 @@ import es.ucm.fdi.iw.model.User;
 public class AdminController {
 	
 	private static final Logger log = LogManager.getLogger(AdminController.class);
-	
+
 	@Autowired 
 	private EntityManager entityManager;
 	
 	@Autowired
 	private LocalData localData;
+	
+	@Autowired
+	private SimpMessagingTemplate messagingTemplate;
 	
 	@Autowired
 	private Environment env;
@@ -45,14 +51,8 @@ public class AdminController {
 	public String index(Model model) {
 		model.addAttribute("activeProfiles", env.getActiveProfiles());
 		model.addAttribute("basePath", env.getProperty("es.ucm.fdi.base-path"));
-	//	model.addAttribute("users", entityManager.createQuery(
-	//			"SELECT u FROM Usuario u").getResultList());
-		
-	//	model.addAttribute("allUsers", entityManager.createQuery(
-	//			"SELECT u FROM Usuario u").getResultList());
 		model.addAttribute("allEvents", entityManager.createQuery(
 				"SELECT u FROM Evento u").getResultList());
-	
 		return "admin_view";
 	}
 
@@ -61,12 +61,9 @@ public class AdminController {
 	@ResponseBody
 	public List<Usuario.Transfer> retrieveUsers(HttpSession session){
 		log.info("Generating User List");
-		List<Usuario> usuarios = entityManager.createQuery(
-				"SELECT u FROM Usuario u").getResultList();
+		List<Usuario> usuarios = entityManager.createNamedQuery("Usuario.all").getResultList();
 		return Usuario.asTransferObjects(usuarios);
 	}
-
-
 	
 	@PostMapping("/toggleuser")
 	@Transactional
@@ -100,6 +97,7 @@ public class AdminController {
 			.setParameter("idUser",id)
 			.setParameter("state",newState)
 			.executeUpdate();
+		updateListUsers();
 		return index(model);
 	}	
 
@@ -110,6 +108,13 @@ public class AdminController {
 		entityManager.createNamedQuery("Usuario.deleteUser")
 			.setParameter("idUser",id)
 			.executeUpdate();
+		updateListUsers();
 		return index(model);
+	}
+	
+	public void updateListUsers() {
+		log.info("Sending updated userlist via websocket");
+		List<Usuario> usuarios = entityManager.createNamedQuery("Usuario.all").getResultList();
+		messagingTemplate.convertAndSend("/topic/admin",Usuario.asTransferObjects(usuarios));
 	}	
 }
