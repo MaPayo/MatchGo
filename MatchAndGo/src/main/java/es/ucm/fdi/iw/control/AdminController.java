@@ -24,8 +24,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.ucm.fdi.iw.LocalData;
 import es.ucm.fdi.iw.model.Usuario;
-
-import io.reactivex.Observable;
 /**
  * Admin-only controller
  * @author mfreire
