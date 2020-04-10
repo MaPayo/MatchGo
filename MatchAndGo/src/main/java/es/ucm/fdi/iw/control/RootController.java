@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
@@ -28,7 +29,35 @@ import es.ucm.fdi.iw.model.User;
 public class RootController {
 
 	private static Logger log = LogManager.getLogger(RootController.class);
+	
+	@GetMapping("/")
+	public String index(Model model,HttpSession session) {
+		
+		return "index";
+	}
 
+	@GetMapping("/index")
+	public String welcome(Model model) {
+		return "index";
+	}
+
+	@GetMapping("/login")
+	public String login(Model model,HttpSession session) {
+		if(session.getAttribute("user") != null) 
+			return "redirect:/user/" + ((User) session.getAttribute("user")).getId();
+	
+		return "login";
+	}
+
+	
+	@GetMapping("/error")
+	public String error(Model model) {
+		return "error";
+	}	
+
+}
+	
+/*
 	@Autowired
 	private EntityManager entityManager;
 
@@ -53,7 +82,7 @@ public class RootController {
 	   if(session.getAttribute("user") != null) 
 	   return "redirect:/user/" + ((Usuario) session.getAttribute("user")).getId();
 	   return "registro";
-	   }*/
+	   }
 
 
 	public User pasoDeModificarElImportSql() {
@@ -154,3 +183,4 @@ public class RootController {
 		return "error";
 	}	
 }
+*/

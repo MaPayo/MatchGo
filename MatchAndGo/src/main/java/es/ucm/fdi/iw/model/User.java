@@ -22,7 +22,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @NamedQueries({
 	@NamedQuery(name="User.byUsername",
 	query="SELECT u FROM User u "
-			+ "WHERE u.username = :username AND u.enabled = 1"),
+			+ "WHERE u.username = :username AND u.enabled = true"),
 	@NamedQuery(name="User.hasUsername",
 	query="SELECT COUNT(u) "
 			+ "FROM User u "
@@ -54,7 +54,7 @@ public class User {
 	private String password;
 	private String birthDate;
 	private String gender;
-	private String userRole;
+	private String roles;
 	private String photo;
 	
 	private boolean enabled;
@@ -97,7 +97,7 @@ public class User {
 	 */
 	public boolean hasRole(Role role) {
 		String roleName = role.name();
-		return Arrays.stream(userRole.split(","))
+		return Arrays.stream(roles.split(","))
 				.anyMatch(r -> r.equals(roleName));
 	}
 	
@@ -153,7 +153,7 @@ public class User {
 		this.username= username;
 		this.firstName = firstName;
 		this.lastName = lastname;
-		this.userRole = roles;
+		this.roles = roles;
 		this.password = password;
 		this.email = email;
 		this.birthDate = birthate;
@@ -232,11 +232,11 @@ public class User {
 	}
 	
 	public String getRole() {
-		return userRole;
+		return roles;
 	}
 	
 	public void setRole(String roles) {
-		this.userRole = roles;
+		this.roles = roles;
 	}
 	
 	public String getPhoto() {
