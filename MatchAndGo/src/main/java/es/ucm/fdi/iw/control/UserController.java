@@ -254,10 +254,10 @@ public class UserController {
 				session.setAttribute("user", u);
 				return "redirect:/user/" + u.getId(); // Devuelve el usuario loggeado
 			} else {
-				return "redirect:/login";
+				return "redirect:/user/login";
 			}
 		}
-		return "redirect:/login";
+		return "redirect:/index";
 	}
 
 	@GetMapping("/logout")
