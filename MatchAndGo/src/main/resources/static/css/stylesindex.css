@@ -408,3 +408,124 @@ footer {
     line-height: 24px;
   }
   
+/* template login/signup
+--------------------------------*/
+.btn-rounded-grey {
+    color: black;
+    padding: 15px 25px;
+    border: 3px solid #fff;
+    border-radius: 30px;
+    transition: .5s ease all
+}
+
+.btn-rounded-grey:hover {
+    color: #afeea0;
+    background: #74808a;
+    text-decoration: none
+}
+
+
+#lead-login {
+    position: relative;
+    padding: 10px;
+    overflow: hidden
+}
+
+#lead-form {
+    display: flex;
+    flex-direction: row;
+    background-color: #74808a;
+    background-repeat: round;
+    background-size: cover;
+    padding: 2em;
+}
+
+#lead-content-login {
+    text-align: center;
+    padding: 2em;
+    background-color: #74808a;
+    margin-bottom: 2em;
+}
+
+#lead-content-login h1 {
+    color: #fff;
+    font-weight: 900;
+    font-size: 5em;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    line-height: 0.9em
+}
+
+#lead-content-login h2 {
+    color: #afeea0;
+    font-weight: 500;
+    font-size: 2.25em;
+    margin-bottom: 15px
+}
+
+.signup{
+    
+    margin-right: auto;
+    margin-left: auto;
+    width:50%;
+}
+.signup form{
+    margin: auto;
+    padding: 2.5em;
+    border: 1px solid #fff;
+    background-color: #afeea0;
+    border-radius: 5%;
+}
+
+.signup h2 {
+    text-align: center;
+}
+
+.login{
+    
+    margin-right: auto;
+    margin-left: auto;
+    width:35%
+}
+.login form{
+    margin: auto;
+    padding: 2.5em;
+    border: 1px solid #fff;
+    background-color: #afeea0;
+    border-radius: 5%;
+}
+.divBoton{
+    margin-top: 2em;
+    display:flex;
+    flex-direction: row;
+}
+.divBoton button{
+
+    margin-right: auto;
+    margin-left: auto;
+    
+}
+.login h2 {
+    text-align: center;
+}
+
+.form_texto {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-bottom: 0.5em;
+}
+
+.form_texto label {
+    flex-grow: 1;
+    margin-right: auto;
+}
+
+.form_texto input {
+    flex-grow: 4;
+    height: 1.5em;
+    margin-right: 0.5em;
+}
+
+  
+  

@@ -162,7 +162,7 @@ public class UserController {
 	public String getRegister(Model model, HttpSession session) {
 		if(session.getAttribute("user") != null) 
 			return "redirect:/user/" + ((User) session.getAttribute("user")).getId();
-		return "signup";
+		return "login";
 	}
 	
 	@PostMapping("/signup")
@@ -177,7 +177,7 @@ public class UserController {
 		//redirigimos al registro si el usrname ya existe o las contraseñas no coinciden
 		//aunq esto lo quiero hacer desde el html y que salga un aviso en la pagina
 		if (usernameAlreadyInUse(username) || !password.equals(password2)) {
-			return "redirect:/user/register";
+			return "redirect:/user/login";
 		}
 
 		// Creación de un usuario
@@ -263,7 +263,7 @@ public class UserController {
 	@GetMapping("/logout")
 	public String logout(Model model, HttpSession session) {
 		session.setAttribute("user", null);
-		return "redirect:/welcome";
+		return "redirect:/index";
 	}
 
 	
