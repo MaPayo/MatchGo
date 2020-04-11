@@ -27,17 +27,17 @@ public class IwUserDetailsService implements UserDetailsService {
 
     public UserDetails loadUserByUsername(String username){
     	try {
-	        User u = entityManager.createNamedQuery("Usuario.byUsername", User.class)
+	        User u = entityManager.createNamedQuery("User.byUsername", User.class)
                     .setParameter("username", username)
                     .getSingleResult();
 	        // build UserDetails object
 	        ArrayList<SimpleGrantedAuthority> roles = new ArrayList<>();
-	        for (String r : u.getRole().split("[,]")) {
+	        for (String r : u.getUserRole().split("[,]")) {
 	        	roles.add(new SimpleGrantedAuthority("ROLE_" + r));
 		        log.info("Roles for " + username + " include " + roles.get(roles.size()-1));
 	        }
 	        return new org.springframework.security.core.userdetails.User(
-	        		u.getName(), u.getPassword(), roles); 
+	        		u.getUsername(), u.getPassword(), roles); 
 	    } catch (Exception e) {
     		log.info("No such user: " + username + "(e = " + e.getMessage() + ")");
     		throw new UsernameNotFoundException(username);

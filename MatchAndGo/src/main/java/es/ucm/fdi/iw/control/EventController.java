@@ -32,7 +32,7 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 
 import es.ucm.fdi.iw.LocalData;
 import es.ucm.fdi.iw.model.User;
-import es.ucm.fdi.iw.model.Evento;
+import es.ucm.fdi.iw.model.Event;
 import es.ucm.fdi.iw.model.User.Role;
 
 /**
@@ -58,14 +58,14 @@ public class EventController {
 	@GetMapping("/{id}")
 	public String getEvent(@PathVariable long id, Model model, HttpSession session) {
 		
-		Evento e = entityManager.find(Evento.class, id);
+		Event e = entityManager.find(Event.class, id);
 		
 		User requester = (User)session.getAttribute("u");
 		requester = entityManager.find(User.class, requester.getId());
 
 		model.addAttribute("access", e.checkAccess(requester));
 		model.addAttribute("event", e);
-		return "matchAndGoEvento";
+		return "matchAndGoEvent";
 	}
 
 	@PostMapping("/{id}")
@@ -73,13 +73,13 @@ public class EventController {
 	public String postEvent(
 			HttpServletResponse response,
 			@PathVariable long id, 
-			@ModelAttribute Evento edited, 
+			@ModelAttribute Event edited, 
 			Model model, HttpSession session) throws IOException {
-		Evento target = entityManager.find(Evento.class, id);
+		Event target = entityManager.find(Event.class, id);
 		model.addAttribute("event", target);
 		
 		User requester = (User)session.getAttribute("u");
-		if (requester.getId() != target.getCreador().getId() &&
+		if (requester.getId() != target.getCreator().getId() &&
 				! requester.hasRole(Role.ADMIN)) {			
 			response.sendError(HttpServletResponse.SC_FORBIDDEN, 
 					"No eres administrador, y éste no es tu evento");
@@ -87,7 +87,7 @@ public class EventController {
 		
 		// copiar todos los campos cambiados de edited a target
 
-		return "matchAndGoEvento";
+		return "matchAndGoEvent";
 	}	
 	
 	@GetMapping(value="/{id}/photo")
@@ -139,6 +139,6 @@ public class EventController {
 			}
 			log.info("Successfully uploaded photo for {} into {}!", id, f.getAbsolutePath());
 		}
-		return "matchAndGoEvento";
+		return "matchAndGoEvent";
 	}
 }

@@ -83,7 +83,7 @@ public class UserController {
 			// save encoded version of password
 			target.setPassword(passwordEncoder.encode(edited.getPassword()));
 		}		
-		target.setName(edited.getName());
+		target.setUsername(edited.getUsername());
 		return "profile";
 	}	
 	

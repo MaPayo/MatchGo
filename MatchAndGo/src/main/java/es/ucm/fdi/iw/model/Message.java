@@ -19,9 +19,9 @@ public class Message {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	private String contenido;
-	@ManyToOne(targetEntity = User.class)
+	@ManyToOne
 	private User sender;			// La persona que lo envía
-	@ManyToOne(targetEntity = User.class)
+	@ManyToOne
 	private User receiver;		// La persona que lo recibe
 	private LocalDateTime fecha;				// Hay que tener en cuenta el tipo java.sql.Date para las query SQL
 	private EstadoMensaje estado;
