@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org" lang="es-ES">
+<html xmlns:th="http://thymeleaf.org" lang="es-ES" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 	<head>
 		<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" media="screen"/>
 		<link rel="shortcut icon" type="image/png" th:href="@{/img/logo.png}">
 		<title>Admin</title>
 		<!-- <th:block th:replace="fragments/header :: header" /></th:block> -->
+		<meta name="author" content="colano">
 		<script>
 			window.onload = function(){
 				document.getElementById("listEvents").addEventListener("click",function() {
@@ -21,6 +22,22 @@
 				});
 			};
 		</script>
+		<script th:src="@{/js/simple-datatables-2.1.10.min.js}"></script>
+		<link th:href="@{/css/simple-datatables-2.1.10.css}" rel="stylesheet">
+		<script type="text/javascript">
+			const config = {
+				socketUrl: "[[${session.ws}?:'']]",	// vacío indica falso
+				rootUrl: "[[${session.ws}?@{/}:'']]",
+				csrf: {
+					name: "[[${_csrf.parameterName}]]",
+					value: "[[${_csrf.token}]]"
+				},
+				admin: [[${session.u != null && session.u.hasRole('ADMIN')}?true:false]],
+				userId: [[${session.u != null}?${session.u.id}:-1]]
+			};
+		</script>
+		<script th:src="@{/js/stomp.js}" src="js/stomp.js" type="text/javascript"></script>
+		<script th:src="@{/js/iwclientAdmin.js}" src="js/iwclientAdmin.js" type="text/javascript"></script>
 	</head>
 	<body class="bgwhite">
 		<header>
@@ -46,6 +63,10 @@
 							<div><span th:text="${event.getDescripcion()}"></span> Para: <span th:text="${event.getFecha()}"></span> Publicada: <span th:text="${event.getPublicada()}"></span></div>
 							<!--<button type="button" class="acceptButton">Aceptar</button>-->
 							<button type="button" class="declineButton"  th:onclick="|javascript:blockEvent(__${event.getId()}__)|">Eliminar</button>
+							
+	   <form method="post" th:action="@{/admin/deleteUser(id=${event.getId()})}">
+	   <button type="submit" class="declineButton" value="Eliminar" />
+	   </form>
 							<div class="tagBox">
 								<!--	<span class="tag category"> Deportivo </span><span class="tag" th:each="tag: ${event.getTags()}"><span th:text="${tag.getNombre()}">Benefico</span></span>-->
 							</div>
@@ -53,21 +74,57 @@
 					</div>
 				</div>
 			</div>
-			<div id="contUsers" class="width100">
-
-				<div class="eventCard bgwhite" th:each="user: ${allUsers}">
-					<div class="cardUpperContainer">
-						<h2 id="nombre"><span th:text="${user.getNombre()}"></span></h2>
-					</div>
-					<div class="cardLowerContainer">
-						<p id="edad"><span th:text="${user.getFecha_nac()}"></span></p>
-						<p id="sexo"><span th:text="${user.getSexo()}"></span></p>
-						<!--	<p id="valoracion">Valoración<span th:text="${user.valoracion}"> 3 estrellas</span></p>-->
-						<button type="button" class="declineButton" th:onclick="|javascript:blockEvent(__${user.getId()}__)|">Bloquear</button>
-					</div>
-				</div>
-			</div>
-
+			<div id="contUsers" class="width100"></div>
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+			<script>
+				function appendChild(element){
+					const html = ["<div class='eventCard bgwhite'>" + 
+						"<div class='cardUpperContainer'>" +
+						"<h2 id='nombre'><span>"+ element.nombre +"</span></h2>" + 
+						"</div>" +
+						"<div class='cardLowerContainer'>" +
+						"<p id='edad'><span>"+ element.fecha_nac +"</span></p>" +
+						"<p id='sexo'><span>"+ element.sexo +"</span></p>" +
+						"<form method='get' action='/admin/deleteUser'>" +
+						"<input hidden type='number' name='id' value="+ element.id +">" +
+						"<button type='submit' class='declineButton' value='Eliminar' />" +
+						"</form>" +
+						"<form method='post' action='/admin/blockUser?id="+ element.id +"'>" +
+						"<input hidden type='number' name='id' value="+ element.id +">" +
+						"<button type='submit' class='declineButton' value='Bloquear' />" +
+						"</form>" +
+						"</div>" +
+						"</div>"];
+					$("#contUsers").append(html);
+				}
+				jQuery.ajax({
+					url: config.rootUrl + "admin/userlist", // empieza siempre por config.rootUrl
+					success: function(xhr) {
+						console.log("Ajax petition was ok");
+						xhr.forEach(e => appendChild(e));
+					},
+					error: function() {
+						console.log("sorry something was wrong");
+					},
+				});
+				
+			</script>		
+			<!--
+	   <div class="eventCard bgwhite" th:each="user: ${allUsers}">
+	   <div class="cardUpperContainer">
+	   <h2 id="nombre"><span th:text="${user.getNombre()}"></span></h2>
+	   </div>
+	   <div class="cardLowerContainer">
+	   <p id="edad"><span th:text="${user.getFecha_nac()}"></span></p>
+	   <p id="sexo"><span th:text="${user.getSexo()}"></span></p>
+	   <form method="post" th:action="@{/admin/deleteUser(id=${user.getId()})}">
+	   <button type="submit" class="declineButton" value="Eliminar" />
+	   </form>
+	   <form method="post" th:action="@{/admin/blockUser(id=${user.getId()})}">
+	   <button type="submit" class="declineButton" value="Bloquear" />
+	   </form>
+	   </div>
+	   </div>-->
 		</div>
 
 		<footer th:replace="fragments/footer.html :: footer"> El Footer de la página </footer>

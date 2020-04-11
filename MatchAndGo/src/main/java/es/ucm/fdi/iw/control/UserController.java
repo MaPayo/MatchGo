@@ -184,12 +184,12 @@ public class UserController {
 		User u = new User();
 		u.setUsername(username);
 		u.setPassword(passwordEncoder.encode(password));
-		u.setRole("USER");
+		u.setUserRole("USER");
 		u.setEmail(email);
 		u.setFirstName(firstname);
 		u.setLastName(lastname);
 		//u.setBirthDate(birthdate);
-		u.setSexo(gender);
+		u.setGender(gender);
 		u.setEnabled(true);
 		
 		//No se como tratar las tags

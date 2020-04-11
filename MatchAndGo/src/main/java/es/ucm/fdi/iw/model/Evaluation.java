@@ -56,7 +56,7 @@ public class Evaluation {
 		return evaluator;
 	}
 	
-	public void setValorante(User evaluator) {
+	public void setevaluator(User evaluator) {
 		this.evaluator = evaluator;
 	}
 	

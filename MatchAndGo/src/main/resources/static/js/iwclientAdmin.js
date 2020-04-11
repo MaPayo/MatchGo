@@ -12,7 +12,29 @@ const ws = {
 	 * Default action when message is received. 
 	 */
 	receive: (text) => {
-		console.log(text);
+				$("#contUsers").empty();
+				function appendChild(element){
+					const html = ["<div class='eventCard bgwhite'>" + 
+						"<div class='cardUpperContainer'>" +
+						"<h2 id='nombre'><span>"+ element.nombre +"</span></h2>" + 
+						"</div>" +
+						"<div class='cardLowerContainer'>" +
+						"<p id='edad'><span>"+ element.fecha_nac +"</span></p>" +
+						"<p id='sexo'><span>"+ element.sexo +"</span></p>" +
+						"<form method='get' action='/admin/deleteUser'>" +
+						"<input hidden type='number' name='id' value="+ element.id +">" +
+						"<button type='submit' class='declineButton' value='Eliminar' />" +
+						"</form>" +
+						"<form method='post' action='/admin/blockUser?id="+ element.id +"'>" +
+						"<input hidden type='number' name='id' value="+ element.id +">" +
+						"<button type='submit' class='declineButton' value='Bloquear' />" +
+						"</form>" +
+						"</div>" +
+						"</div>"];
+					$("#contUsers").append(html);
+				}
+				text.forEach(e => appendChild(e));
+		console.log("updating view updated list received via socket");
 	},
 	
 	headers: {'X-CSRF-TOKEN' : config.csrf.value},

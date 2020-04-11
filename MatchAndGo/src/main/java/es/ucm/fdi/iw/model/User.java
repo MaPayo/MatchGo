@@ -1,6 +1,8 @@
 package es.ucm.fdi.iw.model;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -17,12 +19,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-
 @Entity
 @NamedQueries({
-	@NamedQuery(name="User.byUsername",
-	query="SELECT u FROM User u "
-			+ "WHERE u.username = :username AND u.enabled = true"),
+	@NamedQuery(name="User.byUsername", query= "SELECT u from User u WHERE "
+			+ "u.username = :username"),
 	@NamedQuery(name="User.hasUsername",
 	query="SELECT COUNT(u) "
 			+ "FROM User u "
@@ -30,10 +30,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 })
 
 public class User {
-
+	
 	private static Logger log = LogManager.getLogger(User.class);	
 	private static BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-	
+
 	public enum Role{
 		USER,ADMIN, MOD
 	}	
@@ -54,7 +54,7 @@ public class User {
 	private String password;
 	private String birthDate;
 	private String gender;
-	private String roles;
+	private String userRole;
 	private String photo;
 	
 	private boolean enabled;
@@ -97,10 +97,11 @@ public class User {
 	 */
 	public boolean hasRole(Role role) {
 		String roleName = role.name();
-		return Arrays.stream(roles.split(","))
+		return Arrays.stream(userRole.split(","))
 				.anyMatch(r -> r.equals(roleName));
 	}
 	
+
 	/**
 	 * Tests a raw (non-encoded) password against the stored one.
 	 * @param rawPassword to test against
@@ -122,7 +123,8 @@ public class User {
 	 */
 	public static String encodePassword(String rawPassword) {
 		return encoder.encode(rawPassword);
-	}	
+	}	 
+	
 	public List<Event> getJoinedEvents() {
 		return joinedEvents;
 	}
@@ -148,17 +150,78 @@ public class User {
 	}
 	
 	
-	public User(long id,String username, String firstName, String lastname, String email, String password, String birthate, String gender, String roles) {
+	public User(long id,String username, String firtName, String lastname, String email, String password, String birthate, String gender, String roles) {
 		this.id = id;
 		this.username= username;
-		this.firstName = firstName;
+		this.firstName = firtName;
 		this.lastName = lastname;
-		this.roles = roles;
+		this.userRole = roles;
 		this.password = password;
 		this.email = email;
 		this.birthDate = birthate;
 		this.gender = gender;
 	}
+	
+	
+	/**
+	 * Convierte colecciones de mensajes a formato JSONificable
+	 * @param messages
+	 * @return
+	 * @throws JsonProcessingException
+	 */
+	public static List<Transfer> asTransferObjects(Collection<User> users) {
+		ArrayList<Transfer> all = new ArrayList<>();
+		for (User u : users) {
+			all.add(new Transfer(u));
+		}
+		return all;
+	}
+
+	/**
+	 * Objeto para persistir a/de JSON
+	 * @author mfreire
+	 * @author colano
+	 */
+
+	public static class Transfer {
+		public enum Role{
+			USER,ADMIN, MOD
+		}	
+		private long id;
+		private String username;
+		private String firstName;
+		private String lastName;
+		private String email;
+		private String password;
+		private String birthDate;
+		private String gender;
+		private String userRole;
+		private String photo;
+		private boolean enabled;
+		private List<Evaluation> receivedEvaluation;
+		private List<Evaluation> senderEvaluation;
+		private List<Message> sentMessages;
+		private List<Message> receivedMessages;
+		private List<Tags> tags;
+		private List<Event> joinedEvents;
+		private List<Event> createdEvents;
+		
+
+		public Transfer(User m) {
+			this.id = m.getId();
+			this.username = m.getUsername();
+			this.firstName = m.getFirstName();
+			this.lastName = m.getLastName();
+			this.userRole = m.getUserRole();
+			this.password = m.getPassword();
+			this.email = m.getEmail();
+			this.birthDate = m.getBirthDate();
+			this.gender = m.getGender();
+		}
+
+
+	}
+	
 
 	public long getId() {
 		return id;
@@ -179,10 +242,11 @@ public class User {
 	public String getFirstName() {
 		return firstName;
 	}
-	
-	public void setFirstName(String nombre) {
-		this.firstName = nombre;
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
+
 	
 	public String getLastName() {
 		return lastName;
@@ -204,6 +268,7 @@ public class User {
 		return password;
 	}
 	
+
 	/**
 	 * Sets the password to an encoded value. 
 	 * You can generate encoded passwords using {@link #encodePassword}.
@@ -227,16 +292,16 @@ public class User {
 		return gender;
 	}
 	
-	public void setSexo(String sexo) {
-		this.gender = sexo;
+	public void setGender(String gender) {
+		this.gender = gender;
 	}
 	
-	public String getRole() {
-		return roles;
+	public String getUserRole() {
+		return userRole;
 	}
-	
-	public void setRole(String roles) {
-		this.roles = roles;
+
+	public void setUserRole(String userRole) {
+		this.userRole = userRole;
 	}
 	
 	public String getPhoto() {

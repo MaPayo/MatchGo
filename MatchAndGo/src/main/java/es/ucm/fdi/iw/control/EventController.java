@@ -65,7 +65,7 @@ public class EventController {
 
 		model.addAttribute("access", e.checkAccess(requester));
 		model.addAttribute("event", e);
-		return "matchAndGoEvento";
+		return "matchAndGoEvent";
 	}
 
 	@PostMapping("/{id}")
@@ -87,7 +87,7 @@ public class EventController {
 		
 		// copiar todos los campos cambiados de edited a target
 
-		return "matchAndGoEvento";
+		return "matchAndGoEvent";
 	}	
 	
 	@GetMapping(value="/{id}/photo")
@@ -139,6 +139,6 @@ public class EventController {
 			}
 			log.info("Successfully uploaded photo for {} into {}!", id, f.getAbsolutePath());
 		}
-		return "matchAndGoEvento";
+		return "matchAndGoEvent";
 	}
 }

@@ -49,11 +49,7 @@
        	 <!-- Este div solo se muestra si no hay session-->
   <!--        <div class="form_registro" th:unless="${session.user}">
             <h1>Registro</h1>
-            <form th:action="@{/user/signup}" method="POST" enctype="multipart/form-data">
-                <div class="form_texto">
-                    <label for="txt_nick">Nick:</label>
-                    <input type="text" name="username" id="txt_username" required>
-                </div>
+            <form th:action="@{/signup}" method="POST" enctype="multipart/form-data">
                 <div class="form_texto">
                     <label for="txt_email">Email:</label>
                     <input type="email" name="email" id="txt_email" required>
@@ -62,23 +58,18 @@
                     <label for="txt_password">Contraseña:</label>
                     <input type="password" minlength="6" maxlength="15" name="password" id="txt_password" required>
                 </div>
-                  <div class="form_texto">
-                    <label for="txt_password">Verificar contraseña:</label>
-                    <input type="password" minlength="6" maxlength="15" name="password2" id="txt_password" required>
-                </div>
                 <div class="form_texto">
                     <label for="txt_name">Nombre:</label>
-                    <input type="text" minlength="4" maxlength="30" name="firstname" id="txt_name" required>
+                    <input type="text" minlength="4" maxlength="30" name="name" id="txt_name" required>
                 </div>
                  <div class="form_texto">
                     <label for="txt_name">Apellidos:</label>
-                    <input type="text" minlength="4" maxlength="30" name="lastname" id="txt_apellidos" required>
+                    <input type="text" minlength="4" maxlength="30" name="apellidos" id="txt_apellidos" required>
                 </div>
                 <div class="form_texto">
                     <label>Sexo:</label>
-                    <input type="radio" name="gender" value="hombre"> Hombre
-                    <input type="radio" name="gender" value="mujer" checked> Mujer
-                    <input type="radio" name="gender" value="mujer" checked> Otro
+                    <input type="radio" name="sexo" value="hombre"> Hombre
+                    <input type="radio" name="sexo" value="mujer" checked> Mujer
                 </div>
                 <div class="form_texto">
                     <label for="date_calendar">Fecha de nacimiento:</label>
