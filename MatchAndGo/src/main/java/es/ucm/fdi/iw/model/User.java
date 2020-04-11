@@ -23,10 +23,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @NamedQueries({
 	@NamedQuery(name="User.byUsername", query= "SELECT u from User u WHERE "
 			+ "u.username = :username"),
+	@NamedQuery(name="User.HasName", query= "SELECT COUNT(u) "
+			+ "FROM User u "
+			+ "WHERE u.username = :username"),
 	@NamedQuery(name="User.hasUsername",
 	query="SELECT COUNT(u) "
 			+ "FROM User u "
-			+ "WHERE u.username = :username")
+			+ "WHERE u.username = :username"),
+	@NamedQuery(name = "User.Password", query = "SELECT password FROM User u WHERE u.username = :userName")
 })
 
 public class User {

@@ -170,7 +170,7 @@ public class UserController {
 	public String register(Model model, HttpServletRequest request, Principal principal, @RequestParam String username,
 			@RequestParam String password, @RequestParam String password2, @RequestParam String email,
 			@RequestParam String firstname, @RequestParam String lastname, @RequestParam String gender,
-			@RequestParam Date birthdate, @RequestParam String tags,
+			@RequestParam Date birthdate, 
 			@RequestParam("userPhoto") MultipartFile userPhoto, HttpSession session) {
 
 		
@@ -236,19 +236,19 @@ public class UserController {
 	public String login(Model model, HttpServletRequest request, Principal principal, @RequestParam String userName,
 			@RequestParam String password, HttpSession session) {
 
-	
-	
-		// if the user exists, we check the if the password is correct
+		System.out.println("HE LLEGADO AQUI ");
 		if (usernameAlreadyInUse(userName)) {
 			// Se saca la constraseña del usuario que se está loggeando
 			String pass = entityManager.createNamedQuery("User.Password", String.class)
 					.setParameter("userName", userName).getSingleResult();
 
+			System.out.println("HE LLEGADO AQUI 1");
 			// Se compara la contraseña introducida con la contraseña cifrada de la BD
 			boolean correct = passwordEncoder.matches(password, pass);
 			log.info("The passwords match: {}", correct);
+			System.out.println("HE LLEGADO AQUI 2");
 			if (correct) {
-				User u = entityManager.createNamedQuery("User.ByName", User.class).setParameter("userName", userName)
+				User u = entityManager.createNamedQuery("User.byUsername", User.class).setParameter("userName", userName)
 						.getSingleResult();
 
 				session.setAttribute("user", u);
@@ -268,7 +268,7 @@ public class UserController {
 
 	
 	private boolean usernameAlreadyInUse(String userName) {
-		Long usernameAlreadyInUse = entityManager.createNamedQuery("User.HasName", Long.class)
+		Long usernameAlreadyInUse = entityManager.createNamedQuery("User.hasUsername", Long.class)
 				.setParameter("userName", userName).getSingleResult();
 		if(usernameAlreadyInUse != 0) {
 			return true;
