@@ -16,7 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 //import org.springframework.web.bind.annotation.RequestParam;
 
-import es.ucm.fdi.iw.model.Evento;
+import es.ucm.fdi.iw.model.Event;
 import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.Tags;
 import es.ucm.fdi.iw.model.User;
@@ -39,9 +39,9 @@ public class RootController {
 
 		// Creamos el chat de ejemplo
 		User user1 = new User();
-		user1.setName("Rodolfo");
+		user1.setUsername("Rodolfo");
 		User user2 = new User();
-		user2.setName("Laura");
+		user2.setUsername("Laura");
 		res[0] = new Message("Buenas tardes!", user1, user2, LocalDateTime.now());
 		res[1] = new Message("Hombre, cuanto tiempo!", user2, user1, LocalDateTime.now());
 
@@ -59,25 +59,25 @@ public class RootController {
 	public User pasoDeModificarElImportSql() {
 		User user = new User();
 		Tags etiqueta1= new Tags();
-		etiqueta1.setCategoriaTipo(false);
-		etiqueta1.setContenido("Futbol");
+		etiqueta1.setIsCategory(false);
+		etiqueta1.setTag("Futbol");
 		entityManager.persist(etiqueta1);
 		
 		Tags etiqueta2= new Tags();
-		etiqueta2.setCategoriaTipo(true);
-		etiqueta2.setContenido("Concierto");
+		etiqueta2.setIsCategory(true);
+		etiqueta2.setTag("Concierto");
 		entityManager.persist(etiqueta2);
 
 		user.setEmail("pepe@ucm.es");
 		user.setPassword("1234");
-		user.setName("Pepe");
+		user.setUsername("Pepe");
 		user.setLastName("el del quinto");
 		user.setBirthDate("05/03/1965");
-		user.setSexo("Hombre");
+		user.setGender("Hombre");
 		user.setPhoto("");
 		user.setEnabled(true);
 		// user.setTags(tags);
-		user.setRole("USER");
+		user.setUserRole("USER");
 		entityManager.persist(user);
 		entityManager.flush();
 		return user;
@@ -99,7 +99,7 @@ public class RootController {
 		// session.setAttribute("user", user);
 
 		model.addAttribute("user", user);
-		model.addAttribute("nombre", user.getName());
+		model.addAttribute("nombre", user.getUsername());
 		model.addAttribute("edad", user.getBirthDate());
 		model.addAttribute("sexo", user.getGender());
 		model.addAttribute("valoracion", "3 estrellas");
@@ -117,24 +117,24 @@ public class RootController {
 	
   @GetMapping("/search")
   public String searching(Model model) {
-	  Evento e = new Evento();
-	  Evento e2 = new Evento();
+	  Event e = new Event();
+	  Event e2 = new Event();
 	  Tags t = new Tags();
 	  Tags t2 = new Tags();
-	  Evento[] eventos = new Evento[2];
+	  Event[] eventos = new Event[2];
 	  List<Tags> categoria1 = new ArrayList<Tags>();
 	  List<Tags> categoria2 = new ArrayList<Tags>();
-	  e.setNombre("Partido Benéfico de Fútbol");
-	  e.setDescripcion("Para ayudar a la asociacion 'Afectados por IW'");
+	  e.setName("Partido Benéfico de Fútbol");
+	  e.setDescription("Para ayudar a la asociacion 'Afectados por IW'");
 
-	  e2.setNombre("Visita al Museo del Jamon");
-	  e2.setDescripcion("Nos lo vamos a pasar super bien");
+	  e2.setName("Visita al Museo del Jamon");
+	  e2.setDescription("Nos lo vamos a pasar super bien");
 
-	  t.setContenido("Deportivo");
-	  t.setCategoriaTipo(true);
+	  t.setTag("Deportivo");
+	  t.setIsCategory(true);
 
-	  t2.setContenido("Cultural");
-	  t2.setCategoriaTipo(true);
+	  t2.setTag("Cultural");
+	  t2.setIsCategory(true);
 
 	  categoria1.add(t);
 	  categoria2.add(t2);

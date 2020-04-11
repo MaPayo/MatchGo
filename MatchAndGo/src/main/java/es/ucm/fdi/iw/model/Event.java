@@ -20,6 +20,7 @@ public class Event {
 	private String name;
 	private String description;
 	private String location;
+	private String photo;
 	private LocalDateTime date;
 	private LocalDateTime publicationDate;
 
@@ -81,11 +82,11 @@ public class Event {
 		this.name = name;
 	}
 
-	public String getDescripcion() {
+	public String getDescription() {
 		return description;
 	}
 
-	public void setDescripcion(String description) {
+	public void setDescription(String description) {
 		this.description = description;
 	}
 
@@ -108,9 +109,17 @@ public class Event {
 	public LocalDateTime getPublicationDate() {
 		return publicationDate;
 	}
-
-	public void setPublicada(LocalDateTime publicationDate) {
+	
+	public void setPublicationDate(LocalDateTime publicationDate) {
 		this.publicationDate = publicationDate;
+	}
+	
+	public String getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(String photo) {
+		this.photo = photo;
 	}
 
 	public List<Tags> getTags() {
@@ -136,7 +145,5 @@ public class Event {
 	public void setCreator(User creator) {
 		this.creator = creator;
 	}
-
-
 
 }

@@ -1,6 +1,8 @@
 package es.ucm.fdi.iw.model;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -18,7 +20,7 @@ import javax.persistence.OneToMany;
 @Entity
 @NamedQueries({
 	@NamedQuery(name="User.byUsername", query= "SELECT u from User u WHERE "
-			+ "u.name = :username")
+			+ "u.username = :username")
 })
 
 public class User {
@@ -51,7 +53,7 @@ public class User {
 	@OneToMany(mappedBy="evaluated")
 	private List<Evaluation> receivedEvaluation;
 
-	@OneToMany(mappedBy="evaluater")
+	@OneToMany(mappedBy="evaluator")
 	private List<Evaluation> senderEvaluation;
 	
 	@OneToMany(mappedBy="sender")
@@ -64,10 +66,10 @@ public class User {
 	private List<Tags> tags;
 	
 	@ManyToMany(mappedBy = "participants")
-	private List<Evento> joinedEvents;
+	private List<Event> joinedEvents;
 	
 	@OneToMany(mappedBy="creator")
-	private List<Evento> createdEvents;
+	private List<Event> createdEvents;
 	
 	@Override
 	public int hashCode() {
@@ -91,22 +93,22 @@ public class User {
 	}
 	
 	
-	public List<Evento> getJoinedEvents() {
+	public List<Event> getJoinedEvents() {
 		return joinedEvents;
 	}
 
 
-	public void setJoinedEvents(List<Evento> joinedEvents) {
+	public void setJoinedEvents(List<Event> joinedEvents) {
 		this.joinedEvents = joinedEvents;
 	}
 
 
-	public List<Evento> getCreatedEvents() {
+	public List<Event> getCreatedEvents() {
 		return createdEvents;
 	}
 
 
-	public void setCreatedEvents(List<Evento> createdEvents) {
+	public void setCreatedEvents(List<Event> createdEvents) {
 		this.createdEvents = createdEvents;
 	}
 
@@ -127,6 +129,67 @@ public class User {
 		this.birthDate = birthate;
 		this.gender = gender;
 	}
+	
+	
+	/**
+	 * Convierte colecciones de mensajes a formato JSONificable
+	 * @param messages
+	 * @return
+	 * @throws JsonProcessingException
+	 */
+	public static List<Transfer> asTransferObjects(Collection<User> users) {
+		ArrayList<Transfer> all = new ArrayList<>();
+		for (User u : users) {
+			all.add(new Transfer(u));
+		}
+		return all;
+	}
+
+	/**
+	 * Objeto para persistir a/de JSON
+	 * @author mfreire
+	 * @author colano
+	 */
+
+	public static class Transfer {
+		public enum Role{
+			USER,ADMIN, MOD
+		}	
+		private long id;
+		private String username;
+		private String firstName;
+		private String lastName;
+		private String email;
+		private String password;
+		private String birthDate;
+		private String gender;
+		private String userRole;
+		private String photo;
+		private boolean enabled;
+		private List<Evaluation> receivedEvaluation;
+		private List<Evaluation> senderEvaluation;
+		private List<Message> sentMessages;
+		private List<Message> receivedMessages;
+		private List<Tags> tags;
+		private List<Event> joinedEvents;
+		private List<Event> createdEvents;
+		
+
+		public Transfer(User m) {
+			this.id = m.getId();
+			this.username = m.getUsername();
+			this.firstName = m.getFirstName();
+			this.lastName = m.getLastName();
+			this.userRole = m.getUserRole();
+			this.password = m.getPassword();
+			this.email = m.getEmail();
+			this.birthDate = m.getBirthDate();
+			this.gender = m.getGender();
+		}
+
+
+	}
+	
 
 	public long getId() {
 		return id;
@@ -136,13 +199,22 @@ public class User {
 		this.id = id;
 	}
 	
-	public String getName() {
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getFirstName() {
 		return firstName;
 	}
-	
-	public void setName(String nombre) {
-		this.firstName = nombre;
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
+
 	
 	public String getLastName() {
 		return lastName;
@@ -180,16 +252,16 @@ public class User {
 		return gender;
 	}
 	
-	public void setSexo(String sexo) {
-		this.gender = sexo;
+	public void setGender(String gender) {
+		this.gender = gender;
 	}
 	
-	public String getRole() {
+	public String getUserRole() {
 		return userRole;
 	}
-	
-	public void setRole(String roles) {
-		this.userRole = roles;
+
+	public void setUserRole(String userRole) {
+		this.userRole = userRole;
 	}
 	
 	public String getPhoto() {

@@ -3,19 +3,19 @@
 -- 		application-default ó application-externaldb en modo 'create'
 --
 
-INSERT INTO usuario(id, username, nombre,apellidos,correo,password,fecha_nac,sexo,roles,enabled) VALUES (
-	1, 
+INSERT INTO USER(ID, USERNAME, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, BIRTH_DATE, GENDER, USER_ROLE, ENABLED) VALUES (
+	1,
 	'n',
 	'nombre',
 	'apellidos',
 	'correo',
 	'{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u',
 	'fecha_nac',
-	'String sexo', 
-	'ADMIN',true
+	'String sexo',
+	'ADMIN', true
 );
 
-INSERT INTO usuario(id,username, nombre,apellidos,correo,password,fecha_nac,sexo,roles,enabled) VALUES (
+INSERT INTO USER(ID, USERNAME, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, BIRTH_DATE, GENDER, USER_ROLE, ENABLED) VALUES (
 	2, 
 	'n2',
 	'nombre 2',
@@ -27,7 +27,7 @@ INSERT INTO usuario(id,username, nombre,apellidos,correo,password,fecha_nac,sexo
 	'USER',true
 );
 
-INSERT INTO usuario(id,username, nombre,apellidos,correo,password,fecha_nac,sexo,roles,enabled) VALUES (
+INSERT INTO USER(ID, USERNAME, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, BIRTH_DATE, GENDER, USER_ROLE, ENABLED) VALUES (
 	3, 
 	'n3',
 	'nombre 3',
@@ -39,7 +39,7 @@ INSERT INTO usuario(id,username, nombre,apellidos,correo,password,fecha_nac,sexo
 	'USER',true
 );
 
-INSERT INTO evento(id,nombre,descripcion,ubicacion,fecha,publicada) VALUES (
+INSERT INTO EVENT(ID, NAME, DESCRIPTION, LOCATION, DATE, PUBLICATION_DATE) VALUES (
 	1,
 	'Nombre Evento',
 	'Descripcion Evnto',
@@ -47,7 +47,7 @@ INSERT INTO evento(id,nombre,descripcion,ubicacion,fecha,publicada) VALUES (
 	NOW(),
 	NOW()
 );
-INSERT INTO evento(id,nombre,descripcion,ubicacion,fecha,publicada) VALUES (
+INSERT INTO EVENT(ID, NAME, DESCRIPTION, LOCATION, DATE, PUBLICATION_DATE) VALUES (
 	2,
 	'Nombre Evento 2',
 	'Descripcion Evnto 2',
@@ -55,7 +55,7 @@ INSERT INTO evento(id,nombre,descripcion,ubicacion,fecha,publicada) VALUES (
 	NOW(),
 	NOW()
 );
-INSERT INTO evento(id,nombre,descripcion,ubicacion,fecha,publicada) VALUES (
+INSERT INTO EVENT(ID, NAME, DESCRIPTION, LOCATION, DATE, PUBLICATION_DATE) VALUES (
 	3,
 	'Nombre Evento 3',
 	'Descripcion Evnto 3',

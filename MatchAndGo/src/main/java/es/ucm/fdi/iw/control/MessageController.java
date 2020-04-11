@@ -33,7 +33,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
-import es.ucm.fdi.iw.LocalData;
 import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.User;
 import es.ucm.fdi.iw.model.User.Role;
@@ -53,15 +52,15 @@ public class MessageController {
 
         // The contacts of the user
         List<User> contacts = new ArrayList<User>();
-        for (int i = 0; i < usuario.getSent().size(); ++i) {
-            User user = usuario.getSent().get(i).getSender();
+        for (int i = 0; i < usuario.getSentMessages().size(); ++i) {
+            User user = usuario.getSentMessages().get(i).getSender();
             if (!contacts.contains(user)) {
                 contacts.add(user);
             }
         }
 
-        for (int i = 0; i < usuario.getReceived().size(); ++i) {
-            User user = usuario.getReceived().get(i).getRecipient();
+        for (int i = 0; i < usuario.getReceivedMessages().size(); ++i) {
+            User user = usuario.getReceivedMessages().get(i).getReceiver();
             if (!contacts.contains(user)) {
                 contacts.add(user);
             }
@@ -76,15 +75,15 @@ public class MessageController {
         User usuario = (User) session.getAttribute("user");
         List<Message> messages = new ArrayList<Message>();
 
-        for (int i = 0; i < usuario.getSent().size(); ++i) {
+        for (int i = 0; i < usuario.getSentMessages().size(); ++i) {
             if (contact.getId() == usuario.getId()) {
-                messages.add(usuario.getSent().get(i));
+                messages.add(usuario.getSentMessages().get(i));
             }
         }
 
-        for (int i = 0; i < usuario.getReceived().size(); ++i) {
+        for (int i = 0; i < usuario.getReceivedMessages().size(); ++i) {
             if (contact.getId() == usuario.getId()) {
-                messages.add(usuario.getSent().get(i));
+                messages.add(usuario.getSentMessages().get(i));
             }
         }
 
@@ -101,7 +100,7 @@ public class MessageController {
 
         User usuario = (User) session.getAttribute("user");
 
-        usuario.getSent();
+        usuario.getSentMessages();
 
         // The contacts of the user
         List<User> contacts = getContactsFromUser(session);
