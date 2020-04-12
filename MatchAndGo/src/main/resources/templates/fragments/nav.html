@@ -13,10 +13,11 @@
 		<div class="logx" th:if="${session.u}">			
 			<a th:if="${session.u.hasRole('ADMIN')}" th:href="@{/admin/}">admin</a>
 			<a th:if="${session.g} neq null" th:href="@{/clase/}">clase</a>
+			<a th:if="${session.u.hasRole('MOD') || session.u.hasRole('ADMIN')}" th:href="@{/moderator/}">moderator</a>
 			<a th:href="@{/logout}" href="/logout">logout</a>
 			<a th:href="@{/user/{id}(id=${session.u.id})}">
 				<img class="userthumb" th:src="@{/user/{id}/photo(id=${session.u.id})}">
-				<span th:text="${session.u.nombre}">Pepe</span></a>						
+				<span th:text="${session.u.username}">Pepe</span></a>						
 		</div>
 		<div class="logx" th:unless="${session.u}">
 			<a th:href="@{/login}" href="/login">login</a>

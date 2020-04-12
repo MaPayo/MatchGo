@@ -21,9 +21,6 @@ import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.Tags;
 import es.ucm.fdi.iw.model.User;
 
-
-
-
 @Controller
 public class RootController {
 
@@ -153,4 +150,5 @@ public class RootController {
 	public String error(Model model) {
 		return "error";
 	}	
+	
 }

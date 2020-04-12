@@ -146,4 +146,9 @@ public class Event {
 		this.creator = creator;
 	}
 
+	@Override
+	public String toString() {
+		return "Event [id=" + id + ", name=" + name + ", description=" + description + ", location=" + location + "]";
+	}
+	
 }

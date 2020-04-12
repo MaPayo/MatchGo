@@ -67,7 +67,7 @@ public class EventController {
 		model.addAttribute("event", e);
 		return "matchAndGoEvent";
 	}
-
+	
 	@PostMapping("/{id}")
 	@Transactional
 	public String postEvent(
