@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -37,6 +38,11 @@ import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.User;
 import es.ucm.fdi.iw.model.User.Role;
 
+/**
+ * Message controller
+ * @author EnriqueTorrijos
+ */
+@Controller
 public class MessageController {
 
     private static final Logger log = LogManager.getLogger(MessageController.class);
@@ -45,8 +51,8 @@ public class MessageController {
     private EntityManager entityManager;
     
     /*
-        This method gets all the contacts from the user in the session.
-    * */
+     * This method gets all the contacts from the user in the session.
+     */
     private List<User> getContactsFromUser (HttpSession session) {
         User usuario = (User) session.getAttribute("user");
 
@@ -69,8 +75,8 @@ public class MessageController {
     }
 
     /*
-        This method gets all the messages between the user in the session and his contact "contact".
-    * */
+     * This method gets all the messages between the user in the session and his contact "contact".
+     */
     private List<Message> getMessagesFromContact(HttpSession session, User contact) {
         User usuario = (User) session.getAttribute("user");
         List<Message> messages = new ArrayList<Message>();
@@ -87,28 +93,44 @@ public class MessageController {
             }
         }
 
+        messages = orderMessagesByDate(messages);
+
+        return messages;
+    }
+
+    /*
+     * This method order the messages by their date.
+     * NOT IMPLEMENTED YET.
+     */
+    private List<Message> orderMessagesByDate(List<Message> messages) {
         return messages;
     }
 
     @GetMapping("/messages/{id}")
-    public String getMessagesUser(Model model, HttpSession session) {
+    @Transactional
+    public String getMessagesUser(@PathVariable long id, Model model, HttpSession session) {
 
-        // User target = entityManager.find(User.class, id);
-
-        // model.addAttribute("users", entityManager.createQuery(
-		//      "SELECT u FROM User u").getResultList());
-
-        User usuario = (User) session.getAttribute("user");
-
-        usuario.getSentMessages();
+        User contact = null;
+        try {
+            contact = entityManager.find(User.class, id);
+        } catch (Exception e) {
+            log.info("Error al buscar el contacto del usuario:");
+            log.info("  - idContacto: {}", id);
+            log.info("  - error: {}", e.getMessage());
+        }
 
         // The contacts of the user
         List<User> contacts = getContactsFromUser(session);
 
-
-
-        // List<Message> messages = getMessagesFromContact(session, );
+        // The messages between the contact and the user
+        List<Message> messages = getMessagesFromContact(session, contact);
         
+        model.addAttribute("contactos", contacts);
+        model.addAttribute("mensajes", messages);
+        model.addAttribute("usuario", (User) session.getAttribute("user"));
+        model.addAttribute("contacto", contact);
+
         return "mensajes";
     }
+    // Para Post: @RequestParam long id
 }

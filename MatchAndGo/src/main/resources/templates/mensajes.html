@@ -14,7 +14,7 @@
         <div class="contenedorGeneral">
             <div class="contenedorContactos">
                 <div class="contenedorContacto" th:each="contacto: ${contactos}">
-                    <p th:text="${ contacto }"></p>
+                    <p th:text="${ contacto.getUsername() }"></p>
                 </div>
             </div>
             <div class="contenedorMensajes">
@@ -25,22 +25,22 @@
                 </form>
                 <div class="mensajes">
                     <div class="mensaje" th:each="mensaje: ${mensajes}">
-                        <div class="mensaje" th:switch="__${mensaje.getSender().getNombre()}__">
+                        <div class="mensaje" th:switch="__${mensaje.getSender().getUsername()}__">
 
                             <!-- Si el mensaje es mio (el usuario) se muestra como tal -->
-                            <div class="mensajeMio" th:case="__${session.usuario}__">
-                                <pre th:text="${mensaje.getContenido()}"></pre>
+                            <div class="mensajeMio" th:case="__${session.usuario.getUsername()}__">
+                                <pre th:text="${mensaje.getText()}"></pre>
                             </div>
 
                             <!-- Si el mensaje es de mi contacto se muestra como tal -->
-                            <div class="mensajeContacto" th:case="__${contacto}__">
-                                <pre th:text="${mensaje.getContenido()}"></pre>
+                            <div class="mensajeContacto" th:case="__${contacto.getUsername()}__">
+                                <pre th:text="${mensaje.getText()}"></pre>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="contactoMensaje">
-                    <p th:text="${contacto}"></p>
+                    <p th:text="${contacto.getUsername()}"></p>
                 </div>
             </div>
         </div>

@@ -11,41 +11,40 @@ import javax.persistence.ManyToOne;
 @Entity
 public class Message {
 
-	public enum EstadoMensaje {
-		LEIDO, PENDIENTE
-	}
+	
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-	private String contenido;
-	@ManyToOne
+	private String text;
+	@ManyToOne(targetEntity = User.class)
 	private User sender;			// La persona que lo envía
-	@ManyToOne
+	@ManyToOne(targetEntity = User.class)
 	private User receiver;		// La persona que lo recibe
-	private LocalDateTime fecha;				// Hay que tener en cuenta el tipo java.sql.Date para las query SQL
-	private EstadoMensaje estado;
+	private LocalDateTime sendDate;		// Hay que tener en cuenta el tipo java.sql.Date para las query SQL
+	private boolean read;
 
 	public Message() {
 		super();
 	}
 
-    public Message(long id, String c, User s, User r,LocalDateTime f, EstadoMensaje e) {
+    public Message(long id, String c, User s, User r,LocalDateTime f, boolean e) {
 		super();
 		this.id = id;
-        this.contenido = c;
+        this.text = c;
 		this.sender = s;
 		this.receiver = r;
-		this.fecha = f;
-		this.estado = e;
+		this.sendDate = f;
+		this.read = e;
 	}
 	
 	public Message(String c, User s, User r, LocalDateTime f) {
 		super();
-		this.contenido = c;
+		this.text = c;
 		this.sender = s;
 		this.receiver = r;
-		this.fecha = f;
+		this.sendDate = f;
+		this.read = false;
 	}
 	
 	/**
@@ -60,14 +59,14 @@ public class Message {
 	}
 
 	/**
-     * @return the contenido
+     * @return the text
      */
-    public String getContenido() {
-        return this.contenido;
+    public String getText() {
+        return this.text;
 	}
 	
-	public void setContenido(String contenido) {
-		this.contenido = contenido;
+	public void setText(String text) {
+		this.text = text;
 	}
 
 	/**
@@ -93,24 +92,24 @@ public class Message {
 	}
 
 	/**
-     * @return the fecha
+     * @return the sendDate
      */
-	public LocalDateTime getFecha() {
-		return this.fecha;
+	public LocalDateTime getSendDate() {
+		return this.sendDate;
 	}
 
-	public void setFecha(LocalDateTime fecha) {
-		this.fecha = fecha;
+	public void setSendDate(LocalDateTime sendDate) {
+		this.sendDate = sendDate;
 	}
 
 	/**
-     * @return the estado
+     * @return the read
      */
-	public EstadoMensaje getEstado() {
-		return this.estado;
+	public boolean getRead() {
+		return this.read;
 	}
 
-	public void setEstado(EstadoMensaje estado) {
-		this.estado = estado;
+	public void setRead(boolean read) {
+		this.read = read;
 	}	
 }
