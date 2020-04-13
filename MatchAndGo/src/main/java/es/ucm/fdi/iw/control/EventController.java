@@ -54,6 +54,11 @@ public class EventController {
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	@GetMapping("/")
+	public String getEvent(@PathVariable long id) {
+		return "event";
+	}
 
 	@GetMapping("/{id}")
 	public String getEvent(@PathVariable long id, Model model, HttpSession session) {
@@ -65,7 +70,7 @@ public class EventController {
 
 		model.addAttribute("access", e.checkAccess(requester));
 		model.addAttribute("event", e);
-		return "matchAndGoEvent";
+		return "event";
 	}
 	
 	@PostMapping("/{id}")
@@ -87,7 +92,7 @@ public class EventController {
 		
 		// copiar todos los campos cambiados de edited a target
 
-		return "matchAndGoEvent";
+		return "event";
 	}	
 	
 	@GetMapping(value="/{id}/photo")
@@ -139,6 +144,6 @@ public class EventController {
 			}
 			log.info("Successfully uploaded photo for {} into {}!", id, f.getAbsolutePath());
 		}
-		return "matchAndGoEvent";
+		return "event";
 	}
 }
