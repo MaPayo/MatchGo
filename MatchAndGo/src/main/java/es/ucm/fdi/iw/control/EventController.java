@@ -59,33 +59,18 @@ public class EventController {
 	private PasswordEncoder passwordEncoder;
 	
 	@GetMapping("/newEvent")
-	public String getNewEvent(Model model, HttpSession session) {
+	public String getNewEvent(@PathVariable long id, Model model, HttpSession session) {
+
+		Event e = entityManager.find(Event.class, id);
 		
 		User requester = (User)session.getAttribute("u");
 		requester = entityManager.find(User.class, requester.getId());
 
+		//model.addAttribute("access", e.checkAccess(requester)); //no funciona
 		model.addAttribute("newEvent", true); 
+		
+		model.addAttribute("event", e);
 		return "event";
-	}
-	
-	@PostMapping("/newEvent")
-	@Transactional
-	public String postNewEvent(HttpServletResponse response,
-			@ModelAttribute Event event, 
-			Model model, HttpSession session) {
-		
-		Event newEvent = new Event();
-		System.out.println(event.getName());
-		/*
-		User requester = (User)session.getAttribute("u");
-		if (requester.getId() != target.getCreator().getId() &&
-				! requester.hasRole(Role.ADMIN)) {			
-			response.sendError(HttpServletResponse.SC_FORBIDDEN, 
-					"No eres administrador, y éste no es tu evento");
-		}
-		*/
-		
-				return "event";
 	}
 
 	@GetMapping("/")
