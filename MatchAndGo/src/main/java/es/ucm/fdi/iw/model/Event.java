@@ -3,10 +3,14 @@ package es.ucm.fdi.iw.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
@@ -23,7 +27,8 @@ public class Event {
 	private String photo;
 	private LocalDateTime date;
 	private LocalDateTime publicationDate;
-	private boolean isAppropriate;
+	@Column(columnDefinition = "boolean default null")
+	private Boolean isAppropriate;
 
 	@ManyToMany
 	private List<Tags> tags;
@@ -147,11 +152,11 @@ public class Event {
 		this.creator = creator;
 	}
 	
-	public boolean isAppropriate() {
+	public Boolean getIsAppropriate() {
 		return isAppropriate;
 	}
 
-	public void setAppropriate(boolean isAppropriate) {
+	public void setIsAppropriate(Boolean isAppropriate) {
 		this.isAppropriate = isAppropriate;
 	}
 

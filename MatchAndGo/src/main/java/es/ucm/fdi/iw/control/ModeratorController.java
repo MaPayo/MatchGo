@@ -44,7 +44,7 @@ public class ModeratorController {
     @GetMapping("")
     @Transactional
 	public String getUser(Model model) {
-    	List<Event> listnum = readAllEvents();
+    	List<Event> listnum = readAllNonEvaluatedEvents();
     	Event e = new Event(10, "Event name", "Event description", "Event location");
     	List<Tags> tags = new ArrayList();
     	Tags tag = new Tags();
@@ -53,7 +53,7 @@ public class ModeratorController {
     	e.setTags(tags);
     	listnum.add(e);
     	
-    	readAllEvents().stream().forEach(att -> System.out.println(att.getTags()));
+    	readAllNonEvaluatedEvents().stream().forEach(att -> System.out.println(att.getTags()));
     	
     	model.addAttribute("listnum", listnum);
 		return "moderator";
@@ -73,11 +73,18 @@ public class ModeratorController {
 			result = new ResponseTransfer("Event rejected.");
 		}
 		
+		List<Event> events = readAllNonEvaluatedEvents();
+		
+		readAllNonEvaluatedEvents().stream().forEach(att -> System.out.println(att.getTags()));
+		
+		result.setEvents(events);
+		
 		return result;
 	}
     
-    private List<Event> readAllEvents() {
-    	 List<Event> events = entityManager.createNativeQuery("SELECT * FROM EVENT", Event.class).getResultList();
+    @Transactional
+    private List<Event> readAllNonEvaluatedEvents() {
+    	 List<Event> events = entityManager.createNativeQuery("SELECT * FROM EVENT WHERE IS_APPROPRIATE IS NULL", Event.class).getResultList();
     	 return events;
     }
 }
