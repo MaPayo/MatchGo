@@ -23,6 +23,7 @@ public class Event {
 	private String photo;
 	private LocalDateTime date;
 	private LocalDateTime publicationDate;
+	private boolean isAppropriate;
 
 	@ManyToMany
 	private List<Tags> tags;
@@ -144,6 +145,14 @@ public class Event {
 
 	public void setCreator(User creator) {
 		this.creator = creator;
+	}
+	
+	public boolean isAppropriate() {
+		return isAppropriate;
+	}
+
+	public void setAppropriate(boolean isAppropriate) {
+		this.isAppropriate = isAppropriate;
 	}
 
 	@Override

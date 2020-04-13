@@ -7,6 +7,17 @@
     <title>Moderar</title>
     <!--<link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" media="screen">-->
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" media="screen">
+    <script type="text/javascript" th:src="@{/js/ajax-client.js}"></script>
+    <script type="text/javascript"> 
+		    const config = {
+		    		apiUrl: "[[${session.apiUrl}]]",
+		    		csrf: {
+		    			name: "[[${_csrf.parameterName}]]",
+		    			value: "[[${_csrf.token}]]"
+		    		}
+		    	};
+    </script>
+    <meta name="author" content="GasanNazer">
     <nav th:replace="fragments/nav.html :: nav">
         El navegador
     </nav>
@@ -18,8 +29,10 @@
 
         <div th:each="element: ${listnum}" class="eventCard">
             <div class="cardUpperContainer">
-                <img th:src="@{/img/noImage.png}" alt="" class="placeImage">
+                <img th:src="@{/img/noImage.png}" alt="no image" class="placeImage">
                 <h2><span th:text="${element.getName()}"></span>
+                <span th:text="${element.getId()}"></span>
+                
                 </h2>
             </div>
             <div class="cardLowerContainer">
@@ -30,8 +43,8 @@
                     </div>
                 </div>
                 <div>
-                    <button type="button" class="acceptButton">Aceptar</button>
-                    <button type="button" class="declineButton">Rechazar</button>
+                    <button id="moderatorAceptEventBtn" type="button" class="acceptButton" th:onclick="'javascript:aceptEvent(' + ${element.getId()} + ');'">Aceptar</button>
+                    <button id="moderatorRejectEventBtn" type="button" class="declineButton" th:onclick="'javascript:rejectEvent(' + ${element.getId()} + ');'">Rechazar</button>
                 </div>
             </div>
         </div>
