@@ -20,7 +20,12 @@ import javax.persistence.OneToMany;
 @Entity
 @NamedQueries({
 	@NamedQuery(name="User.byUsername", query= "SELECT u from User u WHERE "
-			+ "u.username = :username")
+			+ "u.username = :username"),
+	@NamedQuery(name="User.all", query= "SELECT u from User u"),
+	@NamedQuery(name="User.deleteUser", query= "DELETE FROM User u WHERE "
+		+ "u.id = :idUser"),
+	@NamedQuery(name="User.blockUser", query= "UPDATE User u SET u.enabled = :state "
+		+ "WHERE u.id = :idUser")
 })
 
 public class User {
