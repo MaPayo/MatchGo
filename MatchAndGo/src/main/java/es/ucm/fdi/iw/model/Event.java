@@ -1,20 +1,21 @@
 package es.ucm.fdi.iw.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 import es.ucm.fdi.iw.model.User.Role;
+import es.ucm.fdi.iw.model.User.Transfer;
 
 @Entity
 public class Event {
@@ -30,7 +31,7 @@ public class Event {
 	@Column(columnDefinition = "boolean default null")
 	private Boolean isAppropriate;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	private List<Tags> tags;
 	
 	@ManyToMany
@@ -44,6 +45,58 @@ public class Event {
 		PARTICIPANT,
 		MINIMAL		
 	};
+	
+	public static List<TransferEvent> asTransferObjects(Collection<Event> events) {
+		ArrayList<TransferEvent> all = new ArrayList<>();
+		for (Event e : events) {
+			all.add(new TransferEvent(e));
+		}
+		return all;
+	}
+
+
+	public static class TransferEvent {
+		public enum Access {
+			CREATOR,
+			PARTICIPANT,
+			MINIMAL		
+		};
+		
+		private long id;
+		private String name;
+		private String description;
+		private String location;
+		private String photo;
+		private LocalDateTime date;
+		private LocalDateTime publicationDate;
+		private Boolean isAppropriate;
+		
+		private List<String> tagNames;
+		private List<Long> participants;
+		private Long creator;
+
+		public TransferEvent(Event e) {
+			this.id = e.getId();
+			this.name = e.getName();
+			this.description = e.getDescription();
+			this.location = e.getLocation();
+			this.photo = e.getPhoto();
+			this.date = e.getDate();
+			this.publicationDate = e.getPublicationDate();
+			this.isAppropriate = e.getIsAppropriate();
+			this.tagNames = new ArrayList();
+			this.participants = new ArrayList();
+			if(e.creator != null)
+				this.creator = e.getCreator().getId();
+			
+			if(e.getTags() != null)
+				e.getTags().forEach(tag -> this.tagNames.add(tag.getTag()));
+			if(e.getParticipants() != null)
+				e.getParticipants().forEach(user -> this.participants.add(user.getId()));
+		}
+
+
+	}
 
 	public Event() {
 		super();

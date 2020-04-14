@@ -75,9 +75,9 @@ public class ModeratorController {
 		
 		List<Event> events = readAllNonEvaluatedEvents();
 		
-		readAllNonEvaluatedEvents().stream().forEach(att -> System.out.println(att.getTags()));
+		//readAllNonEvaluatedEvents().stream().forEach(att -> System.out.println(att.getTags()));
 		
-		result.setEvents(events);
+		result.setEvents(Event.asTransferObjects(events));
 		
 		return result;
 	}
