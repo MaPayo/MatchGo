@@ -48,18 +48,16 @@ public class ModeratorController {
     	Event e = new Event(10, "Event name", "Event description", "Event location");
     	List<Tags> tags = new ArrayList();
     	Tags tag = new Tags();
-    	tag.setTag("sport");
+    	tag.setTag("random");
     	tags.add(tag);
     	e.setTags(tags);
     	listnum.add(e);
-    	
-    	readAllNonEvaluatedEvents().stream().forEach(att -> System.out.println(att.getTags()));
     	
     	model.addAttribute("listnum", listnum);
 		return "moderator";
 	}
     
-    @PostMapping(path = "/{id}"/*, produces = "application/json"*/)
+    @PostMapping(path = "/{id}", produces = "application/json")
 	@Transactional
 	@ResponseBody
 	public ResponseTransfer aceptRejectEvent(@PathVariable("id") int id, @RequestBody ValidEvent body){
@@ -74,8 +72,6 @@ public class ModeratorController {
 		}
 		
 		List<Event> events = readAllNonEvaluatedEvents();
-		
-		//readAllNonEvaluatedEvents().stream().forEach(att -> System.out.println(att.getTags()));
 		
 		result.setEvents(Event.asTransferObjects(events));
 		

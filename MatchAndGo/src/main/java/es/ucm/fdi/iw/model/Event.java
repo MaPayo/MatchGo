@@ -86,6 +86,7 @@ public class Event {
 			this.isAppropriate = e.getIsAppropriate();
 			this.tagNames = new ArrayList();
 			this.participants = new ArrayList();
+			
 			if(e.creator != null)
 				this.creator = e.getCreator().getId();
 			
@@ -95,7 +96,101 @@ public class Event {
 				e.getParticipants().forEach(user -> this.participants.add(user.getId()));
 		}
 
+		public long getId() {
+			return id;
+		}
 
+		public void setId(long id) {
+			this.id = id;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public String getDescription() {
+			return description;
+		}
+
+		public void setDescription(String description) {
+			this.description = description;
+		}
+
+		public String getLocation() {
+			return location;
+		}
+
+		public void setLocation(String location) {
+			this.location = location;
+		}
+
+		public String getPhoto() {
+			return photo;
+		}
+
+		public void setPhoto(String photo) {
+			this.photo = photo;
+		}
+
+		public LocalDateTime getDate() {
+			return date;
+		}
+
+		public void setDate(LocalDateTime date) {
+			this.date = date;
+		}
+
+		public LocalDateTime getPublicationDate() {
+			return publicationDate;
+		}
+
+		public void setPublicationDate(LocalDateTime publicationDate) {
+			this.publicationDate = publicationDate;
+		}
+
+		public Boolean getIsAppropriate() {
+			return isAppropriate;
+		}
+
+		public void setIsAppropriate(Boolean isAppropriate) {
+			this.isAppropriate = isAppropriate;
+		}
+
+		public List<String> getTagNames() {
+			return tagNames;
+		}
+
+		public void setTagNames(List<String> tagNames) {
+			this.tagNames = tagNames;
+		}
+
+		public List<Long> getParticipants() {
+			return participants;
+		}
+
+		public void setParticipants(List<Long> participants) {
+			this.participants = participants;
+		}
+
+		public Long getCreator() {
+			return creator;
+		}
+
+		public void setCreator(Long creator) {
+			this.creator = creator;
+		}
+
+		@Override
+		public String toString() {
+			return "TransferEvent [id=" + id + ", name=" + name + ", description=" + description + ", location="
+					+ location + ", photo=" + photo + ", date=" + date + ", publicationDate=" + publicationDate
+					+ ", isAppropriate=" + isAppropriate + ", tagNames=" + tagNames + ", participants=" + participants
+					+ ", creator=" + creator + "]";
+		}
 	}
 
 	public Event() {

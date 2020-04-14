@@ -1,23 +1,48 @@
-function aceptEvent(id){
-	console.log(config)
-	console.log(id);
-	let params = {acept: true};
-	params[config.csrf.name] = config.csrf.value;
+function createEventCard(event){
+	let cardUpperContainer = `<div class='cardUpperContainer'>
+		<img src='/img/noImage.png' alt='no image' class='placeImage'>
+			<h2>
+				<span>${event.name}</span>
+			</h2>
+	</div>`;
 	
-	return go(config.apiUrl + "/moderator/" + id, 'POST', params)
-			.then(res => console.log(res))
-			.catch(() => "nombre de usuario inválido o duplicado");
+let tagClass = `<div class="tagBox">`
+
+for(let tagName of event.tagNames){
+	tagClass += `<span class="tag">${tagName}<span></span></span>`
+}
+	
+tagClass += `</div>`;
+
+let cardLowerContainer = `<div class="cardLowerContainer">
+       	<div>
+           	<div>
+           		<span>${event.description}</span>
+           	</div>
+              ${tagClass}
+        	</div>
+        	<div>			
+					<button id="moderatorAceptEventBtn" type="button" class="acceptButton" onclick="javascript:aceptEvent(${event.id})">Aceptar</button>
+				<button id="moderatorRejectEventBtn" type="button" class="declineButton" onclick="rejectEvent(${event.id})">Rechazar</button>
+			</div>
+		</div>
+	</div>`;
+
+
+let eventCard = `<div class="eventCard"> ${cardUpperContainer} ${cardLowerContainer}</div>`;
+
+return eventCard;
 }
 
-function rejectEvent(id){
-	console.log(config)
-	console.log(id);
-	let params = {acept: false};
-	params[config.csrf.name] = config.csrf.value;
+function refreshPage(res){
+	var div = document.getElementById('moderator-central-panel');
 	
-	return go(config.apiUrl + "/moderator/" + id, 'POST', params)
-			.then(res => console.log(res))
-			.catch(() => "nombre de usuario inválido o duplicado");
+	let eventCards = "";
+	for(let event of res.events){
+		eventCards += createEventCard(event);
+	}
+	
+	div.innerHTML = eventCards;
 }
 
 /**
@@ -48,10 +73,20 @@ function go(url, method, data = {}) {
   	})
 }
 
-/**
- * Actions to perform once the page is fully loaded
- */
-document.addEventListener("DOMContentLoaded", () => {
-	console.log("hhh");
-});
+function aceptEvent(id){
+	let params = {acept: true};
+	params[config.csrf.name] = config.csrf.value;
+	
+	return go(config.apiUrl + "/moderator/" + id, 'POST', params)
+			.then(res => refreshPage(res))
+			.catch(() => "nombre de usuario inválido o duplicado");
+}
 
+function rejectEvent(id){
+	let params = {acept: false};
+	params[config.csrf.name] = config.csrf.value;
+	
+	return go(config.apiUrl + "/moderator/" + id, 'POST', params)
+			.then(res => refreshPage(res))
+			.catch(() => "nombre de usuario inválido o duplicado");
+}

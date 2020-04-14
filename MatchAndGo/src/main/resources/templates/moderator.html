@@ -25,13 +25,12 @@
 
 <body>
 
-    <div>
+    <div id="moderator-central-panel">
 
         <div th:each="element: ${listnum}" class="eventCard">
             <div class="cardUpperContainer">
                 <img th:src="@{/img/noImage.png}" alt="no image" class="placeImage">
                 <h2><span th:text="${element.getName()}"></span>
-                <span th:text="${element.getId()}"></span>
                 
                 </h2>
             </div>
@@ -39,7 +38,7 @@
                 <div>
                     <div><span th:text="${element.getDescription()}"></span></div>
                     <div class="tagBox">
-                        <span class="tag" th:each="tag: ${element.getTags()}"><span th:text="${tag.getTag()}">aliquam</span></span>
+                        <span class="tag" th:each="tag: ${element.getTags()}"><span th:text="${tag.getTag()}"></span></span>
                     </div>
                 </div>
                 <div>
@@ -48,8 +47,6 @@
                 </div>
             </div>
         </div>
-
-
 
     </div>
 
