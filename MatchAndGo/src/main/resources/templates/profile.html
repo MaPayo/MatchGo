@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" media="screen">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="libs/font-awesome/css/font-awesome.min.css"> 
     <link rel="shortcut icon" type="image/png" th:href="@{/img/icon.png}">
     <title>Registro</title>
   <!--    <th:block th:replace="fragments/header ::header" />   </th:block> -->
@@ -17,13 +18,13 @@
     </nav>
   
     <div class="principal">
-        <div class="datosPerfil"> <!--th:if="${session.user}"  -->
-         <img th:src="@{/img/noImage.png}">   <!-- "@{/user/{id}/photo(id=${user.id})}" -->            
+        <div class="datosPerfil" th:if="(${session.u.id} eq ${user.getId()}) or ${user.hasRole('ADMIN')}">
+         <img th:src="@{/img/noImage.png}">   <!-- "@{/user/{id}/photo(id=${u.id})}" -->            
             <div class="datos_texto">
-                <h2 id="nombre"> Nombre del usuario <span th:text="${nombre}"></span></h2>      
-                <p id="edad">Edad usuario <span th:text="${edad}"></span></p>	   
-                <p id="sexo">Sexo usuario <span th:text="${sexo}"></span></p>	 
-                <p id="valoracion">Valoración<span th:text="${valoracion}"></span></p>	   
+                <h2 id="nombre"> <span th:text="${user.getUsername()}"></span></h2>      
+                <p id="edad"><span th:text="${user.getBirthDate()}"></span></p>	   
+                <p id="sexo"><span th:text="${user.getGender()}"></span></p>	 
+           <!--     <p id="valoracion">Media de valoraciones<span th:text="${valoracion}"></span></p>	   --> 
             </div>
 
         </div>
@@ -40,61 +41,13 @@
         <div class="intereses_usuario">
             <h2 class="centrado">Intereses:</h2>
             <ul class="listaIntereses">
-                <li th:each="tag: ${tags}">
-                    <p><span th:text="${tag}">tag</span></p>
+                <li th:each="tag: ${user.getTags()}">
+                    <p><span th:text="${tag.getTag()}">tag</span></p>
                 </li>
             </ul>
         </div>
     
-       	 <!-- Este div solo se muestra si no hay session-->
-  <!--        <div class="form_registro" th:unless="${session.user}">
-            <h1>Registro</h1>
-            <form th:action="@{/signup}" method="POST" enctype="multipart/form-data">
-                <div class="form_texto">
-                    <label for="txt_email">Email:</label>
-                    <input type="email" name="email" id="txt_email" required>
-                </div>
-                <div class="form_texto">
-                    <label for="txt_password">Contraseña:</label>
-                    <input type="password" minlength="6" maxlength="15" name="password" id="txt_password" required>
-                </div>
-                <div class="form_texto">
-                    <label for="txt_name">Nombre:</label>
-                    <input type="text" minlength="4" maxlength="30" name="name" id="txt_name" required>
-                </div>
-                 <div class="form_texto">
-                    <label for="txt_name">Apellidos:</label>
-                    <input type="text" minlength="4" maxlength="30" name="apellidos" id="txt_apellidos" required>
-                </div>
-                <div class="form_texto">
-                    <label>Sexo:</label>
-                    <input type="radio" name="sexo" value="hombre"> Hombre
-                    <input type="radio" name="sexo" value="mujer" checked> Mujer
-                </div>
-                <div class="form_texto">
-                    <label for="date_calendar">Fecha de nacimiento:</label>
-                    <input type="date" name="fecha_nacimiento" id="date_calendar" required>
-                </div>
-                <div class="form_texto">
-                    <form name="form_tags" method="post" action="">
-                        <p>Intereses:</p>
-                        <input type="checkbox" name="cb-cine" value="gusta">Cine
-                        <input type="checkbox" name="cb-deportes" value="gusta"> Deportes
-                        <input type="checkbox" name="cb-videojuegos" value="gusta"> Videojuegos
-                    </form>
-                </div>
-                <div class="form_texto">
-                    <label>Imagen de perfil:</label>
-                    <input type="file" accept="image/png" name="img_perfil" id="file_input">
-                </div>
-                <div class="divBoton">
-                    <input type="submit" value="Registrarse">
-                </div>
-            </form>
-        </div>
          
-    </div>
--->
 <!-- 
 
     <footer th:replace="fragments/footer.html :: footer">
