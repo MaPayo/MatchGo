@@ -20,13 +20,13 @@ public class Message {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-	private String text;
+	private String textMessage;
 	@ManyToOne(targetEntity = User.class)
 	private User sender;			// La persona que lo envía
 	@ManyToOne(targetEntity = User.class)
 	private User receiver;		// La persona que lo recibe
 	private LocalDateTime sendDate;		// Hay que tener en cuenta el tipo java.sql.Date para las query SQL
-	private boolean read;
+	private boolean readMessage;
 
 	public Message() {
 		super();
@@ -35,20 +35,20 @@ public class Message {
     public Message(long id, String c, User s, User r,LocalDateTime f, boolean e) {
 		super();
 		this.id = id;
-        this.text = c;
+        this.textMessage = c;
 		this.sender = s;
 		this.receiver = r;
 		this.sendDate = f;
-		this.read = e;
+		this.readMessage = e;
 	}
 	
 	public Message(String c, User s, User r, LocalDateTime f) {
 		super();
-		this.text = c;
+		this.textMessage = c;
 		this.sender = s;
 		this.receiver = r;
 		this.sendDate = f;
-		this.read = false;
+		this.readMessage = false;
 	}
 	
 	/**
@@ -74,16 +74,16 @@ public class Message {
 		private String sender;
 		private String receiver;
 		private String sendDate;
-		private String read;
-		private String text;
+		private String readMessage;
+		private String textMessage;
 		long id;
 
 		public Transfer(Message m) {
 			this.sender = m.getSender().getUsername();
 			this.receiver = m.getReceiver().getUsername();
 			this.sendDate = DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(m.getSendDate());
-			this.read = String.valueOf(m.getRead());
-			this.text = m.getText();
+			this.readMessage = String.valueOf(m.getReadMessage());
+			this.textMessage = m.getTextMessage();
 			this.id = m.getId();
 		}
 		public String getSender() {
@@ -92,7 +92,7 @@ public class Message {
 		public void setSender(String sender) {
 			this.sender = sender;
 		}
-		public String getreceiver() {
+		public String getReceiver() {
 			return receiver;
 		}
 		public void setReceiver(String receiver) {
@@ -104,17 +104,17 @@ public class Message {
 		public void setSendDate(String sendDate) {
 			this.sendDate = sendDate;
 		}
-		public String getRead() {
-			return read;
+		public String getReadMessage() {
+			return readMessage;
 		}
-		public void setRead(String read) {
-			this.read = read;
+		public void setReadMessage(String read) {
+			this.readMessage = read;
 		}
-		public String getText() {
-			return text;
+		public String getTextMessage() {
+			return textMessage;
 		}
-		public void setText(String text) {
-			this.text = text;
+		public void setTextMessage(String text) {
+			this.textMessage = text;
 		}
 		public long getId() {
 			return id;
@@ -139,12 +139,12 @@ public class Message {
 	/**
      * @return the text
      */
-    public String getText() {
-        return this.text;
+    public String getTextMessage() {
+        return this.textMessage;
 	}
 	
-	public void setText(String text) {
-		this.text = text;
+	public void setTextMessage(String text) {
+		this.textMessage = text;
 	}
 
 	/**
@@ -183,11 +183,11 @@ public class Message {
 	/**
      * @return the read
      */
-	public boolean getRead() {
-		return this.read;
+	public boolean getReadMessage() {
+		return this.readMessage;
 	}
 
-	public void setRead(boolean read) {
-		this.read = read;
+	public void setReadMessage(boolean read) {
+		this.readMessage = read;
 	}	
 }

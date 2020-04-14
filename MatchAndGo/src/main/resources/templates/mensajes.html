@@ -79,12 +79,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
                             <!-- Si el mensaje es mio (el usuario) se muestra como tal -->
                             <div class="mensajeMio" th:case="__${session.usuario.getUsername()}__">
-                                <pre th:text="${mensaje.getText()}"></pre>
+                                <pre th:text="${mensaje.getTextMessage()}"></pre>
                             </div>
 
                             <!-- Si el mensaje es de mi contacto se muestra como tal -->
                             <div class="mensajeContacto" th:case="__${contacto.getUsername()}__">
-                                <pre th:text="${mensaje.getText()}"></pre>
+                                <pre th:text="${mensaje.getTextMessage()}"></pre>
                             </div>
                         </div>
                     </div>
