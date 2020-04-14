@@ -59,16 +59,12 @@ public class EventController {
 	private PasswordEncoder passwordEncoder;
 	
 	@GetMapping("/newEvent")
-	public String getNewEvent(@PathVariable long id, Model model, HttpSession session) {
-
-		Event e = entityManager.find(Event.class, id);
+	public String getNewEvent(Model model, HttpSession session) {
 		
 		User requester = (User)session.getAttribute("u");
 		requester = entityManager.find(User.class, requester.getId());
 
 		model.addAttribute("newEvent", true); 
-		
-		model.addAttribute("event", e);
 		return "event";
 	}
 	
