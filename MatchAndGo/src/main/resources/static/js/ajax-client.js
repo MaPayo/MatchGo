@@ -42,6 +42,12 @@ function refreshPage(res){
 		eventCards += createEventCard(event);
 	}
 	
+	if(res.events.length <= 0){
+		eventCards += `<div class='div-centered'> 
+							<p>No hay Eventos para verificar.</p>
+					   </div>`
+	}
+	
 	div.innerHTML = eventCards;
 }
 

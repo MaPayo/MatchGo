@@ -39,29 +39,69 @@ INSERT INTO USER(ID, USERNAME, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, BIRTH_DAT
 	'MOD',true
 );
 
-INSERT INTO EVENT(ID, NAME, DESCRIPTION, LOCATION, DATE, PUBLICATION_DATE, IS_APPROPRIATE) VALUES (
+INSERT INTO EVENT(ID, NAME, DESCRIPTION, LOCATION, DATE, PUBLICATION_DATE, IS_APPROPRIATE, CREATOR_ID) VALUES (
 	1,
 	'Nombre Evento 1',
 	'Descripcion Evnto 1',
 	'El retiro',
 	NOW(),
 	NOW(),
-	true
+	true,
+	1
 );
 
-INSERT INTO EVENT(ID, NAME, DESCRIPTION, LOCATION, DATE, PUBLICATION_DATE) VALUES (
+INSERT INTO EVENT(ID, NAME, DESCRIPTION, LOCATION, DATE, PUBLICATION_DATE, CREATOR_ID) VALUES (
 	2,
 	'Nombre Evento 2',
 	'Descripcion Evnto 2',
+	'El retiro',
+	NOW(),
+	NOW(),
+	2
+);
+
+INSERT INTO EVENT(ID, NAME, DESCRIPTION, LOCATION, DATE, PUBLICATION_DATE, CREATOR_ID) VALUES (
+	3,
+	'Nombre Evento 3',
+	'Descripcion Evnto 3',
+	'El retiro',
+	NOW(),
+	NOW(),
+	3
+);
+
+INSERT INTO EVENT(ID, NAME, DESCRIPTION, LOCATION, DATE, PUBLICATION_DATE, CREATOR_ID) VALUES (
+	4,
+	'Nombre Evento 4',
+	'Descripcion Evnto 4',
+	'El retiro',
+	NOW(),
+	NOW(),
+	1
+);
+
+INSERT INTO EVENT(ID, NAME, DESCRIPTION, LOCATION, DATE, PUBLICATION_DATE) VALUES (
+	5,
+	'Nombre Evento 5',
+	'Descripcion Evnto 5',
 	'El retiro',
 	NOW(),
 	NOW()
 );
 
 INSERT INTO EVENT(ID, NAME, DESCRIPTION, LOCATION, DATE, PUBLICATION_DATE) VALUES (
-	3,
-	'Nombre Evento 3',
-	'Descripcion Evnto 3',
+	6,
+	'Nombre Evento 6',
+	'Descripcion Evnto 6',
+	'El retiro',
+	NOW(),
+	NOW()
+);
+
+INSERT INTO EVENT(ID, NAME, DESCRIPTION, LOCATION, DATE, PUBLICATION_DATE) VALUES (
+	7,
+	'Nombre Evento 7',
+	'Descripcion Evnto 7',
 	'El retiro',
 	NOW(),
 	NOW()

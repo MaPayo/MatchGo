@@ -43,35 +43,38 @@ public class ModeratorController {
     
     @GetMapping("")
     @Transactional
-	public String getUser(Model model) {
-    	List<Event> listnum = readAllNonEvaluatedEvents();
-    	Event e = new Event(10, "Event name", "Event description", "Event location");
-    	List<Tags> tags = new ArrayList();
-    	Tags tag = new Tags();
-    	tag.setTag("random");
-    	tags.add(tag);
-    	e.setTags(tags);
-    	listnum.add(e);
-    	
-    	model.addAttribute("listnum", listnum);
+	public String getUser(Model model, HttpSession session) {
+    	User user = (User)session.getAttribute("u");
+    	model.addAttribute("listnum", readAllNonEvaluatedEvents(user.getId()));
 		return "moderator";
 	}
     
     @PostMapping(path = "/{id}", produces = "application/json")
 	@Transactional
 	@ResponseBody
-	public ResponseTransfer aceptRejectEvent(@PathVariable("id") int id, @RequestBody ValidEvent body){
+	public ResponseTransfer aceptRejectEvent(@PathVariable("id") int id, @RequestBody ValidEvent body, HttpSession session){
     	ResponseTransfer result;
 		if(body.isAcept()) {
-			log.warn("Acepting an event with id:" + id + " Body: " + body);
+			log.info("Acepting an event with id:" + id + " Body: " + body);
 			result = new ResponseTransfer("Event acepted.");
 		}
 		else {
-			log.warn("Reject an event with id:" + id + " Body: " + body);
+			log.info("Reject an event with id:" + id + " Body: " + body);
 			result = new ResponseTransfer("Event rejected.");
 		}
 		
-		List<Event> events = readAllNonEvaluatedEvents();
+		int updated = entityManager.createNativeQuery("UPDATE EVENT SET IS_APPROPRIATE=? where id=?").setParameter(1, body.isAcept()).setParameter(2, id).executeUpdate();
+		
+		if(updated >= 1) {
+			log.info("Updated sucessfully");
+		}
+		else {
+			log.error("The update was not sucessful.");
+		}
+		
+		User user = (User)session.getAttribute("u");
+		
+		List<Event> events = readAllNonEvaluatedEvents(user.getId());
 		
 		result.setEvents(Event.asTransferObjects(events));
 		
@@ -79,8 +82,8 @@ public class ModeratorController {
 	}
     
     @Transactional
-    private List<Event> readAllNonEvaluatedEvents() {
-    	 List<Event> events = entityManager.createNativeQuery("SELECT * FROM EVENT WHERE IS_APPROPRIATE IS NULL", Event.class).getResultList();
+    private List<Event> readAllNonEvaluatedEvents(long userId) {
+    	 List<Event> events = entityManager.createNativeQuery("SELECT * FROM EVENT WHERE IS_APPROPRIATE IS NULL AND (CREATOR_ID != ? OR CREATOR_ID IS NULL)", Event.class).setParameter(1, userId).getResultList();
     	 return events;
     }
 }
