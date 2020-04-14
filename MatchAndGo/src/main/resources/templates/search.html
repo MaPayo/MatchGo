@@ -18,12 +18,12 @@
     <div th:each="evento: ${event}" class="eventCard">
         <div class="cardUpperContainer">
             <img th:src="@{/img/noImage.png}" alt="" class="placeImage">
-            <h2><span th:text="${evento.getNombre()}"></span>
+            <h2><span th:text="${evento.getName()}"></span>
             </h2>
         </div>
         <div class="cardLowerContainer">
             <div>
-                <div><span th:text="${evento.getDescripcion()}">Description</span></div>
+                <div><span th:text="${evento.getDescription()}">Description</span></div>
                 <div class="tagBox">
                     <!-- <span class="tag category" th:text="${}"> Deportivo </span>--><span class="tag" th:each="tag: ${evento.getTags()}"><span th:text="${tag.getContenido()}">Benefico</span></span>
                 </div>

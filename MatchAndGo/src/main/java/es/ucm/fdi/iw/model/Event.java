@@ -216,6 +216,7 @@ public class Event {
 		if (u.getId() == creator.getId()) return Access.CREATOR;
 		if (u.hasRole(Role.ADMIN) || participants.contains(u)) return Access.PARTICIPANT;
 		return Access.MINIMAL;
+		
 	}
 
 	
