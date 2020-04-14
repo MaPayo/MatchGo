@@ -18,12 +18,12 @@
     </nav>
   
     <div class="principal">
-        <div class="datosPerfil" th:if="(${session.u.id} eq ${user.getId()}) or ${user.hasRole('ADMIN')}">
+        <div class="datosPerfil" th:if="(${session.u.id} eq ${user.getId()})">
          <img th:src="@{/img/noImage.png}">   <!-- "@{/user/{id}/photo(id=${u.id})}" -->            
             <div class="datos_texto">
-                <h2 id="nombre"> <span th:text="${user.getUsername()}"></span></h2>      
-                <p id="edad"><span th:text="${user.getBirthDate()}"></span></p>	   
-                <p id="sexo"><span th:text="${user.getGender()}"></span></p>	 
+                <h2 id="nombre"> <span th:text="${user.username}"></span></h2>      
+                <p id="edad"><span th:text="${user.birthDate}"></span></p>	   
+                <p id="sexo"><span th:text="${user.gender}"></span></p>	 
            <!--     <p id="valoracion">Media de valoraciones<span th:text="${valoracion}"></span></p>	   --> 
             </div>
 
@@ -37,16 +37,16 @@
             <a class="boton" id="Modificar" th:href="@{/user/modificarPerfil(id=${user.id})}">Modificar perfil</a>
         </div>
 -->
- 
+ <!--
         <div class="intereses_usuario">
             <h2 class="centrado">Intereses:</h2>
             <ul class="listaIntereses">
-                <li th:each="tag: ${user.getTags()}">
-                    <p><span th:text="${tag.getTag()}">tag</span></p>
+                <li th:each="tag: ${user.tags}">
+                    <p><span th:text="${tag}">tag</span></p>
                 </li>
             </ul>
         </div>
-    
+   --> 
          
 <!-- 
 
