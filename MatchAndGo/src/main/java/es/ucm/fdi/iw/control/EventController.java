@@ -35,6 +35,7 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 import es.ucm.fdi.iw.LocalData;
 import es.ucm.fdi.iw.model.User;
 import es.ucm.fdi.iw.model.Event;
+import es.ucm.fdi.iw.model.Event.Access;
 import es.ucm.fdi.iw.model.User.Role;
 
 /**
@@ -57,8 +58,18 @@ public class EventController {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
-	@GetMapping("/")
-	public String getEvent(@PathVariable long id) {
+	@GetMapping("/newEvent")
+	public String getNewEvent(@PathVariable long id, Model model, HttpSession session) {
+
+		Event e = entityManager.find(Event.class, id);
+		
+		User requester = (User)session.getAttribute("u");
+		requester = entityManager.find(User.class, requester.getId());
+
+		//model.addAttribute("access", e.checkAccess(requester)); //no funciona
+		model.addAttribute("newEvent", true); 
+		
+		model.addAttribute("event", e);
 		return "event";
 	}
 
@@ -90,7 +101,9 @@ public class EventController {
 		User requester = (User)session.getAttribute("u");
 		requester = entityManager.find(User.class, requester.getId());
 
-		model.addAttribute("access", e.checkAccess(requester));
+		//model.addAttribute("access", e.checkAccess(requester)); //no funciona
+		model.addAttribute("access", Access.MINIMAL); 
+		
 		model.addAttribute("event", e);
 
 		return "event";
@@ -115,11 +128,7 @@ public class EventController {
 		
 		// copiar todos los campos cambiados de edited a target
 
-<<<<<<< HEAD
-		return "matchAndGoEvento";
-=======
 		return "event";
->>>>>>> changes
 	}	
 	
 	@GetMapping(value="/{id}/photo")
@@ -171,10 +180,7 @@ public class EventController {
 			}
 			log.info("Successfully uploaded photo for {} into {}!", id, f.getAbsolutePath());
 		}
-<<<<<<< HEAD
-		return "matchAndGoEvento";
-=======
+
 		return "event";
->>>>>>> changes
 	}
 }

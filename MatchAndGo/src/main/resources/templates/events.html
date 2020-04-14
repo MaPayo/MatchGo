@@ -19,7 +19,9 @@
     <div th:each="evento: ${event}" class="eventCard">
         <div class="cardUpperContainer">
             <img th:src="@{/img/noImage.png}" alt="" class="placeImage">
+MatchAndGo/src/main/resources/templates/eventos.html
             <h2><span th:text="${evento.getName()}"></span> <a th:href="@{/event/{id}(id=${evento.getId()})}" style="color:green"> Go</a>
+MatchAndGo/src/main/resources/templates/search.html
             </h2>
         </div>
         <div class="cardLowerContainer">
