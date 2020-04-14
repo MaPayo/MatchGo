@@ -56,7 +56,7 @@ public class AdminController {
 		return "admin_view";
 	}
 
-	@GetMapping(path = "/userlist", produces = "application/json")
+	@PostMapping(path = "/userlist", produces = "application/json")
 	@Transactional
 	@ResponseBody
 	public List<User.Transfer> retrieveUsers(HttpSession session){
@@ -102,7 +102,7 @@ public class AdminController {
 	}	
 
 
-	@GetMapping("/deleteUser")
+	@PostMapping("/deleteUser")
 	@Transactional
 	public String deleteUser(Model model, @RequestParam long id) {		
 		entityManager.createNamedQuery("User.deleteUser")

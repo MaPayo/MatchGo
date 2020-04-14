@@ -7,38 +7,39 @@ const ws = {
 	 * Number of retries if connection fails
 	 */
 	retries: 3,
-		
+
 	/**
 	 * Default action when message is received. 
 	 */
 	receive: (text) => {
-				$("#contUsers").empty();
-				function appendChild(element){
-					const html = ["<div class='eventCard bgwhite'>" + 
-						"<div class='cardUpperContainer'>" +
-						"<h2 id='nombre'><span>"+ element.nombre +"</span></h2>" + 
-						"</div>" +
-						"<div class='cardLowerContainer'>" +
-						"<p id='edad'><span>"+ element.fecha_nac +"</span></p>" +
-						"<p id='sexo'><span>"+ element.sexo +"</span></p>" +
-						"<form method='get' action='/admin/deleteUser'>" +
-						"<input hidden type='number' name='id' value="+ element.id +">" +
-						"<button type='submit' class='declineButton' value='Eliminar' />" +
-						"</form>" +
-						"<form method='post' action='/admin/blockUser?id="+ element.id +"'>" +
-						"<input hidden type='number' name='id' value="+ element.id +">" +
-						"<button type='submit' class='declineButton' value='Bloquear' />" +
-						"</form>" +
-						"</div>" +
-						"</div>"];
-					$("#contUsers").append(html);
-				}
-				text.forEach(e => appendChild(e));
+		$("#contUsers").empty();
+		function appendChild(element){
+			const html = ["<div class='eventCard bgwhite'>" + 
+				"<div class='cardUpperContainer'>" +
+				"<h2 id='nombre'><span>"+ element.nombre +"</span></h2>" + 
+				"</div>" +
+				"<div class='cardLowerContainer'>" +
+				"<p id='edad'><span>"+ element.fecha_nac +"</span></p>" +
+				"<p id='sexo'><span>"+ element.sexo +"</span></p>" +
+				"<form method='get' action='/admin/deleteUser'>" +
+				"<input hidden type='number' name='id' value="+ element.id +">" +
+				"<input type='hidden' name='[[${_csrf.parameterName}]]' value='[[${_csrf.token}]]' />" +
+				"<button type='submit' class='declineButton' value='Eliminar' />" +
+				"</form>" +
+				"<form method='post' action='/admin/blockUser?id="+ element.id +"'>" +
+				"<input hidden type='number' name='id' value="+ element.id +">" +
+				"<button type='submit' class='declineButton' value='Bloquear' />" +
+				"</form>" +
+				"</div>" +
+				"</div>"];
+			$("#contUsers").append(html);
+		}
+		text.forEach(e => appendChild(e));
 		console.log("updating view updated list received via socket");
 	},
-	
+
 	headers: {'X-CSRF-TOKEN' : config.csrf.value},
-	
+
 	/**
 	 * Attempts to establish communication with the specified
 	 * web-socket endpoint. If successfull, will call 
@@ -48,26 +49,26 @@ const ws = {
 			ws.stompClient = Stomp.client(endpoint);
 			ws.stompClient.reconnect_delay = (ws.retries -- > 0) ? 2000 : 0;
 			ws.stompClient.connect(ws.headers, () => {
-		        ws.connected = true;
-		        console.log('Connected to ', endpoint, ' - subscribing...');		        
-		        while (subs.length != 0) {
-		        	ws.subscribe(subs.pop())
-		        }
-		    });			
+				ws.connected = true;
+				console.log('Connected to ', endpoint, ' - subscribing...');		        
+				while (subs.length != 0) {
+					ws.subscribe(subs.pop())
+				}
+			});			
 			console.log("Connected to WS '" + endpoint + "'")
 		} catch (e) {
 			console.log("Error, connection to WS '" + endpoint + "' FAILED: ", e);
 		}
 	},
-	
+
 	subscribe: (sub) => {
-        try {
-	        ws.stompClient.subscribe(sub, 
-	        		(m) => ws.receive(JSON.parse(m.body))); 	// falla si no recibe JSON!
-        	console.log("Hopefully subscribed to " + sub);
-        } catch (e) {
-        	console.log("Error, could not subscribe to " + sub);
-        }
+		try {
+			ws.stompClient.subscribe(sub, 
+				(m) => ws.receive(JSON.parse(m.body))); 	// falla si no recibe JSON!
+			console.log("Hopefully subscribed to " + sub);
+		} catch (e) {
+			console.log("Error, could not subscribe to " + sub);
+		}
 	}
 } 
 
@@ -76,27 +77,27 @@ const ws = {
  */
 //envía json, espera json de vuelta; lanza error si status != 200
 function go(url, method, data = {}) {
-  let params = {
-    method: method, // POST, GET, POST, PUT, DELETE, etc.
-    headers: {
-      "Content-Type": "application/json; charset=utf-8",
-    },
-    body: JSON.stringify(data)
-  };
-  if (method === "GET") {
-	  delete params.body;
-  } else {
-      params.headers["X-CSRF-TOKEN"] = config.csrf.value; 
-  }  
-  console.log("sending", url, params)
-  return fetch(url, params)
-  	.then(response => {
-	    if (response.ok) {
-	        return response.json(); // esto lo recibes con then(d => ...)
-	    } else {
-	    	throw response.text();  // esto lo recibes con catch(d => ...)
-	    }
-  	})
+	let params = {
+		method: method, // POST, GET, POST, PUT, DELETE, etc.
+		headers: {
+			"Content-Type": "application/json; charset=utf-8",
+		},
+		body: JSON.stringify(data)
+	};
+	if (method === "GET") {
+		delete params.body;
+	} else {
+		params.headers["X-CSRF-TOKEN"] = config.csrf.value; 
+	}  
+	console.log("sending", url, params)
+	return fetch(url, params)
+		.then(response => {
+			if (response.ok) {
+				return response.json(); // esto lo recibes con then(d => ...)
+			} else {
+				throw response.text();  // esto lo recibes con catch(d => ...)
+			}
+		})
 }
 
 /**
@@ -105,11 +106,60 @@ function go(url, method, data = {}) {
 document.addEventListener("DOMContentLoaded", () => {
 	if (config.socketUrl) {
 		let subs = config.admin ? 
-				["/topic/admin", "/user/queue/updates"] : ["/user/queue/updates"]
+			["/topic/admin", "/user/queue/updates"] : ["/user/queue/updates"]
 		ws.initialize(config.socketUrl, subs);
 	}
+
+	document.getElementById("listEvents").addEventListener("click",function() {
+		document.getElementById("listEvents").classList.add("bgblue");
+		document.getElementById("listUsers").classList.remove("bgblue");
+		document.getElementById("contEvents").hidden = false;
+		document.getElementById("contUsers").hidden = true;
+	});
+	document.getElementById("listUsers").addEventListener("click",function() {
+		document.getElementById("listEvents").classList.remove("bgblue");
+		document.getElementById("listUsers").classList.add("bgblue");
+		document.getElementById("contUsers").hidden = false;
+		document.getElementById("contEvents").hidden = true;
+	});
+
+
+
+	go(config.rootUrl + "admin/userlist","POST",null).then(e => listUsers(e));
 	
+
+	//response.forEach(e => );
+
 	// add your after-page-loaded JS code here; or even better, call 
 	// 	 document.addEventListener("DOMContentLoaded", () => { /* your-code-here */ });
 	//   (assuming you do not care about order-of-execution, all such handlers will be called correctly)
 });
+
+
+function listUsers(jsonArray){
+	jsonArray.forEach(e => appendChild(e));
+}
+
+
+function appendChild(element){
+	const html = ["<div class='eventCard bgwhite'>" + 
+		"<div class='cardUpperContainer'>" +
+		"<h2 id='nombre'><span>"+ element.name +"</span></h2>" + 
+		"</div>" +
+		"<div class='cardLowerContainer'>" +
+		"<p id='edad'><span>"+ element.birthdate +"</span></p>" +
+		"<p id='sexo'><span>"+ element.gender +"</span></p>" +
+		"<form method='post' action='/admin/deleteUser'>" +
+		"<input type='hidden' name='[[${_csrf.parameterName}]]' value='[[${_csrf.token}]]' />" +
+		"<input hidden type='number' name='id' value="+ element.id +">" +
+		"<button type='submit' class='declineButton' value='Eliminar' />" +
+		"</form>" +
+		"<form method='post' action='/admin/blockUser?id="+ element.id +"'>" +
+		"<input type='hidden' name='[[${_csrf.parameterName}]]' value='[[${_csrf.token}]]' />" +
+		"<input hidden type='number' name='id' value="+ element.id +">" +
+		"<button type='submit' class='declineButton' value='Bloquear' />" +
+		"</form>" +
+		"</div>" +
+		"</div>"];
+	document.getElementById("contUsers").insertAdjacentHTML('beforeend',html);
+}
