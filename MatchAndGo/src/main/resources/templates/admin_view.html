@@ -56,11 +56,11 @@
 				<div class="eventCard bgwhite" th:each="event: ${allEvents}">
 					<div class="cardUpperContainer">
 						<img th:src="@{/img/{id}.png(id=${event.getId()})}" alt="" class="placeImage">
-						<h2 th:text="${event.getNombre()}"></h2>
+						<h2 th:text="${event.getName()}"></h2>
 					</div>
 					<div class="cardLowerContainer">
 						<div>
-							<div><span th:text="${event.getDescripcion()}"></span> Para: <span th:text="${event.getFecha()}"></span> Publicada: <span th:text="${event.getPublicada()}"></span></div>
+							<div><span th:text="${event.getDescription()}"></span> Para: <span th:text="${event.getDate()}"></span> Publicada: <span th:text="${event.getPublicationDate()}"></span></div>
 							<!--<button type="button" class="acceptButton">Aceptar</button>-->
 							<button type="button" class="declineButton"  th:onclick="|javascript:blockEvent(__${event.getId()}__)|">Eliminar</button>
 							
@@ -68,7 +68,7 @@
 	   <button type="submit" class="declineButton" value="Eliminar" />
 	   </form>
 							<div class="tagBox">
-								<!--	<span class="tag category"> Deportivo </span><span class="tag" th:each="tag: ${event.getTags()}"><span th:text="${tag.getNombre()}">Benefico</span></span>-->
+								<!--	<span class="tag category"> Deportivo </span><span class="tag" th:each="tag: ${event.getTags()}"><span th:text="${tag.getUsername()}">Benefico</span></span>-->
 							</div>
 						</div>
 					</div>
@@ -80,11 +80,11 @@
 				function appendChild(element){
 					const html = ["<div class='eventCard bgwhite'>" + 
 						"<div class='cardUpperContainer'>" +
-						"<h2 id='nombre'><span>"+ element.nombre +"</span></h2>" + 
+						"<h2 id='nombre'><span>"+ element.name +"</span></h2>" + 
 						"</div>" +
 						"<div class='cardLowerContainer'>" +
-						"<p id='edad'><span>"+ element.fecha_nac +"</span></p>" +
-						"<p id='sexo'><span>"+ element.sexo +"</span></p>" +
+						"<p id='edad'><span>"+ element.birthdate +"</span></p>" +
+						"<p id='sexo'><span>"+ element.gender +"</span></p>" +
 						"<form method='get' action='/admin/deleteUser'>" +
 						"<input hidden type='number' name='id' value="+ element.id +">" +
 						"<button type='submit' class='declineButton' value='Eliminar' />" +
@@ -112,10 +112,10 @@
 			<!--
 	   <div class="eventCard bgwhite" th:each="user: ${allUsers}">
 	   <div class="cardUpperContainer">
-	   <h2 id="nombre"><span th:text="${user.getNombre()}"></span></h2>
+	   <h2 id="nombre"><span th:text="${user.getUsername()}"></span></h2>
 	   </div>
 	   <div class="cardLowerContainer">
-	   <p id="edad"><span th:text="${user.getFecha_nac()}"></span></p>
+	   <p id="edad"><span th:text="${user.getDate_nac()}"></span></p>
 	   <p id="sexo"><span th:text="${user.getSexo()}"></span></p>
 	   <form method="post" th:action="@{/admin/deleteUser(id=${user.getId()})}">
 	   <button type="submit" class="declineButton" value="Eliminar" />

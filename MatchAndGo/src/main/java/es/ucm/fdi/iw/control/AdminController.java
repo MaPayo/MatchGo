@@ -52,7 +52,7 @@ public class AdminController {
 		model.addAttribute("activeProfiles", env.getActiveProfiles());
 		model.addAttribute("basePath", env.getProperty("es.ucm.fdi.base-path"));
 		model.addAttribute("allEvents", entityManager.createQuery(
-				"SELECT u FROM Evento u").getResultList());
+				"SELECT u FROM Event u").getResultList());
 		return "admin_view";
 	}
 

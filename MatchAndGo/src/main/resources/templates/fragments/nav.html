@@ -16,7 +16,7 @@
 			<a th:href="@{/logout}" href="/logout">logout</a>
 			<a th:href="@{/user/{id}(id=${session.u.id})}">
 				<img class="userthumb" th:src="@{/user/{id}/photo(id=${session.u.id})}">
-				<span th:text="${session.u.nombre}">Pepe</span></a>						
+				<span th:text="${session.u.id}">Pepe</span></a>						
 		</div>
 		<div class="logx" th:unless="${session.u}">
 			<a th:href="@{/login}" href="/login">login</a>
