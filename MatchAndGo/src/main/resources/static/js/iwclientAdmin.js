@@ -12,29 +12,8 @@ const ws = {
 	 * Default action when message is received. 
 	 */
 	receive: (text) => {
-		$("#contUsers").empty();
-		function appendChild(element){
-			const html = ["<div class='eventCard bgwhite'>" + 
-				"<div class='cardUpperContainer'>" +
-				"<h2 id='nombre'><span>"+ element.nombre +"</span></h2>" + 
-				"</div>" +
-				"<div class='cardLowerContainer'>" +
-				"<p id='edad'><span>"+ element.fecha_nac +"</span></p>" +
-				"<p id='sexo'><span>"+ element.sexo +"</span></p>" +
-				"<form method='get' action='/admin/deleteUser'>" +
-				"<input hidden type='number' name='id' value="+ element.id +">" +
-				"<input type='hidden' name='[[${_csrf.parameterName}]]' value='[[${_csrf.token}]]' />" +
-				"<button type='submit' class='declineButton' value='Eliminar' />" +
-				"</form>" +
-				"<form method='post' action='/admin/blockUser?id="+ element.id +"'>" +
-				"<input hidden type='number' name='id' value="+ element.id +">" +
-				"<button type='submit' class='declineButton' value='Bloquear' />" +
-				"</form>" +
-				"</div>" +
-				"</div>"];
-			$("#contUsers").append(html);
-		}
-		text.forEach(e => appendChild(e));
+		listUsers(text);
+		
 		console.log("updating view updated list received via socket");
 	},
 
@@ -137,6 +116,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 function listUsers(jsonArray){
+	let container = document.getElementById("contusers");
+	while (container){ 
+		container.removeChild(container.firstChild);
+	}
 	jsonArray.forEach(e => appendChild(e));
 }
 
@@ -150,12 +133,12 @@ function appendChild(element){
 		"<p id='edad'><span>"+ element.birthdate +"</span></p>" +
 		"<p id='sexo'><span>"+ element.gender +"</span></p>" +
 		"<form method='post' action='/admin/deleteUser'>" +
-		"<input type='hidden' name='[[${_csrf.parameterName}]]' value='[[${_csrf.token}]]' />" +
+		"<input type='hidden' name='_csrf' value='"+config.csrf.value+"' />" +
 		"<input hidden type='number' name='id' value="+ element.id +">" +
 		"<button type='submit' class='declineButton' value='Eliminar' />" +
 		"</form>" +
 		"<form method='post' action='/admin/blockUser?id="+ element.id +"'>" +
-		"<input type='hidden' name='[[${_csrf.parameterName}]]' value='[[${_csrf.token}]]' />" +
+		"<input type='hidden' name='_csrf' value='"+config.csrf.value+"' />" +
 		"<input hidden type='number' name='id' value="+ element.id +">" +
 		"<button type='submit' class='declineButton' value='Bloquear' />" +
 		"</form>" +
