@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html 
-	xmlns:th="http://www.thymeleaf.org"
-	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
-	<title>Nav fragment - rest intentionally left empty</title>
-</head>
-<body>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
+<head>
+    <title>Nav fragment - rest intentionally left empty</title>
+</head>
+
+<body>
 	 <nav th:fragment="nav">
         <a class="logo" href="" th:href="@{/}">
             <img id= imagenNormal src="/img/logo.jpg"></a>
@@ -28,6 +27,7 @@
 				El bloque de "debug" sólo está activado si application.properties tiene debug a "true"
 				(ver StartupConfig.java para ver cómo se lee el atributo y se pone en ${application.debug})
 			*/-->
+
 			<div class="debug" th:if="${application.debug}">
 				<form th:action="@{/login}" method="post">
 					<input type="hidden" name="username" value="nombre">
@@ -44,4 +44,5 @@
     </nav>
 	
 </body>
+
 </html>
