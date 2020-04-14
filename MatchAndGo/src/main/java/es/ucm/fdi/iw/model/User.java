@@ -20,7 +20,12 @@ import javax.persistence.OneToMany;
 @Entity
 @NamedQueries({
 	@NamedQuery(name="User.byUsername", query= "SELECT u from User u WHERE "
-			+ "u.username = :username")
+			+ "u.username = :username"),
+	@NamedQuery(name="User.all", query= "SELECT u from User u"),
+	@NamedQuery(name="User.deleteUser", query= "DELETE FROM User u WHERE "
+		+ "u.id = :idUser"),
+	@NamedQuery(name="User.blockUser", query= "UPDATE User u SET u.enabled = :state "
+		+ "WHERE u.id = :idUser")
 })
 
 public class User {
@@ -187,6 +192,139 @@ public class User {
 			this.gender = m.getGender();
 		}
 
+	public long getId() {
+		return id;
+	}
+	
+	public void setId(long id) {
+		this.id = id;
+	}
+	
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	
+	public String getLastName() {
+		return lastName;
+	}
+	
+	public void setLastName(String lastname) {
+		this.lastName = lastname;
+	}
+	
+	public String getEmail() {
+		return email;
+	}
+	
+	public void setEmail(String mail) {
+		this.email = mail;
+	}
+	
+	public String getPassword() {
+		return password;
+	}
+	
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
+	public String getBirthDate() {
+		return birthDate;
+	}
+	
+	public void setBirthDate(String birthdate) {
+		this.birthDate = birthdate;
+	}
+	
+	public String getGender() {
+		return gender;
+	}
+	
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+	
+	public String getUserRole() {
+		return userRole;
+	}
+
+	public void setUserRole(String userRole) {
+		this.userRole = userRole;
+	}
+	
+	public String getPhoto() {
+		return photo;
+	}
+	
+	public void setPhoto(String img) {
+		this.photo = img;
+	}
+	
+
+	public List<Evaluation> getReceivedEvaluation() {
+		return receivedEvaluation;
+	}
+	
+	public void setReceivedEvaluation(List<Evaluation> evaluation) {
+		this.receivedEvaluation = evaluation;
+	}
+	
+	public List<Evaluation> getSenderEvaluation() {
+		return senderEvaluation;
+	}
+	
+	public void setSenderEvaluation(List<Evaluation> evaluation) {
+		this.senderEvaluation = evaluation;
+	}
+	
+
+	public List<Tags> getTags() {
+		return tags;
+	}
+
+	public void setTags(List<Tags> tags) {
+		this.tags = tags;
+	}
+
+	public List<Message> getSentMessages() {
+		return sentMessages;
+	}
+
+	public void setSentMessages(List<Message> sentMessages) {
+		this.sentMessages = sentMessages;
+	}
+
+	public List<Message> getReceivedMessages() {
+		return receivedMessages;
+	}
+
+	public void setReceivedMessages(List<Message> receivedMessages) {
+		this.receivedMessages = receivedMessages;
+	}
+
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+	
 
 	}
 	

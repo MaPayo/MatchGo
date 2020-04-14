@@ -52,11 +52,11 @@ public class AdminController {
 		model.addAttribute("activeProfiles", env.getActiveProfiles());
 		model.addAttribute("basePath", env.getProperty("es.ucm.fdi.base-path"));
 		model.addAttribute("allEvents", entityManager.createQuery(
-				"SELECT u FROM Evento u").getResultList());
+				"SELECT u FROM Event u").getResultList());
 		return "admin_view";
 	}
 
-	@GetMapping(path = "/userlist", produces = "application/json")
+	@PostMapping(path = "/userlist", produces = "application/json")
 	@Transactional
 	@ResponseBody
 	public List<User.Transfer> retrieveUsers(HttpSession session){
@@ -102,7 +102,7 @@ public class AdminController {
 	}	
 
 
-	@GetMapping("/deleteUser")
+	@PostMapping("/deleteUser")
 	@Transactional
 	public String deleteUser(Model model, @RequestParam long id) {		
 		entityManager.createNamedQuery("User.deleteUser")
