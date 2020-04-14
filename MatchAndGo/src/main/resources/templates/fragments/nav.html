@@ -13,8 +13,8 @@
         <div class="menu" th:if="${session.u}">
             <a th:href="@{/user/{id}(id=${session.u.id})}">Mi perfil</a>
             <a  th:href="@{/event/}">Eventos</a>
-            <a  th:href="@{/mensajes/}">Mensajes</a>
-            <a th:if="${session.u.hasRole('MOD')} || session.u.hasRole('ADMIN')" th:href="@{/moderator/}">Moderador</a>
+            <a  th:href="@{/messages/}">Mensajes</a>
+            <a th:if="${session.u.hasRole('MOD') || session.u.hasRole('ADMIN')}" th:href="@{/moderator/}">Moderador</a>
             <a th:if="${session.u.hasRole('ADMIN')}" th:href="@{/admin/}">Admin</a>
             <a th:href="@{/user/logout}">Salir</a>
         </div>
