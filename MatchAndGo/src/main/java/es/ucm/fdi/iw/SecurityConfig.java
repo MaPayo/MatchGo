@@ -37,6 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	            .antMatchers("/css/**", "/js/**", "/img/**", "/", "/error").permitAll()
 	            // .antMatchers("/clase/enter").permitAll() 		 <-- only when logging in to vote 
 	            .antMatchers("/admin/**").hasRole("ADMIN")		// <-- administration
+	            .antMatchers("/moderator/**").hasAnyRole("MOD", "ADMIN") // <-- moderator functionality
 	            .anyRequest().authenticated()
 	            .and()
 	        .formLogin()

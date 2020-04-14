@@ -31,7 +31,7 @@ import javax.persistence.OneToMany;
 public class User {
 
 	public enum Role{
-		USER,ADMIN, MOD
+		USER,ADMIN,MOD
 	}	
 	
 	@Id
