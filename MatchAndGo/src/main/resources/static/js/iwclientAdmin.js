@@ -28,17 +28,20 @@ const ws = {
 			ws.stompClient = Stomp.client(endpoint);
 			ws.stompClient.reconnect_delay = (ws.retries -- > 0) ? 2000 : 0;
 			ws.stompClient.connect(ws.headers, () => {
+
 				ws.connected = true;
 				console.log('Connected to ', endpoint, ' - subscribing...');		        
 				while (subs.length != 0) {
 					ws.subscribe(subs.pop())
 				}
 			});			
+
 			console.log("Connected to WS '" + endpoint + "'")
 		} catch (e) {
 			console.log("Error, connection to WS '" + endpoint + "' FAILED: ", e);
 		}
 	},
+
 
 	subscribe: (sub) => {
 		try {
@@ -48,6 +51,7 @@ const ws = {
 		} catch (e) {
 			console.log("Error, could not subscribe to " + sub);
 		}
+
 	}
 } 
 
@@ -56,6 +60,7 @@ const ws = {
  */
 //envía json, espera json de vuelta; lanza error si status != 200
 function go(url, method, data = {}) {
+
 	let params = {
 		method: method, // POST, GET, POST, PUT, DELETE, etc.
 		headers: {
@@ -77,6 +82,7 @@ function go(url, method, data = {}) {
 				throw response.text();  // esto lo recibes con catch(d => ...)
 			}
 		})
+
 }
 
 /**
@@ -85,6 +91,7 @@ function go(url, method, data = {}) {
 document.addEventListener("DOMContentLoaded", () => {
 	if (config.socketUrl) {
 		let subs = config.admin ? 
+
 			["/topic/admin", "/user/queue/updates"] : ["/user/queue/updates"]
 		ws.initialize(config.socketUrl, subs);
 	}
@@ -113,6 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	// 	 document.addEventListener("DOMContentLoaded", () => { /* your-code-here */ });
 	//   (assuming you do not care about order-of-execution, all such handlers will be called correctly)
 });
+
 
 
 function listUsers(jsonArray){
@@ -146,3 +154,4 @@ function appendChild(element){
 		"</div>"];
 	document.getElementById("contUsers").insertAdjacentHTML('beforeend',html);
 }
+

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>MatchandGo</title>
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet">
+    <link rel="stylesheet" href="libs/font-awesome/css/font-awesome.min.css"> 
+    <link rel="stylesheet" type="text/css" th:href="@{/css/stylesindex.css}">
+</head>
+
+<body>
+    <header>
+        <ul id="menu" class="shadow">
+            <li>
+                <a href="#description" class='no-scroll'>Sobre nosotros</a>
+            </li>
+            <li>
+                <a href="#services">Servicios</a>
+            </li>
+            <li>
+                <a href="#about">Equipo</a>
+            </li>
+        </ul>
+    </header>
+    <!-- End header -->
+    <div id="lead">
+        <div id="lead-content">
+            <h1>Match&Go</h1>
+            <h2> Find friends, have fun, experience new things!</h2>
+            <form th:action="@{/login}" method="GET">
+                <button type="submit" class="btn-rounded-white">Empezar</button>
+             </form>
+        </div>
+        <!-- End #lead-content -->
+        <div id="lead-overlay" class="background-alt"></div>
+
+        <div id="lead-down">
+            <span>
+                <i class="fa fa-chevron-down" aria-hidden="true"></i>
+            </span>
+        </div>
+        <!-- End #lead-down -->
+    </div>
+    <!-- End #lead -->
+
+    <div id="description" >
+        <div class="container">
+            <h2 class="heading">Sobre nosotros</h2>
+
+            <div class="description_text">
+                <p>
+                    ¿Cansado de ir al cine solo? ¿Quieres ir a una exposición de arte acompañado para compartir opinión?
+                    ¿Tu grupo planea ir a jugar al tenis pero sois impares? Con Match&Go puedes buscar a esa persona que
+                    falta para realizar tu plan ideal o unirte
+                    a una actividad de tu interés planteada por otros usuarios.
+                    Gracias a esta plataforma, quedarse en casa por falta de acompañante ya nunca será una excusa.
+                </p>
+            </div>
+
+        </div>
+    </div>
+    <!-- End #description -->
+    <div id="services">
+            <h2 class="heading">Nuestros servicios</h2>
+
+
+            <div class="container">
+            <div class="service-item" id="i1">
+                <div class="service-icon"> <img id="imagenPequeña" th:src="@{/img/eventos.png}"></div>
+                <h4 class="service-title">Eventos</h4>
+                <p class="service-description">A través de nuestro portal podrás ver, crear y unirte a los eventos de tu
+                    interés.</p>
+            </div>
+            <div class="service-item"id="i2">
+                <div class="service-icon"> <img id="imagenPequeña" th:src="@{/img/mensajes.png}"></div>
+                <h4 class="service-title">Mensajes</h4>
+                <p class="service-description">Una vez unidos a un evento, tienen la posibilidad de acceder a un chat
+                    interno de la aplicación donde
+                    pueden mensajearse con otros miembros.</p>
+            </div>
+            <div class="service-item"id="i3">
+                <div class="service-icon"> <img id="imagenPequeña"  th:src="@{/img/tags.png}"></div>
+                <h4 class="service-title">Etiquetas</h4>
+                <p class="service-description">Cada evento estará identificado por etiquetas específicas. De esta manera
+                    podrás filtrar las búsquedas en función a tus propios intereses.
+                </p>
+            </div>
+            <div class="service-item" id="i4">
+                <div class="service-icon"> <img id="imagenPequeña" th:src="@{/img/valoraciones.png}"></div>
+                <h4 class="service-title">Valoraciones</h4>
+                <p class="service-description">Una vez se concluya un evento, cada participante podrá valorar a los
+                    participantes de este.
+                </p>
+            </div>
+            <div class="service-item" id="i5">
+                <div class="service-icon">  <img id="imagenPequeña" th:src="@{/img/reporte.png}"></div>
+                <h4 class="service-title">Reportes</h4>
+                <p class="service-description">Nuestro objetivo es conseguir la mejor experiencia del usuario. Por ello,
+                    se podrá reportar
+                    cualquier evento o usuario que se pueda considerar inoportuno. </p>
+            </div>
+            <div class="service-item" id="i6">
+                <div class="service-icon">  <img id="imagenPequeña" th:src="@{/img/calidad.png}"></div>
+                <h4 class="service-title">Control de calidad</h4>
+                <p class="service-description">Disponemos de varios usuarios con ciertos privilegios que se encargarán
+                    de comprobar la vericidad de los eventos.
+                </p>
+            </div>
+
+        </div>
+    </div>
+    <!-- End #service -->
+    <div id="about" class="background-alt">
+        <h2 class="heading">Equipo</h2>
+        <div class="container">
+            <div class="about shadow-large">
+
+                <!-- End .personal-image -->
+                
+                <div class="personal-info">
+                    <h3>Carlos, Enrique, Gasan, Marina, Mercedes, Veronika</h3>
+                    <p>
+                        Somos estudiantes de Ingeniería de Software en la facultad de informática de la UCM.
+                        Estamos realizando este proyecto para la asignatura de Ingeniería Web.
+                    </p>
+                    <a href="https://github.com/MaPayo/MatchGo">gitHub</a>
+                </div>
+                <!-- End .about-info -->
+                
+            </div>
+            <!-- End .about -->
+
+        </div>
+    </div>
+    <!-- End #about -->
+
+
+    <footer>
+        <div class="container">
+
+            <div class="top">
+                <span id="to-top">
+                    <i class="fa fa-chevron-up" aria-hidden="true"></i>
+                </span>
+            </div>
+            <div class="social">
+                <ul>
+                    <li>
+                        <a href="https://informatica.ucm.es/" target="_blank"><i class="fa fa-fdi"
+                                aria-hidden="true"></i>
+                            <img id="imagenlarga" th:src="@{/img/fdi.png}">
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/" target="_blank"><i class="fa fa-github" aria-hidden="true"></i>
+                            <img id=imagenNormal th:src="@{/img/github.jpg}"></a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </footer>
+    <!-- End footer -->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script th:src="@{/js/scriptIndex.js}"></script>
+
+</body>
+
+</html>

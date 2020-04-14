@@ -1,6 +1,7 @@
 package es.ucm.fdi.iw.model;
 
 import java.time.LocalDateTime;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,7 +17,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 import es.ucm.fdi.iw.model.User.Role;
+
 import es.ucm.fdi.iw.model.User.Transfer;
+
 
 @Entity
 public class Event {
@@ -28,10 +32,12 @@ public class Event {
 	private String photo;
 	private LocalDateTime date;
 	private LocalDateTime publicationDate;
+
 	@Column(columnDefinition = "boolean default null")
 	private Boolean isAppropriate;
 
 	@ManyToMany(fetch = FetchType.EAGER)
+
 	private List<Tags> tags;
 	
 	@ManyToMany

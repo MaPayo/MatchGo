@@ -52,11 +52,13 @@ public class AdminController {
 		model.addAttribute("activeProfiles", env.getActiveProfiles());
 		model.addAttribute("basePath", env.getProperty("es.ucm.fdi.base-path"));
 		model.addAttribute("allEvents", entityManager.createQuery(
+
 				"SELECT u FROM Event u").getResultList());
 		return "admin_view";
 	}
 
 	@PostMapping(path = "/userlist", produces = "application/json")
+
 	@Transactional
 	@ResponseBody
 	public List<User.Transfer> retrieveUsers(HttpSession session){

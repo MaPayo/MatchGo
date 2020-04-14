@@ -11,11 +11,14 @@ import javax.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 //import org.springframework.web.bind.annotation.RequestParam;
 
+import es.ucm.fdi.iw.LocalData;
 import es.ucm.fdi.iw.model.Event;
 import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.Tags;
@@ -29,6 +32,27 @@ public class RootController {
 	@Autowired
 	private EntityManager entityManager;
 
+	
+	@GetMapping("/")
+	public String index(Model model,HttpSession session) {
+		
+		return "index";
+	}
+
+	@GetMapping("/index")
+	public String welcome(Model model) {
+		return "index";
+	}
+	@GetMapping("/login")
+	public String login(Model model,HttpSession session) {
+		return "login";
+	}
+	
+	@GetMapping("/error")
+	public String error(Model model) {
+		return "error";
+	}	
+/*
 
 	// Crea unos chats de ejemplo para la vista "mensajes"
 	public Message[] generarChatPorDefecto() {
@@ -44,13 +68,13 @@ public class RootController {
 
 		return res;
 	}
-	/*
+	
 	   @GetMapping("/profile")
 	   public String getSignUp(Model model, HttpSession session) {
 	   if(session.getAttribute("user") != null) 
 	   return "redirect:/user/" + ((Usuario) session.getAttribute("user")).getId();
 	   return "registro";
-	   }*/
+	   }
 
 
 	public User pasoDeModificarElImportSql() {
@@ -145,10 +169,13 @@ public class RootController {
 
 	  return "search";
   }
+<<<<<<< HEAD
 
 	@GetMapping("/error")
 	public String error(Model model) {
 		return "error";
 	}	
 	
+=======
+*/
 }

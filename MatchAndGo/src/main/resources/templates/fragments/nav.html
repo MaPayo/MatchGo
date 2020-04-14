@@ -6,22 +6,24 @@
 	<title>Nav fragment - rest intentionally left empty</title>
 </head>
 <body>
-	<nav th:fragment="nav">
-		<a class="logo" href="" th:href="@{/}"></a>
-		<span class="sitename">Plantilla de IW</span>
 
-		<div class="logx" th:if="${session.u}">			
-			<a th:if="${session.u.hasRole('ADMIN')}" th:href="@{/admin/}">admin</a>
-			<a th:if="${session.g} neq null" th:href="@{/clase/}">clase</a>
-			<a th:if="${session.u.hasRole('MOD') || session.u.hasRole('ADMIN')}" th:href="@{/moderator/}">moderator</a>
-			<a th:href="@{/logout}" href="/logout">logout</a>
-			<a th:href="@{/user/{id}(id=${session.u.id})}">
-				<img class="userthumb" th:src="@{/user/{id}/photo(id=${session.u.id})}">
-				<span th:text="${session.u.username}">Pepe</span></a>						
-		</div>
-		<div class="logx" th:unless="${session.u}">
-			<a th:href="@{/login}" href="/login">login</a>
-			<!--/*
+	 <nav th:fragment="nav">
+        <a class="logo" href="" th:href="@{/}">
+            <img id= imagenNormal src="/img/logo.jpg"></a>
+        <!-- El menú cambiara en función del rol de usuario -->
+        <div class="menu" th:if="${session.u}">
+            <a th:href="@{/user/{id}(id=${session.u.id})}">Mi perfil</a>
+            <a  th:href="@{/eventos/}">Eventos</a>
+            <a  th:href="@{/mensajes/}">Mensajes</a>
+            <a th:if="${session.u.hasRole('MOD')}" th:href="@{/mod/}">Moderador</a>
+            <a th:if="${session.u.hasRole('ADMIN')}" th:href="@{/admin/}">Admin</a>
+            <a th:href="@{/user/logout}">Salir</a>
+        </div>
+        <div class="menu" th:unless="${session.u}">
+            <a th:href="@{/login}" href="/login">Iniciar sesión</a>
+            <a th:href="@{user/signup}">Registrarse</a>
+            	<!--/*
+
 				Esto es un comentario "thymeleaf" - no se verÃ¡ en el HTML
 				El bloque de "debug" sÃ³lo estÃ¡ activado si application.properties tiene debug a "true"
 				(ver StartupConfig.java para ver cÃ³mo se lee el atributo y se pone en ${application.debug})
@@ -38,7 +40,8 @@
 					<button type="submit">b</button>
   				</form> 
   			</div>
-		</div>		
-	</nav>
+        </div>
+    </nav>
+	
 </body>
 </html>
