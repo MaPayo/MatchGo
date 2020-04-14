@@ -9,23 +9,23 @@
 	 <nav th:fragment="nav">
         <a class="logo" href="" th:href="@{/}">
             <img id= imagenNormal src="/img/logo.jpg"></a>
-        <!-- El men� cambiara en funci�n del rol de usuario -->
+        <!-- El menú cambiara en función del rol de usuario -->
         <div class="menu" th:if="${session.u}">
             <a th:href="@{/user/{id}(id=${session.u.id})}">Mi perfil</a>
-            <a  th:href="@{/eventos/}">Eventos</a>
+            <a  th:href="@{/event/}">Eventos</a>
             <a  th:href="@{/mensajes/}">Mensajes</a>
-            <a th:if="${session.u.hasRole('MOD')}" th:href="@{/mod/}">Moderador</a>
+            <a th:if="${session.u.hasRole('MOD')} || session.u.hasRole('ADMIN')" th:href="@{/moderator/}">Moderador</a>
             <a th:if="${session.u.hasRole('ADMIN')}" th:href="@{/admin/}">Admin</a>
             <a th:href="@{/user/logout}">Salir</a>
         </div>
         <div class="menu" th:unless="${session.u}">
-            <a th:href="@{/login}" href="/login">Iniciar sesi�n</a>
+            <a th:href="@{/login}" href="/login">Iniciar sesión</a>
             <a th:href="@{user/signup}">Registrarse</a>
             	<!--/*
 
-				Esto es un comentario "thymeleaf" - no se verá en el HTML
-				El bloque de "debug" sólo está activado si application.properties tiene debug a "true"
-				(ver StartupConfig.java para ver cómo se lee el atributo y se pone en ${application.debug})
+				Esto es un comentario "thymeleaf" - no se verÃ¡ en el HTML
+				El bloque de "debug" sÃ³lo estÃ¡ activado si application.properties tiene debug a "true"
+				(ver StartupConfig.java para ver cÃ³mo se lee el atributo y se pone en ${application.debug})
 			*/-->
 
 			<div class="debug" th:if="${application.debug}">
