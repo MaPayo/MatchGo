@@ -9,9 +9,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -30,6 +33,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
@@ -37,6 +41,11 @@ import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.User;
 import es.ucm.fdi.iw.model.User.Role;
 
+/**
+ * Message controller
+ * @author EnriqueTorrijos
+ */
+@Controller
 public class MessageController {
 
     private static final Logger log = LogManager.getLogger(MessageController.class);
@@ -44,11 +53,40 @@ public class MessageController {
 	@Autowired
     private EntityManager entityManager;
     
+    /**
+     * Start the user from the session so it can read some messages
+     * @param session
+     * @return
+     */
+    @Transactional
+    private HttpSession startMessages(Model model, HttpSession session) {
+        User usuario = (User) session.getAttribute("u");
+        List<Message> sended = new ArrayList<Message>();
+        List<Message> received = new ArrayList<Message>();
+        try {
+            sended.add((Message) entityManager.find(Message.class, 1));
+            received.add((Message) entityManager.find(Message.class, 2));
+            sended.add((Message) entityManager.find(Message.class, 3));
+            sended.add((Message) entityManager.find(Message.class, 4));
+            received.add((Message) entityManager.find(Message.class, 5));
+
+            usuario.setSentMessages(sended);
+            usuario.setReceivedMessages(received);
+
+            entityManager.persist(usuario);
+            entityManager.flush();
+
+            session.setAttribute("u", usuario);
+        } catch (Exception e) {
+        }
+        return session;
+    }
+
     /*
-        This method gets all the contacts from the user in the session.
-    * */
+     * This method gets all the contacts from the user in the session.
+     */
     private List<User> getContactsFromUser (HttpSession session) {
-        User usuario = (User) session.getAttribute("user");
+        User usuario = (User) session.getAttribute("u");
 
         // The contacts of the user
         List<User> contacts = new ArrayList<User>();
@@ -69,10 +107,10 @@ public class MessageController {
     }
 
     /*
-        This method gets all the messages between the user in the session and his contact "contact".
-    * */
+     * This method gets all the messages between the user in the session and his contact "contact".
+     */
     private List<Message> getMessagesFromContact(HttpSession session, User contact) {
-        User usuario = (User) session.getAttribute("user");
+        User usuario = (User) session.getAttribute("u");
         List<Message> messages = new ArrayList<Message>();
 
         for (int i = 0; i < usuario.getSentMessages().size(); ++i) {
@@ -87,28 +125,62 @@ public class MessageController {
             }
         }
 
+        messages = MessageController.orderMessagesByDate(messages);
+
         return messages;
     }
 
-    @GetMapping("/messages/{id}")
-    public String getMessagesUser(Model model, HttpSession session) {
+    /*
+     * This method order the messages by their date.
+     */
+    private static List<Message> orderMessagesByDate(List<Message> messages) {
+        Collections.sort(messages, new Comparator<Message>() {
+            @Override
+            public int compare(Message o1, Message o2) {
+                if (o1.getSendDate().isBefore(o2.getSendDate())) {
+                    return 0;
+                }
+                return 1;
+            }
+          });
+        return messages;
+    }
 
-        // User target = entityManager.find(User.class, id);
-
-        // model.addAttribute("users", entityManager.createQuery(
-		//      "SELECT u FROM User u").getResultList());
-
-        User usuario = (User) session.getAttribute("user");
-
-        usuario.getSentMessages();
-
-        // The contacts of the user
+    /*
+     * Shows all the contacts of the user but doesn't start a chat
+     */
+    @GetMapping("/messages")
+    @Transactional
+    public String startMessagesUser(Model model, HttpSession session) {
+        session = startMessages(model, session);
         List<User> contacts = getContactsFromUser(session);
-
-
-
-        // List<Message> messages = getMessagesFromContact(session, );
-        
+        model.addAttribute("contactos", contacts);
+        model.addAttribute("usuario", (User) session.getAttribute("u"));
         return "mensajes";
     }
+
+    /*
+     * Shows the chat between the user and his contact
+     */
+    @GetMapping("/messages/{id}")
+    @Transactional
+    @ResponseBody
+    public List<Message.Transfer> getMessagesUser(@PathVariable long id, Model model, HttpSession session) {
+
+        User contact = null;
+        try {
+            contact = entityManager.find(User.class, id);
+        } catch (Exception e) {
+            log.info("Error al buscar el contacto del usuario:");
+            log.info("  - idContacto: {}", id);
+            log.info("  - error: {}", e.getMessage());
+        }
+
+        // The messages between the contact and the user
+        List<Message> messages = getMessagesFromContact(session, contact);
+        model.addAttribute("contacto", contact);
+
+        return Message.asTransferObjects(messages);
+    }
+    // Para Post: @RequestParam long id
 }

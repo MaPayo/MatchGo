@@ -14,7 +14,7 @@
         <div class="contenedorGeneral">
             <div class="contenedorContactos">
                 <div class="contenedorContacto" th:each="contacto: ${contactos}">
-                    <p th:text="${ contacto }"></p>
+                    <button class="bContacto" th:attr="data-id=${contacto.id}" th:text="${ contacto.username }">Pepe</button>
                 </div>
             </div>
             <div class="contenedorMensajes">
@@ -23,28 +23,72 @@
                     <!-- <input type="textarea" name="textoMensaje" id="texto" class="mensaje" required> -->
                     <input type="submit" class="botonMensaje" name="boton" value="enviar">
                 </form>
-                <div class="mensajes">
-                    <div class="mensaje" th:each="mensaje: ${mensajes}">
-                        <div class="mensaje" th:switch="__${mensaje.getSender().getNombre()}__">
-
-                            <!-- Si el mensaje es mio (el usuario) se muestra como tal -->
-                            <div class="mensajeMio" th:case="__${session.usuario}__">
-                                <pre th:text="${mensaje.getContenido()}"></pre>
-                            </div>
-
-                            <!-- Si el mensaje es de mi contacto se muestra como tal -->
-                            <div class="mensajeContacto" th:case="__${contacto}__">
-                                <pre th:text="${mensaje.getContenido()}"></pre>
-                            </div>
-                        </div>
-                    </div>
+                <div class="mensajes" id="M">
+                    
                 </div>
                 <div class="contactoMensaje">
-                    <p th:text="${contacto}"></p>
+                    <p th:text="${contacto.getUsername()}"></p>
                 </div>
             </div>
         </div>
 
         <footer th:replace="fragments/footer.html :: footer"> El Footer de la página </footer>
+        
+        <script> 
+const jsonDePega = [{
+    emisor: "epi", 
+    receptor: "blas", 
+    texto: "blas, eres un pesado"
+}]
+
+let idContactoActual = -1;
+
+function requestMessages(id) {
+    go(config.rootUrl + "messages/" + id, "GET").then(json => updateMessages(json));
+}
+
+function updateMessages(json) {
+    let div = document.getElementById("M");
+    let html = [];
+    json.forEach(m => {
+        html.push("<div><span>" + m.emisor + " -> " + m.receptor + "</span>" + m.texto + "</div>");
+    })
+    div.innerHTML = html.join();
+}
+
+// Asocia los botones de los contactos con recarga de chats
+document.addEventListener("DOMContentLoaded", () => {
+    document.getElementsByClassName("bContacto").forEach(b => {
+        // https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes
+        b.onclick = e => {
+            idContactoActual = b.dataset.id;
+            requestMessages(b.dataset.id);
+        }
+    })
+
+    ws.receive = (o) => {
+        // asume que añades un senderId en los mensajes emitidos desde el controlador...
+        if (o.senderId == idContactoActual) {
+            requestMessages(idContactoActual);
+        }
+    }
+})
+        /*
+        <div class="mensaje" th:each="mensaje: ${mensajes}">
+                        <div class="mensaje" th:switch="__${mensaje.getSender().getUsername()}__">
+
+                            <!-- Si el mensaje es mio (el usuario) se muestra como tal -->
+                            <div class="mensajeMio" th:case="__${session.usuario.getUsername()}__">
+                                <pre th:text="${mensaje.getText()}"></pre>
+                            </div>
+
+                            <!-- Si el mensaje es de mi contacto se muestra como tal -->
+                            <div class="mensajeContacto" th:case="__${contacto.getUsername()}__">
+                                <pre th:text="${mensaje.getText()}"></pre>
+                            </div>
+                        </div>
+                    </div>
+        */
+        </script>
     </body>
 </html>
