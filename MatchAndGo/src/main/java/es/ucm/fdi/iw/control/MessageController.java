@@ -52,35 +52,6 @@ public class MessageController {
 	
 	@Autowired
     private EntityManager entityManager;
-    
-    /**
-     * Start the user from the session so it can read some messages
-     * @param session
-     * @return
-     */
-    @Transactional
-    private HttpSession startMessages(Model model, HttpSession session) {
-        User usuario = (User) session.getAttribute("u");
-        List<Message> sended = new ArrayList<Message>();
-        List<Message> received = new ArrayList<Message>();
-        try {
-            sended.add((Message) entityManager.find(Message.class, 1));
-            received.add((Message) entityManager.find(Message.class, 2));
-            sended.add((Message) entityManager.find(Message.class, 3));
-            sended.add((Message) entityManager.find(Message.class, 4));
-            received.add((Message) entityManager.find(Message.class, 5));
-
-            usuario.setSentMessages(sended);
-            usuario.setReceivedMessages(received);
-
-            entityManager.persist(usuario);
-            entityManager.flush();
-
-            session.setAttribute("u", usuario);
-        } catch (Exception e) {
-        }
-        return session;
-    }
 
     /*
      * This method gets all the contacts from the user in the session.
@@ -153,7 +124,6 @@ public class MessageController {
     @GetMapping("/messages")
     @Transactional
     public String startMessagesUser(Model model, HttpSession session) {
-        session = startMessages(model, session);
         List<User> contacts = getContactsFromUser(session);
         model.addAttribute("contactos", contacts);
         model.addAttribute("usuario", (User) session.getAttribute("u"));
