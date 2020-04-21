@@ -14,13 +14,19 @@ import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-
+import javax.persistence.JoinTable;
+import javax.persistence.JoinColumns;
+import javax.persistence.JoinColumn;
+import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.OnDelete;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Entity
 @NamedQueries({
+	@NamedQuery(name="User.getUser", query= "SELECT u from User u WHERE "
+			+ "u.id = :idUser"),
 	@NamedQuery(name="User.byUsername", query= "SELECT u from User u WHERE "
 			+ "u.username = :username"),
 	@NamedQuery(name="User.all", query= "SELECT u from User u"),

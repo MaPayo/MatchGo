@@ -124,10 +124,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 function listUsers(jsonArray){
-	let container = document.getElementById("contusers");
-	while (container){ 
-		container.removeChild(container.firstChild);
-	}
+ 	const node = document.getElementById("contUsers");
+  	while (node.firstChild) {
+    		node.removeChild(node.lastChild);
+  	}
+
 	jsonArray.forEach(e => appendChild(e));
 }
 
@@ -143,12 +144,12 @@ function appendChild(element){
 		"<form method='post' action='/admin/deleteUser'>" +
 		"<input type='hidden' name='_csrf' value='"+config.csrf.value+"' />" +
 		"<input hidden type='number' name='id' value="+ element.id +">" +
-		"<button type='submit' class='declineButton' value='Eliminar' />" +
+		"<input type='submit' class='declineButton' value='Eliminar' />" +
 		"</form>" +
 		"<form method='post' action='/admin/blockUser?id="+ element.id +"'>" +
 		"<input type='hidden' name='_csrf' value='"+config.csrf.value+"' />" +
 		"<input hidden type='number' name='id' value="+ element.id +">" +
-		"<button type='submit' class='declineButton' value='Bloquear' />" +
+		"<input type='submit' class='declineButton' value='Bloquear' />" +
 		"</form>" +
 		"</div>" +
 		"</div>"];

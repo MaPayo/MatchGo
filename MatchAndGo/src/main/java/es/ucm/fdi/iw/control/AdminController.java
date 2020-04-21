@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.ucm.fdi.iw.LocalData;
+import es.ucm.fdi.iw.model.Tags;
+import es.ucm.fdi.iw.model.Event;
 import es.ucm.fdi.iw.model.User;
 /**
  * Admin-only controller
@@ -32,28 +34,28 @@ import es.ucm.fdi.iw.model.User;
 @Controller()
 @RequestMapping("admin")
 public class AdminController {
-	
+
 	private static final Logger log = LogManager.getLogger(AdminController.class);
 
 	@Autowired 
 	private EntityManager entityManager;
-	
+
 	@Autowired
 	private LocalData localData;
-	
+
 	@Autowired
 	private SimpMessagingTemplate messagingTemplate;
-	
+
 	@Autowired
 	private Environment env;
-	
+
 	@GetMapping("/")
 	public String index(Model model) {
 		model.addAttribute("activeProfiles", env.getActiveProfiles());
 		model.addAttribute("basePath", env.getProperty("es.ucm.fdi.base-path"));
 		model.addAttribute("allEvents", entityManager.createQuery(
 
-				"SELECT u FROM Event u").getResultList());
+					"SELECT u FROM Event u").getResultList());
 		return "admin_view";
 	}
 
@@ -66,7 +68,7 @@ public class AdminController {
 		List<User> users = entityManager.createNamedQuery("User.all").getResultList();
 		return User.asTransferObjects(users);
 	}
-	
+
 	@PostMapping("/toggleuser")
 	@Transactional
 	public String blockUser2(Model model,	@RequestParam long id) {
@@ -106,14 +108,49 @@ public class AdminController {
 
 	@PostMapping("/deleteUser")
 	@Transactional
-	public String deleteUser(Model model, @RequestParam long id) {		
+	public String deleteUser(Model model,@RequestParam long id) {		
+		User u = (User) entityManager.createNamedQuery("User.getUser",User.class)
+			.setParameter("idUser",id)
+			.getSingleResult();
+
+		log.warn("antes "+u.getJoinedEvents()+" "+ u.getTags()+" "+u.getCreatedEvents());
+		List<Tags> tags = u.getTags();
+		log.info("I will Remove all subcribed tags ");
+		for (Tags tag : tags){
+			tag.getSubscribers().remove(u);
+			log.info("Remove user from tag " + tag.getId());
+		}
+
+
+		List<Event> events = u.getJoinedEvents();
+		log.info("I will Remove all Events Joined");
+		for (Event event : events){
+			event.getParticipants().remove(u);
+			log.info("Remove user from event " + event.getId());
+		}
+
+		log.warn(u.getJoinedEvents()+ " " + u.getTags()+" "+u.getCreatedEvents());
+		User u2 = (User) entityManager.createNamedQuery("User.getUser",User.class)
+			.setParameter("idUser",(long)2)
+			.getSingleResult();
+
+		events = u.getCreatedEvents();
+		for (Event event : events){
+			List<User> participants = event.getParticipants();
+			event.setCreator(u2);
+
+		}
+		u.setCreatedEvents(new ArrayList<Event>());
+		log.warn(u.getJoinedEvents()+ " " + u.getTags()+" "+u.getCreatedEvents());
+
+
 		entityManager.createNamedQuery("User.deleteUser")
 			.setParameter("idUser",id)
 			.executeUpdate();
 		updateListUsers();
-		return index(model);
+		return "admin_view";
 	}
-	
+
 	public void updateListUsers() {
 		log.info("Sending updated userlist via websocket");
 		List<User> users = entityManager.createNamedQuery("User.all").getResultList();

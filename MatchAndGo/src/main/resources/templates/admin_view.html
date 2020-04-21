@@ -50,11 +50,7 @@
 						<div>
 							<div><span th:text="${event.getDescription()}"></span> Para: <span th:text="${event.getDate()}"></span> Publicada: <span th:text="${event.getPublicationDate()}"></span></div>
 							<!--<button type="button" class="acceptButton">Aceptar</button>-->
-							<button type="button" class="declineButton"  th:onclick="|javascript:blockEvent(__${event.getId()}__)|">Eliminar</button>
-							
-	   <form method="post" th:action="@{/admin/deleteUser(id=${event.getId()})}">
-	   <button type="submit" class="declineButton" value="Eliminar" />
-	   </form>
+							<input type="submit" class="declineButton"  th:onclick="|javascript:blockEvent(__${event.getId()}__)|">Eliminar</button>
 							<div class="tagBox">
 								<!--	<span class="tag category"> Deportivo </span><span class="tag" th:each="tag: ${event.getTags()}"><span th:text="${tag.getUsername()}">Benefico</span></span>-->
 							</div>
@@ -63,24 +59,6 @@
 				</div>
 			</div>
 			<div id="contUsers" class="width100"></div>
-
-			<!--
-	   <div class="eventCard bgwhite" th:each="user: ${allUsers}">
-	   <div class="cardUpperContainer">
-	   <h2 id="nombre"><span th:text="${user.getUsername()}"></span></h2>
-	   </div>
-	   <div class="cardLowerContainer">
-	   <p id="edad"><span th:text="${user.getDate_nac()}"></span></p>
-
-	   <p id="sexo"><span th:text="${user.getSexo()}"></span></p>
-	   <form method="post" th:action="@{/admin/deleteUser(id=${user.getId()})}">
-	   <button type="submit" class="declineButton" value="Eliminar" />
-	   </form>
-	   <form method="post" th:action="@{/admin/blockUser(id=${user.getId()})}">
-	   <button type="submit" class="declineButton" value="Bloquear" />
-	   </form>
-	   </div>
-	   </div>-->
 		</div>
 
 		<footer th:replace="fragments/footer.html :: footer"> El Footer de la página </footer>
