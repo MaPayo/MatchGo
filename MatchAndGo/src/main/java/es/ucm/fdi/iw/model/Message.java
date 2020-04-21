@@ -140,7 +140,7 @@ public class Message {
      * @return the text
      */
     public String getTextMessage() {
-        return this.textMessage;
+        return textMessage;
 	}
 	
 	public void setTextMessage(String text) {
