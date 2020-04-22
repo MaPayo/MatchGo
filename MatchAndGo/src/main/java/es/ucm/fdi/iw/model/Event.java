@@ -43,7 +43,7 @@ public class Event {
 	@ManyToMany
 	private List<User> participants;
 	
-	@ManyToOne
+	@ManyToOne(targetEntity = User.class)
 	private User creator;
 	
 	public enum Access {

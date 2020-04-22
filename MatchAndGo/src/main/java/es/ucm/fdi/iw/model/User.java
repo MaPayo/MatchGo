@@ -93,7 +93,8 @@ public class User {
 	@ManyToMany(mappedBy = "participants")
 	private List<Event> joinedEvents;
 	
-	@OneToMany(mappedBy="creator")
+	@OneToMany(targetEntity = Event.class)
+	@JoinColumn(name="creator_id")
 	private List<Event> createdEvents;
 	
 	@Override

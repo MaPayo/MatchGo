@@ -123,26 +123,32 @@ public class AdminController {
 
 
 		List<Event> events = u.getJoinedEvents();
-		log.info("I will Remove all Events Joined");
+		log.info("I will Remove from all Events Joined");
 		for (Event event : events){
 			event.getParticipants().remove(u);
 			log.info("Remove user from event " + event.getId());
 		}
 
-		log.warn(u.getJoinedEvents()+ " " + u.getTags()+" "+u.getCreatedEvents());
-		User u2 = (User) entityManager.createNamedQuery("User.getUser",User.class)
-			.setParameter("idUser",(long)2)
-			.getSingleResult();
-
 		events = u.getCreatedEvents();
-		for (Event event : events){
-			List<User> participants = event.getParticipants();
-			event.setCreator(u2);
-
+		if(events != null){
+			for (Event event : events){
+				List<User> participants = event.getParticipants();
+				if (participants != null){
+					log.info("I will change owned event");
+					User u2 = (User) entityManager.createNamedQuery("User.getUser",User.class)
+						.setParameter("idUser",participants.get(0).getId())
+						.getSingleResult();
+					event.setCreator(u2);
+					event.getParticipants().remove(u2);
+					entityManager.flush();
+					log.info("changed ok");
+				} else {
+					u.getCreatedEvents().remove(event);
+				}
+			}
 		}
-		u.setCreatedEvents(new ArrayList<Event>());
-		log.warn(u.getJoinedEvents()+ " " + u.getTags()+" "+u.getCreatedEvents());
 
+		log.warn(u.getJoinedEvents()+ " " + u.getTags()+" "+u.getCreatedEvents());
 
 		entityManager.createNamedQuery("User.deleteUser")
 			.setParameter("idUser",id)
