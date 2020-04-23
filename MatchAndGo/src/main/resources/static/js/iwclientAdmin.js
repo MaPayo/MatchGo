@@ -141,10 +141,10 @@ function appendChild(element, type){
 		case "updateUsers":
 			html = ["<div class='eventCard bgwhite'>" + 
 				"<div class='cardUpperContainer'>" +
-				"<h2 id='nombre'><span>"+ element.name +"</span></h2>" + 
+				"<h2 id='nombre'><span>"+ element.username +" - "+element.firstName+" "+ element.lastName+"</span></h2>" + 
 				"</div>" +
 				"<div class='cardLowerContainer'>" +
-				"<p id='edad'><span>"+ element.birthdate +"</span></p>" +
+				"<p id='edad'><span>"+ element.birthDate +"</span></p>" +
 				"<p id='sexo'><span>"+ element.gender +"</span></p>" +
 				"<form method='post' action='/admin/deleteUser'>" +
 				"<input type='hidden' name='_csrf' value='"+config.csrf.value+"' />" +
