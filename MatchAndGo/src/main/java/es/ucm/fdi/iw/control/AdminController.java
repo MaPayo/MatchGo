@@ -1,5 +1,4 @@
 package es.ucm.fdi.iw.control;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -53,14 +52,21 @@ public class AdminController {
 	public String index(Model model) {
 		model.addAttribute("activeProfiles", env.getActiveProfiles());
 		model.addAttribute("basePath", env.getProperty("es.ucm.fdi.base-path"));
-		model.addAttribute("allEvents", entityManager.createQuery(
-
-					"SELECT u FROM Event u").getResultList());
 		return "admin_view";
 	}
 
-	@PostMapping(path = "/userlist", produces = "application/json")
 
+
+	@PostMapping(path = "/eventlist", produces = "application/json")
+	@Transactional
+	@ResponseBody
+	public List<Event.TransferEvent> retrieveEvents(HttpSession session){
+		log.info("Generating Event List");
+		List<Event> events = entityManager.createNamedQuery("Event.all").getResultList();
+		return Event.asTransferObjects(events);
+	}
+
+	@PostMapping(path = "/userlist", produces = "application/json")
 	@Transactional
 	@ResponseBody
 	public List<User.Transfer> retrieveUsers(HttpSession session){
@@ -169,6 +175,9 @@ public class AdminController {
 	public void updateListUsers() {
 		log.info("Sending updated userlist via websocket");
 		List<User> users = entityManager.createNamedQuery("User.all").getResultList();
-		messagingTemplate.convertAndSend("/topic/admin",User.asTransferObjects(users));
+		List response = new ArrayList();
+		response.add("updateUsers");
+		response.add(User.asTransferObjects(users));
+		messagingTemplate.convertAndSend("/topic/admin",response);
 	}	
 }

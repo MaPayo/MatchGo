@@ -40,24 +40,6 @@
 					<li id="listEvents" class="brtop padding30"><a>Eventos</a></li>
 				</ul>
 			</div> 
-			<div id="contEvents" class="width100" hidden>
-				<div class="eventCard bgwhite" th:each="event: ${allEvents}">
-					<div class="cardUpperContainer">
-						<img th:src="@{/img/{id}.png(id=${event.getId()})}" alt="" class="placeImage">
-						<h2 th:text="${event.getName()}"></h2>
-					</div>
-					<div class="cardLowerContainer">
-						<div>
-							<div><span th:text="${event.getDescription()}"></span> Para: <span th:text="${event.getDate()}"></span> Publicada: <span th:text="${event.getPublicationDate()}"></span></div>
-							<!--<button type="button" class="acceptButton">Aceptar</button>-->
-							<input type="submit" class="declineButton"  th:onclick="|javascript:blockEvent(__${event.getId()}__)|">Eliminar</button>
-							<div class="tagBox">
-								<!--	<span class="tag category"> Deportivo </span><span class="tag" th:each="tag: ${event.getTags()}"><span th:text="${tag.getUsername()}">Benefico</span></span>-->
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
 			<div id="contUsers" class="width100"></div>
 		</div>
 

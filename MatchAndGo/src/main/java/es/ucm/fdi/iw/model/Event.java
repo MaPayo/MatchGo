@@ -29,6 +29,7 @@ import es.ucm.fdi.iw.model.User.Transfer;
  */
 @NamedQueries({
 
+	@NamedQuery(name="Event.all", query= "SELECT u from Event u"),
 	@NamedQuery(name="Event.deleteEvent", query= "DELETE FROM Event u WHERE "
 		+ "u.id = :idUser")
 })
