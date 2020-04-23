@@ -16,12 +16,26 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import es.ucm.fdi.iw.model.User.Role;
 
 import es.ucm.fdi.iw.model.User.Transfer;
 
 
 @Entity
+/**
+ * @author Carlos Olano
+ */
+@NamedQueries({
+
+	@NamedQuery(name="Event.deleteEvent", query= "DELETE FROM Event u WHERE "
+		+ "u.id = :idUser")
+})
+
+/**
+ * End
+ */
 public class Event {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

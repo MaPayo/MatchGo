@@ -113,14 +113,12 @@ public class AdminController {
 			.setParameter("idUser",id)
 			.getSingleResult();
 
-		log.warn("antes "+u.getJoinedEvents()+" "+ u.getTags()+" "+u.getCreatedEvents());
 		List<Tags> tags = u.getTags();
 		log.info("I will Remove all subcribed tags ");
 		for (Tags tag : tags){
 			tag.getSubscribers().remove(u);
 			log.info("Remove user from tag " + tag.getId());
 		}
-
 
 		List<Event> events = u.getJoinedEvents();
 		log.info("I will Remove from all Events Joined");
@@ -129,32 +127,43 @@ public class AdminController {
 			log.info("Remove user from event " + event.getId());
 		}
 
-		events = u.getCreatedEvents();
-		if(events != null){
+		events = new ArrayList<>(u.getCreatedEvents());
+		if(events.size() != 0){
 			for (Event event : events){
 				List<User> participants = event.getParticipants();
-				if (participants != null){
+				if (participants.size() != 0){
 					log.info("I will change owned event");
 					User u2 = (User) entityManager.createNamedQuery("User.getUser",User.class)
 						.setParameter("idUser",participants.get(0).getId())
 						.getSingleResult();
 					event.setCreator(u2);
 					event.getParticipants().remove(u2);
-					entityManager.flush();
 					log.info("changed ok");
 				} else {
-					u.getCreatedEvents().remove(event);
+					tags = event.getTags();
+					log.info("Preparing events to be removed");
+					log.info("I will Remove all event tags ");
+					for (Tags tag : tags){
+						tag.getEvents().remove(event);
+						log.info("Remove event from tag " + tag.getId());
+					}
+					log.info("I will Remove event owned");
+					u.getCreatedEvents().remove(event);				
+					entityManager.createNamedQuery("Event.deleteEvent")
+						.setParameter("idUser",event.getId())
+						.executeUpdate();
+					log.info("Removed event");
 				}
 			}
+
 		}
 
-		log.warn(u.getJoinedEvents()+ " " + u.getTags()+" "+u.getCreatedEvents());
-
+		entityManager.flush();
 		entityManager.createNamedQuery("User.deleteUser")
 			.setParameter("idUser",id)
 			.executeUpdate();
 		updateListUsers();
-		return "admin_view";
+		return index(model);
 	}
 
 	public void updateListUsers() {

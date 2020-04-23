@@ -24,6 +24,9 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Entity
+/**
+ * @author Carlos Olano
+ */
 @NamedQueries({
 	@NamedQuery(name="User.getUser", query= "SELECT u from User u WHERE "
 			+ "u.id = :idUser"),
@@ -42,9 +45,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 			+ "FROM User u "
 			+ "WHERE u.username = :username"),
 	@NamedQuery(name = "User.Password", query = "SELECT password FROM User u WHERE u.username = :userName")
-
 })
 
+/**
+ * End
+ */
 public class User {
 	
 	private static Logger log = LogManager.getLogger(User.class);	
