@@ -56,15 +56,15 @@ public class MessageController {
     private List<User> getContactsFromUser (HttpSession session) {
         User usuario = (User) session.getAttribute("user");
 
-        // The contacts of the user
-        List<User> contacts = new ArrayList<User>();
-        for (int i = 0; i < usuario.getSentMessages().size(); ++i) {
-            User user = usuario.getSentMessages().get(i).getSender();
-            if (!contacts.contains(user)) {
-                contacts.add(user);
-            }
-        }
+        // People we have sent messages to
+        Set<User> contacts = new HashSet<User>();
+        for (Message m : usuario.getSentMessages()) {
+            contacts.add(m.getSender);
+        }   
 
+        // People we have received messages from
+        // TODO: this has O(n²) runtime due to linear checks for "contains"
+        //       see above for a more efficient (O(n)) implementation
         for (int i = 0; i < usuario.getReceivedMessages().size(); ++i) {
             User user = usuario.getReceivedMessages().get(i).getReceiver();
             if (!contacts.contains(user)) {
