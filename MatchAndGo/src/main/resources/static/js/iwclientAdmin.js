@@ -173,6 +173,11 @@ function appendChild(element, type){
 				"<input hidden type='number' name='id' value="+ element.id +">" +
 				"<input type='submit' class='declineButton' value='Eliminar' />" +
 				"</form>" +
+				"<form method='post' action='/admin/blockEvent?id="+ element.id +"'>" +
+				"<input type='hidden' name='_csrf' value='"+config.csrf.value+"' />" +
+				"<input hidden type='number' name='id' value="+ element.id +">" +
+				"<input type='submit' class='declineButton' value='Bloquear' />" +
+				"</form>" +
 				"<div class='tagBox'>" +
 				"</div>"+
 				"</div>"+

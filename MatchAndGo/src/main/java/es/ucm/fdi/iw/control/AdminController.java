@@ -60,8 +60,7 @@ public class AdminController {
 	@ResponseBody
 	public List<Event.TransferEvent> retrieveEvents(final HttpSession session) {
 		log.info("Generating Event List");
-		List<Event> events = entityManager.createNamedQuery(
-			"Event.all", Event.class).getResultList(); // <-- warning evitado
+		List<Event> events = entityManager.createNamedQuery("Event.all",Event.class).getResultList();
 		return Event.asTransferObjects(events);
 	}
 
@@ -70,10 +69,28 @@ public class AdminController {
 	@ResponseBody
 	public List<User.Transfer> retrieveUsers(final HttpSession session) {
 		log.info("Generating User List");
-		List<User> users = entityManager.createNamedQuery(
-			"User.all").getResultList(); // <-- usa (... , User.class) para evitar warning
+		List<User> users = entityManager.createNamedQuery("User.all",User.class).getResultList();
 		return User.asTransferObjects(users);
 	}
+	@PostMapping("/blockEvent")
+	@Transactional
+	public String blockEvent(Model model, @RequestParam long id) {
+		Event target = entityManager.find(Event.class, id);
+		boolean newState = false;
+		if (target.getIsAppropriate()){
+			newState = false;
+		} else {
+			newState = true;
+		}
+		entityManager.createNamedQuery("Event.blockEvent")
+			.setParameter("idUser",id)
+			.setParameter("state",newState)
+			.executeUpdate();
+
+		List<Event> eventsU = entityManager.createNamedQuery("Event.all",Event.class).getResultList();
+		sendMessageWS(eventsU,"updateEvents");
+		return "redirect:/admin/";
+	}	
 
 	@PostMapping("/blockUser")
 	@Transactional
@@ -88,8 +105,8 @@ public class AdminController {
 		entityManager.createNamedQuery("User.blockUser").setParameter("idUser", id).setParameter("state", newState)
 				.executeUpdate();
 
-		final List<User> usersU = entityManager.createNamedQuery("User.all").getResultList();
-		sendMessageWS(usersU, "updateUsers");
+		final List<User> usersU = entityManager.createNamedQuery("User.all",User.class).getResultList();
+		sendMessageWS(usersU,"updateUsers");
 		return "redirect:/admin/";
 	}
 
@@ -121,8 +138,8 @@ public class AdminController {
 		log.info("Removed event");
 
 		entityManager.flush();
-		final List<Event> eventsU = entityManager.createNamedQuery("Event.all").getResultList();
-		sendMessageWS(eventsU, "updateEvents");
+		final List<Event> eventsU = entityManager.createNamedQuery("Event.all",Event.class).getResultList();
+		sendMessageWS(eventsU,"updateEvents");
 		return "redirect:/admin/";
 	}
 
@@ -176,10 +193,12 @@ public class AdminController {
 		}
 
 		entityManager.flush();
-		entityManager.createNamedQuery("User.deleteUser").setParameter("idUser", id).executeUpdate();
-
-		final List<User> usersU = entityManager.createNamedQuery("User.all").getResultList();
-		sendMessageWS(usersU, "updateUsers");
+		entityManager.createNamedQuery("User.deleteUser")
+			.setParameter("idUser",id)
+			.executeUpdate();
+		
+		final List<User> usersU = entityManager.createNamedQuery("User.all",User.class).getResultList();
+		sendMessageWS(usersU,"updateUsers");
 		return "redirect:/admin/";
 	}
 
