@@ -107,8 +107,8 @@ public class Event {
 			this.date = e.getDate();
 			this.publicationDate = e.getPublicationDate();
 			this.isAppropriate = e.getIsAppropriate();
-			this.tagNames = new ArrayList();
-			this.participants = new ArrayList();
+			this.tagNames = new ArrayList<String>();
+			this.participants = new ArrayList<Long>();
 			
 			if(e.creator != null)
 				this.creator = e.getCreator().getId();
