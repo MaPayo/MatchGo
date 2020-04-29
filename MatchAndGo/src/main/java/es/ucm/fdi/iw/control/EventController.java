@@ -8,8 +8,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
@@ -55,12 +57,25 @@ public class EventController {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	@GetMapping("/")public String index(Model model) {
+	@GetMapping("/")
+	public String index(Model model) {
 		model.addAttribute("event", entityManager.createQuery(
 				"SELECT u FROM Event u").getResultList());
-		return "eventos";
+		return "events";
 	}
 	
+
+	@GetMapping("/search")
+	public String search(@RequestParam String title, Model model){
+	
+		TypedQuery<Event> queryEvent= entityManager.createNamedQuery("Event.searchByName", Event.class);
+		queryEvent.setParameter("uname", "%"+title+"%"); //Añadimos el % para que busque una cadena que contenga la palabra
+		List<Event> lista= queryEvent.getResultList();
+		model.addAttribute("event", lista);
+
+
+		return "events";
+	}
 
 	@GetMapping("/{id}")
 	public String getEvent(@PathVariable long id, Model model, HttpSession session) {
