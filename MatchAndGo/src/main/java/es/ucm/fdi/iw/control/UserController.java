@@ -9,7 +9,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
@@ -39,6 +41,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import es.ucm.fdi.iw.LocalData;
+import es.ucm.fdi.iw.model.Tags;
 import es.ucm.fdi.iw.model.User;
 import es.ucm.fdi.iw.model.User.Role;
 
@@ -76,6 +79,12 @@ public class UserController {
 	public String getUser(@PathVariable long id, Model model, HttpSession session) {
 		User u = entityManager.find(User.class, id);
 		model.addAttribute("user", u);
+		/*log.warn("HOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+		
+		final List<Tags> user_tags = new ArrayList<>(u.getTags()); 
+		log.warn("CREADA LISTA DE TAGS SACADA DEL USUARIO");
+		model.addAttribute("user_tags", user_tags);
+		log.warn("FUNCIONAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");*/
 		return "profile";
 	}
 
