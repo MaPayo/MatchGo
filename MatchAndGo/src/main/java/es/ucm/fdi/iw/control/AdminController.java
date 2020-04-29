@@ -164,6 +164,7 @@ public class AdminController {
 		}
 
 		events = new ArrayList<>(u.getCreatedEvents());
+		boolean flag = false;
 		if (events.size() != 0) {
 			for (final Event event : events) {
 				final List<User> participants = event.getParticipants();
@@ -187,9 +188,9 @@ public class AdminController {
 					entityManager.createNamedQuery("Event.deleteEvent").setParameter("idUser", event.getId())
 							.executeUpdate();
 					log.info("Removed event");
+					flag = true;
 				}
 			}
-
 		}
 
 		entityManager.flush();
@@ -199,6 +200,10 @@ public class AdminController {
 		
 		final List<User> usersU = entityManager.createNamedQuery("User.all",User.class).getResultList();
 		sendMessageWS(usersU,"updateUsers");
+		if (flag){
+			final List<Event> eventsU = entityManager.createNamedQuery("Event.all",Event.class).getResultList();
+			sendMessageWS(eventsU,"updateEvents");
+		}
 		return "redirect:/admin/";
 	}
 

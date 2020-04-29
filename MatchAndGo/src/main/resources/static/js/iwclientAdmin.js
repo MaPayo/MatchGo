@@ -120,15 +120,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function listUsers(jsonArray, type){
 	const node = document.getElementById("contUsers");
-	while (node.firstChild) {
-		node.removeChild(node.lastChild);
-	}
 	switch(type){
 		case "updateUsers":
-			jsonArray.forEach(e => appendChild(e,type));
+			if(document.getElementById("listUsers").classList.contains("bgblue")){
+				while (node.firstChild) {
+					node.removeChild(node.lastChild);
+				}
+				jsonArray.forEach(e => appendChild(e,type));
+			}
 			break;
 		case "updateEvents":
-			jsonArray.forEach(e => appendChild(e,type));
+			if(document.getElementById("listEvents").classList.contains("bgblue")){
+				while (node.firstChild) {
+					node.removeChild(node.lastChild);
+				}
+				jsonArray.forEach(e => appendChild(e,type));
+			}
 			break;
 	}
 }
@@ -163,11 +170,12 @@ function appendChild(element, type){
 			 html = ["<div class='eventCard bgwhite'>"+
 				"<div class='cardUpperContainer'>"+
 				"<img src='/img/"+element.id+".png' alt='Imagen de "+element.name+"' class='placeImage'>"+
-				"<h2>"+element.name+"</h2>"+
+				"<h2>"+element.name+"</h2> - <span>"+element.description+"</span>"+
 				"</div>"+
 				"<div class='cardLowerContainer'>"+
-				"<div>"+
-				"<div><span>"+element.description+"</span> Para: <span>"+element.date+"></span> Publicada: <span>"+element.publicationDate+"></span></div>"+
+				" Para: <span>"+element.date+"</span> Publicada: <span>"+element.publicationDate+"</span>"+
+				"<div class='tagBox'>" +
+				"</div>"+
 				"<form method='post' action='/admin/deleteEvent'>" +
 				"<input type='hidden' name='_csrf' value='"+config.csrf.value+"' />" +
 				"<input hidden type='number' name='id' value="+ element.id +">" +
@@ -178,9 +186,6 @@ function appendChild(element, type){
 				"<input hidden type='number' name='id' value="+ element.id +">" +
 				"<input type='submit' class='declineButton' value='Bloquear' />" +
 				"</form>" +
-				"<div class='tagBox'>" +
-				"</div>"+
-				"</div>"+
 				"</div>"+
 				"</div>"];
 			break;
