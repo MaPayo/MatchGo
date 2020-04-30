@@ -35,6 +35,17 @@
         	</div>
         
          -->
+         
+         <div class="profileWithAjax">
+				<ul class="listasPerfil">
+             	   <li id="listaTags"><p>Etiquetas</p></li>  
+             	   <li id="listaEventosCreados" th:if="(${session.u.id} eq ${user.getId()})"><p>Eventos creados</p></li>  
+             	   <li id="listaEventosInscritos" th:if="(${session.u.id} eq ${user.getId()})"><p>Eventos inscritos</p></li>  
+             	   <li id="listaEventosInscritos"><p>Comentarios</p></li>  
+          		</ul>        	
+        		<div id ="contenedorCosas"></div>
+        	</div>
+         
          <div class="intereses_usuario">
        		    <h2 class="centrado">Intereses:</h2>
         	    <ul class="listaIntereses">
@@ -56,7 +67,7 @@
        		<div class="events_usuario">
        		    <h2 class="centrado">Eventos inscritos:</h2>
        		    <div class="event-item" th:each="e: ${user_events}">
-              		 <div class="event-icon"> <img id="imagenPequeña" th:src="@{/event/{id}/photo(id=${event.id})}"></div>
+              		 <div class="event-icon"> <img id="imagenPequeña" th:src="@{/event/{id}/photo(id=${e.getId()})}"></div>
               		 <h4 class="event-title"><span th:text="${e.getName()} "></span></h4>
              		 <p class="event-description"><span th:text="${e.getDescription()} "></span></p>
           		</div>
