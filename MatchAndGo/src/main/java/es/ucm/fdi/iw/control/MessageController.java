@@ -63,14 +63,14 @@ public class MessageController {
         // The contacts of the user
         List<User> contacts = new ArrayList<User>();
         for (int i = 0; i < usuario.getSentMessages().size(); ++i) {
-            User user = usuario.getSentMessages().get(i).getSender();
+            User user = usuario.getSentMessages().get(i).getReceiver();
             if (!contacts.contains(user)) {
                 contacts.add(user);
             }
         }
 
         for (int i = 0; i < usuario.getReceivedMessages().size(); ++i) {
-            User user = usuario.getReceivedMessages().get(i).getReceiver();
+            User user = usuario.getReceivedMessages().get(i).getSender();
             if (!contacts.contains(user)) {
                 contacts.add(user);
             }
@@ -83,21 +83,25 @@ public class MessageController {
      */
     private List<Message> getMessagesFromContact(HttpSession session, User contact) {
         User usuario = (User) session.getAttribute("u");
+        usuario =  entityManager.find(User.class, usuario.getId());
         List<Message> messages = new ArrayList<Message>();
 
-        for (int i = 0; i < usuario.getSentMessages().size(); ++i) {
-            if (contact.getId() == usuario.getId()) {
-                messages.add(usuario.getSentMessages().get(i));
+        List<Message> sended = usuario.getSentMessages();
+        List<Message> received = usuario.getReceivedMessages();
+
+        for (int i = 0; i < sended.size(); ++i) {
+            if (contact.getId() == sended.get(i).getReceiver().getId()) {
+                messages.add(sended.get(i));
             }
         }
 
-        for (int i = 0; i < usuario.getReceivedMessages().size(); ++i) {
-            if (contact.getId() == usuario.getId()) {
-                messages.add(usuario.getSentMessages().get(i));
+        for (int i = 0; i < received.size(); ++i) {
+            if (contact.getId() == received.get(i).getSender().getId()) {
+                messages.add(received.get(i));
             }
         }
 
-        messages = MessageController.orderMessagesByDate(messages);
+        messages = orderMessagesByDate(messages);
 
         return messages;
     }
@@ -126,7 +130,7 @@ public class MessageController {
     public String startMessagesUser(Model model, HttpSession session) {
         List<User> contacts = getContactsFromUser(session);
         model.addAttribute("contactos", contacts);
-        model.addAttribute("usuario", (User) session.getAttribute("u"));
+        model.addAttribute("mensajes", new ArrayList<Message> ());
         return "mensajes";
     }
 
@@ -135,8 +139,7 @@ public class MessageController {
      */
     @GetMapping("/messages/{id}")
     @Transactional
-    @ResponseBody
-    public List<Message.Transfer> getMessagesUser(@PathVariable long id, Model model, HttpSession session) {
+    public String getMessagesUser(@PathVariable long id, Model model, HttpSession session) {
 
         User contact = null;
         try {
@@ -149,9 +152,12 @@ public class MessageController {
 
         // The messages between the contact and the user
         List<Message> messages = getMessagesFromContact(session, contact);
+        List<User> contacts = getContactsFromUser(session);
+        model.addAttribute("contactos", contacts);
+        model.addAttribute("mensajes", messages);
         model.addAttribute("contacto", contact);
 
-        return Message.asTransferObjects(messages);
+        return "mensajes";
     }
     // Para Post: @RequestParam long id
 }
