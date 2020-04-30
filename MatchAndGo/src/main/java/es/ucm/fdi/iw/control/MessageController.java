@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -31,6 +33,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
@@ -49,24 +52,28 @@ public class MessageController {
 	
 	@Autowired
     private EntityManager entityManager;
-    
+
     /*
      * This method gets all the contacts from the user in the session.
      */
     private List<User> getContactsFromUser (HttpSession session) {
-        User usuario = (User) session.getAttribute("user");
-
-        // People we have sent messages to
-        Set<User> contacts = new HashSet<User>();
-        for (Message m : usuario.getSentMessages()) {
-            contacts.add(m.getSender);
-        }   
+        User usuario = (User) session.getAttribute("u");
+        usuario =  entityManager.find(User.class, usuario.getId());
+        
+        // The contacts of the user
+        List<User> contacts = new ArrayList<User>();
+        for (int i = 0; i < usuario.getSentMessages().size(); ++i) {
+            User user = usuario.getSentMessages().get(i).getReceiver();
+            if (!contacts.contains(user)) {
+                contacts.add(user);
+            }
+        }
 
         // People we have received messages from
         // TODO: this has O(n²) runtime due to linear checks for "contains"
         //       see above for a more efficient (O(n)) implementation
         for (int i = 0; i < usuario.getReceivedMessages().size(); ++i) {
-            User user = usuario.getReceivedMessages().get(i).getReceiver();
+            User user = usuario.getReceivedMessages().get(i).getSender();
             if (!contacts.contains(user)) {
                 contacts.add(user);
             }
@@ -78,18 +85,22 @@ public class MessageController {
      * This method gets all the messages between the user in the session and his contact "contact".
      */
     private List<Message> getMessagesFromContact(HttpSession session, User contact) {
-        User usuario = (User) session.getAttribute("user");
+        User usuario = (User) session.getAttribute("u");
+        usuario =  entityManager.find(User.class, usuario.getId());
         List<Message> messages = new ArrayList<Message>();
 
-        for (int i = 0; i < usuario.getSentMessages().size(); ++i) {
-            if (contact.getId() == usuario.getId()) {
-                messages.add(usuario.getSentMessages().get(i));
+        List<Message> sended = usuario.getSentMessages();
+        List<Message> received = usuario.getReceivedMessages();
+
+        for (int i = 0; i < sended.size(); ++i) {
+            if (contact.getId() == sended.get(i).getReceiver().getId()) {
+                messages.add(sended.get(i));
             }
         }
 
-        for (int i = 0; i < usuario.getReceivedMessages().size(); ++i) {
-            if (contact.getId() == usuario.getId()) {
-                messages.add(usuario.getSentMessages().get(i));
+        for (int i = 0; i < received.size(); ++i) {
+            if (contact.getId() == received.get(i).getSender().getId()) {
+                messages.add(received.get(i));
             }
         }
 
@@ -100,12 +111,35 @@ public class MessageController {
 
     /*
      * This method order the messages by their date.
-     * NOT IMPLEMENTED YET.
      */
-    private List<Message> orderMessagesByDate(List<Message> messages) {
+    private static List<Message> orderMessagesByDate(List<Message> messages) {
+        Collections.sort(messages, new Comparator<Message>() {
+            @Override
+            public int compare(Message o1, Message o2) {
+                if (o1.getSendDate().isBefore(o2.getSendDate())) {
+                    return 0;
+                }
+                return 1;
+            }
+          });
         return messages;
     }
 
+    /*
+     * Shows all the contacts of the user but doesn't start a chat
+     */
+    @GetMapping("/messages")
+    @Transactional
+    public String startMessagesUser(Model model, HttpSession session) {
+        List<User> contacts = getContactsFromUser(session);
+        model.addAttribute("contactos", contacts);
+        model.addAttribute("mensajes", new ArrayList<Message> ());
+        return "mensajes";
+    }
+
+    /*
+     * Shows the chat between the user and his contact
+     */
     @GetMapping("/messages/{id}")
     @Transactional
     public String getMessagesUser(@PathVariable long id, Model model, HttpSession session) {
@@ -119,15 +153,11 @@ public class MessageController {
             log.info("  - error: {}", e.getMessage());
         }
 
-        // The contacts of the user
-        List<User> contacts = getContactsFromUser(session);
-
         // The messages between the contact and the user
         List<Message> messages = getMessagesFromContact(session, contact);
-        
+        List<User> contacts = getContactsFromUser(session);
         model.addAttribute("contactos", contacts);
         model.addAttribute("mensajes", messages);
-        model.addAttribute("usuario", (User) session.getAttribute("user"));
         model.addAttribute("contacto", contact);
 
         return "mensajes";
