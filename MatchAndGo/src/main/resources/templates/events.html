@@ -13,8 +13,9 @@
 </head>
 
 <body>
-
-    <input type="search"> <button type="button" class="search">Buscar</button>
+    <form th:action="@{/event/search}" method="GET">
+        <input type="search" name="title" /> <button type="submit" class="search">Buscar</button>
+    </form>
     <div th:each="evento: ${event}" class="eventCard">
         <div class="cardUpperContainer">
             <img th:src="@{/img/noImage.png}" alt="" class="placeImage">
