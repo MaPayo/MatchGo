@@ -116,6 +116,7 @@ public class EventController {
 		newEvent.setTags(tags);
 		
 		entityManager.persist(newEvent);
+
 		/*
 		User requester = (User)session.getAttribute("u");
 		if (requester.getId() != target.getCreator().getId() &&
@@ -160,7 +161,6 @@ public class EventController {
 		model.addAttribute("access", Access.MINIMAL); 
 		
 		model.addAttribute("event", e);
-
 		return "event";
 	}
 	
