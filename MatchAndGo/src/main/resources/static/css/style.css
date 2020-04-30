@@ -372,7 +372,6 @@ input {
     display: flex;
     flex-direction: row;
     margin-top: 0.5em;
-    border-bottom: 3px dotted gray;
     width: 15%;
     margin-left: auto;
     margin-right: auto;
@@ -384,15 +383,24 @@ input {
     background: lightgreen;
 }
 .listaIntereses span {
-	 border-top: 3px dotted gray;
     margin-left: auto;
     margin-right: auto;
 }
 
 .newTags {
-	
+	display: flex;
+    flex-direction: row;
+	 border-top: 3px dotted gray;
     margin-top: 2em;
+    
+    margin-left: auto;
+    margin-right: auto;
 }
+.newTags p, select{
+    margin-top: 1em;
+      margin-right: 1em;
+}
+
 
 
 /*     ESTILOS DE MENSAJES    */
