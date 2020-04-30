@@ -70,7 +70,6 @@ public class EventController {
 		
 		User requester = (User)session.getAttribute("u");
 		requester = entityManager.find(User.class, requester.getId());
-		
 		ArrayList<Tags> categories = (ArrayList<Tags>) entityManager.createQuery("SELECT t FROM Tags t WHERE t.isCategory IS TRUE")
 				.getResultList();
 		
@@ -125,7 +124,6 @@ public class EventController {
 					"No eres administrador, y éste no es tu evento");
 		}
 		*/
-		
 		return "redirect:/user/" + requester.getId();
 	}
 
@@ -235,7 +233,6 @@ public class EventController {
 			}
 			log.info("Successfully uploaded photo for {} into {}!", id, f.getAbsolutePath());
 		}
-
 		return "event";
 	}
 }
