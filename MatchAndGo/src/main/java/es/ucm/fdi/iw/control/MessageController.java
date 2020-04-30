@@ -69,6 +69,9 @@ public class MessageController {
             }
         }
 
+        // People we have received messages from
+        // TODO: this has O(n²) runtime due to linear checks for "contains"
+        //       see above for a more efficient (O(n)) implementation
         for (int i = 0; i < usuario.getReceivedMessages().size(); ++i) {
             User user = usuario.getReceivedMessages().get(i).getSender();
             if (!contacts.contains(user)) {

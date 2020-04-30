@@ -41,6 +41,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	            .anyRequest().authenticated()
 	            .and()
 	        .formLogin()
+	        	.loginPage("/login")
+	        	 .defaultSuccessUrl("/user/{id}")
+	        	 .usernameParameter("userName")
+	             .passwordParameter("password")
 	        	.permitAll().successHandler(loginSuccessHandler);// <-- called when login Ok; can redirect
 	}
 	

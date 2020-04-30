@@ -35,7 +35,7 @@ public class Message {
     public Message(long id, String c, User s, User r,LocalDateTime f, boolean e) {
 		super();
 		this.id = id;
-        this.textMessage = c;
+    this.textMessage = c;
 		this.sender = s;
 		this.receiver = r;
 		this.sendDate = f;
@@ -44,6 +44,11 @@ public class Message {
 	
 	public Message(String c, User s, User r, LocalDateTime f) {
 		super();
+		this.text = c;
+		this.sender = s;
+		this.receiver = r;
+		this.sendDate = f;
+		this.read = false;
 		this.textMessage = c;
 		this.sender = s;
 		this.receiver = r;

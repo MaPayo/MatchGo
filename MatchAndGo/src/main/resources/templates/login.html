@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html  lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login/SignUp</title>
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet">
+    <link rel="stylesheet" href="libs/font-awesome/css/font-awesome.min.css">
+     <link rel="stylesheet" type="text/css" th:href="@{/css/stylesindex.css}">
+
+</head>
+
+<body>
+   
+
+    <div id="lead-login">
+        <div id="lead-content-login">
+            <h1>Match&Go</h1>
+            <h2>Find friends, have fun, experience new things!</h2>
+        </div>
+        <!-- End #lead-content -->
+
+        <div id="lead-form">
+            <div class="signup">
+                <h2>¿Todavía no tienes cuenta? Únete!</h2>
+                <form th:action="@{/signup}" method="POST" enctype="multipart/form-data">
+              
+                    <div class="form_texto">
+                        <label for="txt_username">Nombre de usuario:</label>
+                        <input type="text" name="username" id="txt_email" required>
+                    </div>
+                    <div class="form_texto">
+                        <label for="txt_password">Contraseña:</label>
+                        <input type="password" minlength="6" maxlength="15" name="password" id="txt_password" required>
+                    </div>
+                    <div class="form_texto">
+                        <label for="txt_password">Confirmación contraseña:</label>
+                        <input type="password" minlength="6" maxlength="15" name="password2" id="txt_password" required>
+                    </div>
+                    <div class="form_texto">
+                        <label for="txt_email">Email:</label>
+                        <input type="email" name="email" id="txt_email" required>
+                    </div>
+                    <div class="form_texto">
+                        <label for="txt_name">Nombre:</label>
+                        <input type="text" minlength="4" maxlength="30" name="firstname" id="txt_name" required>
+                    </div>
+                     <div class="form_texto">
+                        <label for="txt_name">Apellidos:</label>
+                        <input type="text" minlength="4" maxlength="30" name="lastname" id="txt_apellidos" required>
+                    </div>
+                    <div class="form_texto">
+                        <label>Sexo:</label>
+                        <input type="radio" name="gender" value="hombre"> Hombre
+                        <input type="radio" name="gender" value="mujer" checked> Mujer
+                        <input type="radio" name="gender" value="mujer" checked> Otro
+                    </div>
+                    <div class="form_texto">
+                        <label for="date_calendar">Fecha de nacimiento:</label>
+                        <input type="date" name="birthdate" id="date_calendar" required>
+                    </div>
+                    <div class="form_texto">
+                        <label>Imagen de perfil:</label>
+                        <input type="file" accept="image/png" name="userPhoto" id="file_input">
+                    </div>
+                    <div class="divBoton">
+                        <button type="submit" class="btn-rounded-grey">Registrarse</button>
+                    </div>
+                </form>
+            </div>
+            <div class="login">
+                <h2>Si ya eres miembro de Match&Go inicia sesión aquí</h2>
+
+                <form th:action="@{/login}" method="POST">
+                    <div class="form_texto">
+                        <label>Nombre de usuario:</label> 
+                        <input  name="userName"  required>
+                    </div>
+                    <div class="form_texto">
+                       <label>Contraseña:</label>  
+                        <input type="password"  name="password" required>
+                    </div>
+                    <div class="divBoton">
+                        <button type="submit" class="btn-rounded-grey">Iniciar sesión</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+    <!-- End #lead -->
+
+
+
+</body>
+
+</html>

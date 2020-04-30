@@ -1,6 +1,7 @@
 package es.ucm.fdi.iw.model;
 
 import java.time.LocalDateTime;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -8,16 +9,36 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import es.ucm.fdi.iw.model.User.Role;
+
 import es.ucm.fdi.iw.model.User.Transfer;
 
+
 @Entity
+/**
+ * @author Carlos Olano
+ */
+@NamedQueries({
+
+	@NamedQuery(name="Event.blockEvent", query= "UPDATE Event SET isAppropriate = :state " + "WHERE id = :idUser"),
+	@NamedQuery(name="Event.getEvent", query= "SELECT u from Event u WHERE u.id = :idUser"),
+	@NamedQuery(name="Event.all", query= "SELECT u from Event u"),
+	@NamedQuery(name="Event.deleteEvent", query= "DELETE FROM Event u WHERE "
+		+ "u.id = :idUser")
+})
+
+/**
+ * End
+ */
 public class Event {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,16 +49,18 @@ public class Event {
 	private String photo;
 	private LocalDateTime date;
 	private LocalDateTime publicationDate;
+
 	@Column(columnDefinition = "boolean default null")
 	private Boolean isAppropriate;
 
 	@ManyToMany(fetch = FetchType.EAGER)
+
 	private List<Tags> tags;
 	
 	@ManyToMany
 	private List<User> participants;
 	
-	@ManyToOne
+	@ManyToOne(targetEntity = User.class)
 	private User creator;
 	
 	public enum Access {
@@ -84,8 +107,8 @@ public class Event {
 			this.date = e.getDate();
 			this.publicationDate = e.getPublicationDate();
 			this.isAppropriate = e.getIsAppropriate();
-			this.tagNames = new ArrayList();
-			this.participants = new ArrayList();
+			this.tagNames = new ArrayList<String>();
+			this.participants = new ArrayList<Long>();
 			
 			if(e.creator != null)
 				this.creator = e.getCreator().getId();

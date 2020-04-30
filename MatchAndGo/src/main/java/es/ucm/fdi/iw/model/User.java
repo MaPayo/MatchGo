@@ -14,21 +14,46 @@ import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-
-
+import javax.persistence.JoinTable;
+import javax.persistence.JoinColumns;
+import javax.persistence.JoinColumn;
+import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.OnDelete;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Entity
+/**
+ * @author Carlos Olano
+ */
 @NamedQueries({
+	@NamedQuery(name="User.getUser", query= "SELECT u from User u WHERE "
+			+ "u.id = :idUser"),
 	@NamedQuery(name="User.byUsername", query= "SELECT u from User u WHERE "
 			+ "u.username = :username"),
 	@NamedQuery(name="User.all", query= "SELECT u from User u"),
 	@NamedQuery(name="User.deleteUser", query= "DELETE FROM User u WHERE "
 		+ "u.id = :idUser"),
 	@NamedQuery(name="User.blockUser", query= "UPDATE User u SET u.enabled = :state "
-		+ "WHERE u.id = :idUser")
+		+ "WHERE u.id = :idUser"),
+	@NamedQuery(name="User.HasName", query= "SELECT COUNT(u) "
+			+ "FROM User u "
+			+ "WHERE u.username = :username"),
+	@NamedQuery(name="User.hasUsername",
+	query="SELECT COUNT(u) "
+			+ "FROM User u "
+			+ "WHERE u.username = :username"),
+	@NamedQuery(name = "User.Password", query = "SELECT password FROM User u WHERE u.username = :userName")
 })
 
+/**
+ * End
+ */
 public class User {
+	
+	private static Logger log = LogManager.getLogger(User.class);	
+	private static BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
 	public enum Role{
 		USER,ADMIN,MOD
@@ -73,7 +98,8 @@ public class User {
 	@ManyToMany(mappedBy = "participants")
 	private List<Event> joinedEvents;
 	
-	@OneToMany(mappedBy="creator")
+	@OneToMany(targetEntity = Event.class)
+	@JoinColumn(name="creator_id")
 	private List<Event> createdEvents;
 	
 	@Override
@@ -97,6 +123,29 @@ public class User {
 				.anyMatch(r -> r.equals(roleName));
 	}
 	
+
+	/**
+	 * Tests a raw (non-encoded) password against the stored one.
+	 * @param rawPassword to test against
+	 * @return true if encoding rawPassword with correct salt (from old password)
+	 * matches old password. That is, true iff the password is correct  
+	 */
+	public boolean passwordMatches(String rawPassword) {
+		return encoder.matches(rawPassword, this.password);
+	}
+
+	/**
+	 * Encodes a password, so that it can be saved for future checking. Notice
+	 * that encoding the same password multiple times will yield different
+	 * encodings, since encodings contain a randomly-generated salt.
+	 * @param rawPassword to encode
+	 * @return the encoded password (typically a 60-character string)
+	 * for example, a possible encoding of "test" is 
+	 * $2y$12$XCKz0zjXAP6hsFyVc8MucOzx6ER6IsC1qo5zQbclxhddR1t6SfrHm
+	 */
+	public static String encodePassword(String rawPassword) {
+		return encoder.encode(rawPassword);
+	}	 
 	
 	public List<Event> getJoinedEvents() {
 		return joinedEvents;
@@ -192,6 +241,7 @@ public class User {
 			this.gender = m.getGender();
 		}
 
+
 	public long getId() {
 		return id;
 	}
@@ -237,9 +287,17 @@ public class User {
 		return password;
 	}
 	
-	public void setPassword(String password) {
-		this.password = password;
+
+	/**
+	 * Sets the password to an encoded value. 
+	 * You can generate encoded passwords using {@link #encodePassword}.
+	 * call only with encoded passwords - NEVER STORE PLAINTEXT PASSWORDS
+	 * @param encodedPassword to set as user's password
+	 */
+	public void setPassword(String encodedPassword) {
+		this.password = encodedPassword;
 	}
+
 	
 	public String getBirthDate() {
 		return birthDate;
@@ -265,70 +323,9 @@ public class User {
 		this.userRole = userRole;
 	}
 	
-	public String getPhoto() {
-		return photo;
-	}
+}
 	
-	public void setPhoto(String img) {
-		this.photo = img;
-	}
 	
-
-	public List<Evaluation> getReceivedEvaluation() {
-		return receivedEvaluation;
-	}
-	
-	public void setReceivedEvaluation(List<Evaluation> evaluation) {
-		this.receivedEvaluation = evaluation;
-	}
-	
-	public List<Evaluation> getSenderEvaluation() {
-		return senderEvaluation;
-	}
-	
-	public void setSenderEvaluation(List<Evaluation> evaluation) {
-		this.senderEvaluation = evaluation;
-	}
-	
-
-	public List<Tags> getTags() {
-		return tags;
-	}
-
-	public void setTags(List<Tags> tags) {
-		this.tags = tags;
-	}
-
-	public List<Message> getSentMessages() {
-		return sentMessages;
-	}
-
-	public void setSentMessages(List<Message> sentMessages) {
-		this.sentMessages = sentMessages;
-	}
-
-	public List<Message> getReceivedMessages() {
-		return receivedMessages;
-	}
-
-	public void setReceivedMessages(List<Message> receivedMessages) {
-		this.receivedMessages = receivedMessages;
-	}
-
-
-	public boolean isEnabled() {
-		return enabled;
-	}
-
-
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
-	
-
-	}
-	
-
 	public long getId() {
 		return id;
 	}
