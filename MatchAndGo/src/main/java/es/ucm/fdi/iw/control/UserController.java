@@ -90,6 +90,10 @@ public class UserController {
 		log.warn("FUNCIONAAAAAAAAAAAAAAAAAA TAAAAAGS");
 		log.warn("CREANDO LISTADO DE EVENTOS");
 		
+		List<Tags> allTags = (ArrayList<Tags>) entityManager.createQuery("SELECT t FROM Tags t").getResultList();
+
+		model.addAttribute("allTags", allTags);
+		
 		final List<Event> user_events = new ArrayList<>(u.getJoinedEvents()); 
 		log.warn("CREADA LISTA DE TAGS SACADA DEL USUARIO");
 		model.addAttribute("user_events", user_events);
@@ -230,7 +234,8 @@ public class UserController {
 			@RequestParam String birthdate, 
 			@RequestParam("userPhoto") MultipartFile userPhoto, HttpSession session) {
 
-		
+
+		log.warn("ENTRA AL METODO DE REGISTRAR EL USER");
 		//redirigimos al registro si el usrname ya existe o las contraseñas no coinciden
 		//aunq esto lo quiero hacer desde el html y que salga un aviso en la pagina
 		if (usernameAlreadyInUse(username) || !password.equals(password2)) {
