@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Evento</title>
+    <!--<link rel="stylesheet" th:href="@{/css/styles.css}" />-->
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+
+<body>
+
+    <nav th:replace="fragments/nav.html :: nav">Nav goes here</nav>
+
+    <form class="eventContainer formEvento" method="POST" th:action="@{/event/newEvent}">
+        <div class="cardUpperContainer">
+            <img th:src="@{/img/noImage.png}" alt="" class="eventImg">
+            <div class="block">
+                <input type="text" name="name" id="name" required placeholder="Nombre del evento">
+                <textarea name="description" id="description" required placeholder="Descripción"></textarea>
+            </div>
+            <div class="block">
+                <select id="category" name="category" required>
+                	<option value="">Categoría</option>
+                	<option th:each="c: ${categories}" th:value="${c.getId()}"><span th:text="${c.getTag()}"></span></option>
+				</select>
+                <textarea id="tagsAll" name="tagsAll" placeholder="Pulse Enter para añadir un tag nuevo"></textarea>
+            </div>
+        </div>
+
+        <div class="cardLowerContainer">
+            <div>
+                <p>Seleccione los campos que desea mantener en privado hasta que el usuario se une al evento</p>
+                <div class="margin">
+                    <input type="checkbox">Fecha: <input type="date" name="date" id="date" required/> </input>
+                </div>
+                <div class="margin">
+                    <input type="checkbox">Dirección: <input type="text" name="location" id="location" required/></input>
+                </div>
+            </div>
+            <div>
+                <select id="agePreference" name="agePreference">
+                	<option value="">Edad de los participantes</option>
+					<option value="18-24">18 - 24 años</option>
+					<option value="25-29">25 - 29 años</option>
+					<option value="30-39">30 - 39 años</option>
+					<option value=">40">mayores de 40 años</option>
+				</select> <select id="genderPreference" name="genderPreference">
+				<option value="">Genero preferido</option>
+					<option value="Femenino">Femenino</option>
+					<option value="Masculino">Masculino</option>
+				</select>
+            </div>
+            <button type="submit" class="acceptButton marginAuto">Crear</button>
+        </div>
+    </form>
+
+    <footer th:replace="fragments/footer.html :: footer"> Footer goes here </footer>
+</body>
+
+</html>

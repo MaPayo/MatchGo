@@ -15,13 +15,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import es.ucm.fdi.iw.model.User.Role;
 
 import es.ucm.fdi.iw.model.User.Transfer;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import es.ucm.fdi.iw.model.User.Role;
 
 @Entity
 /**
@@ -48,9 +49,18 @@ public class Event {
 	private String name;
 	private String description;
 	private String location;
-	private String photo;
-	private LocalDateTime date;
-	private LocalDateTime publicationDate;
+	private String photo; //not saved
+	
+	private Boolean privateLocation;
+	private Boolean privateDate;
+	private String agePreference;
+	private String genderPreference;
+	
+
+
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDateTime date; 
+	private LocalDateTime publicationDate; 
 
 	@Column(columnDefinition = "boolean default null")
 	private Boolean isAppropriate;
@@ -95,6 +105,10 @@ public class Event {
 		private LocalDateTime date;
 		private LocalDateTime publicationDate;
 		private Boolean isAppropriate;
+		private Boolean privateLocation;
+		private Boolean privateDate;
+		private String agePreference;
+		private String genderPreference;
 		
 		private List<String> tagNames;
 		private List<Long> participants;
@@ -109,8 +123,12 @@ public class Event {
 			this.date = e.getDate();
 			this.publicationDate = e.getPublicationDate();
 			this.isAppropriate = e.getIsAppropriate();
-			this.tagNames = new ArrayList<String>();
-			this.participants = new ArrayList<Long>();
+			this.tagNames = new ArrayList();
+			this.participants = new ArrayList();
+			this.privateLocation = e.getPrivateLocation();
+			this.privateDate = e.getPrivateDate();
+			this.agePreference = e.getAgePreference();
+			this.genderPreference = e.getGenderPreference();
 			
 			if(e.creator != null)
 				this.creator = e.getCreator().getId();
@@ -151,6 +169,38 @@ public class Event {
 
 		public void setLocation(String location) {
 			this.location = location;
+		}
+		
+		public Boolean getPrivateLocation() {
+			return privateLocation;
+		}
+
+		public void setPrivateLocation(Boolean privateLocation) {
+			this.privateLocation = privateLocation;
+		}
+
+		public Boolean getPrivateDate() {
+			return privateDate;
+		}
+
+		public void setPrivateDate(Boolean privateDate) {
+			this.privateDate = privateDate;
+		}
+
+		public String getAgePreference() {
+			return agePreference;
+		}
+
+		public void setAgePreference(String agePreference) {
+			this.agePreference = agePreference;
+		}
+
+		public String getGenderPreference() {
+			return genderPreference;
+		}
+
+		public void setGenderPreference(String genderPreference) {
+			this.genderPreference = genderPreference;
 		}
 
 		public String getPhoto() {
@@ -241,6 +291,7 @@ public class Event {
 		if (u.getId() == creator.getId()) return Access.CREATOR;
 		if (u.hasRole(Role.ADMIN) || participants.contains(u)) return Access.PARTICIPANT;
 		return Access.MINIMAL;
+		
 	}
 
 	
@@ -275,6 +326,38 @@ public class Event {
 
 	public void setLocation(String location) {
 		this.location = location;
+	}
+	
+	public Boolean getPrivateLocation() {
+		return privateLocation;
+	}
+
+	public void setPrivateLocation(Boolean privateLocation) {
+		this.privateLocation = privateLocation;
+	}
+
+	public Boolean getPrivateDate() {
+		return privateDate;
+	}
+
+	public void setPrivateDate(Boolean privateDate) {
+		this.privateDate = privateDate;
+	}
+
+	public String getAgePreference() {
+		return agePreference;
+	}
+
+	public void setAgePreference(String agePreference) {
+		this.agePreference = agePreference;
+	}
+
+	public String getGenderPreference() {
+		return genderPreference;
+	}
+
+	public void setGenderPreference(String genderPreference) {
+		this.genderPreference = genderPreference;
 	}
 
 	public LocalDateTime getDate() {
