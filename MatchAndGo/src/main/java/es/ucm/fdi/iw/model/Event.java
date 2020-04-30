@@ -27,6 +27,8 @@ import es.ucm.fdi.iw.model.User.Role;
 @Entity
 /**
  * @author Carlos Olano
+ * @author MaPayo
+ * @author RoNiTo0
  */
 @NamedQueries({
 
@@ -35,7 +37,10 @@ import es.ucm.fdi.iw.model.User.Role;
 	@NamedQuery(name="Event.all", query= "SELECT u from Event u"),
 	@NamedQuery(name="Event.deleteEvent", query= "DELETE FROM Event u WHERE "
 		+ "u.id = :idUser"),
-		@NamedQuery(name="Event.searchByName", query="SELECT u FROM Event u WHERE u.name LIKE :uname")
+	@NamedQuery(name="Event.searchByName", query="SELECT u FROM Event u WHERE lower(u.name) LIKE lower(:uname)"),
+	@NamedQuery(name="Event.searchByLocation", query="SELECT u FROM Event u WHERE lower(u.location) LIKE lower(:ulocation)"),
+	@NamedQuery(name="Tag.getEventCategories", query="SELECT e From Event e WHERE e.tags = :ucategory"),
+	@NamedQuery(name="Event.participants", query="SELECT e.participants FROM Event e  WHERE e.id = :eid " )
 })
 
 

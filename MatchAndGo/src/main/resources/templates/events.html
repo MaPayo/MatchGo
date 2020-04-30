@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" th:href="@{/css/styles.css}" />
     <title>Busqueda</title>
-    <!--<link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" media="screen">-->
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" media="screen">
     <nav th:replace="fragments/nav.html :: nav">
         El navegador
@@ -15,6 +14,18 @@
 <body>
     <form th:action="@{/event/search}" method="GET">
         <input type="search" name="title" /> <button type="submit" class="search">Buscar</button>
+    </form>
+    <!--Busqueda avanzada-->
+    <form th:action="@{/event/advanceSearch}" method="GET">
+        <label>Nombre: </label><input type="search" name="title" />
+        <label>Localizacion: </label><input type="search" name="localitation" />
+        <label>Categoria: </label><select name="category">
+            <option value="" selected >Categoria</option>
+            <option th:each="categories: ${category}" th:value="${categories.getId()}"><span th:text="${categories.getTag()}"></span></option>
+        </select>
+        <!--Desplegable-->
+        <button type="submit" class="advanceSearch">Buscar</button>
+
     </form>
     <div th:each="evento: ${event}" class="eventCard">
         <div class="cardUpperContainer">
