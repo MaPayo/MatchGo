@@ -8,10 +8,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
@@ -36,6 +42,7 @@ import es.ucm.fdi.iw.LocalData;
 import es.ucm.fdi.iw.model.User;
 import es.ucm.fdi.iw.model.Event;
 import es.ucm.fdi.iw.model.Event.Access;
+import es.ucm.fdi.iw.model.Tags;
 import es.ucm.fdi.iw.model.User.Role;
 
 /**
@@ -63,19 +70,52 @@ public class EventController {
 		
 		User requester = (User)session.getAttribute("u");
 		requester = entityManager.find(User.class, requester.getId());
-
+		
+		ArrayList<Tags> categories = (ArrayList<Tags>) entityManager.createQuery("SELECT t FROM Tags t WHERE t.isCategory IS TRUE")
+				.getResultList();
+		
+		model.addAttribute("user", requester);
 		model.addAttribute("newEvent", true); 
+		model.addAttribute("categories", categories);
 		return "event";
 	}
 	
 	@PostMapping("/newEvent")
 	@Transactional
-	public String postNewEvent(HttpServletResponse response,
-			@ModelAttribute Event event, 
-			Model model, HttpSession session) {
+	public String postNewEvent(Model model, HttpServletRequest request, @RequestParam String name,
+			@RequestParam String description, @RequestParam String date, 
+			@RequestParam String agePreference, @RequestParam String genderPreference,
+			@RequestParam String location, @RequestParam Long category,
+			@RequestParam String tagsAll, HttpSession session) {
 		
+		User requester = (User)session.getAttribute("u");
+		requester = entityManager.find(User.class, requester.getId());
+		model.addAttribute("user", requester);
 		Event newEvent = new Event();
-		System.out.println(event.getName());
+		newEvent.setName(name);
+		newEvent.setDescription(description);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        newEvent.setDate(LocalDate.parse(date, formatter).atStartOfDay());
+		newEvent.setPublicationDate(LocalDateTime.now());
+		newEvent.setLocation(location);
+		newEvent.setAgePreference(agePreference);
+		newEvent.setGenderPreference(genderPreference);
+		newEvent.setCreator(requester);
+		List<Tags> tags = new ArrayList();
+		
+		String[] tagNames = tagsAll.split("\n");
+		for(String tagName : tagNames) {
+			Tags t = new Tags();
+			t.setisCategory(false);
+			t.setTag(tagName);
+			tags.add(t);
+			entityManager.persist(t);
+		}
+		
+		tags.add(entityManager.find(Tags.class, category));
+		newEvent.setTags(tags);
+		
+		entityManager.persist(newEvent);
 		/*
 		User requester = (User)session.getAttribute("u");
 		if (requester.getId() != target.getCreator().getId() &&
@@ -85,7 +125,7 @@ public class EventController {
 		}
 		*/
 		
-				return "event";
+		return "redirect:/user/" + requester.getId();
 	}
 
 	@GetMapping("/")

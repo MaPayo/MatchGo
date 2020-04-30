@@ -35,9 +35,7 @@ public class Tags {
 	}
 
 
-	public void setisCategory(boolean isCategory) {
-		this.isCategory = isCategory;
-	}
+	
 
 
 	public List<Event> getEvents() {
@@ -69,8 +67,9 @@ public class Tags {
 	public boolean getIsCategory() {
 		return isCategory;
 	}
-	public void setIsCategory(boolean categoriaTipo) {
-		this.isCategory = categoriaTipo;
+	
+	public void setisCategory(boolean isCategory) {
+		this.isCategory = isCategory;
 	}
 	
 	public List<User> getSubscribers() {
