@@ -171,7 +171,7 @@ public class EventController {
 
 
 	//Seguramente haya una forma mas eficiente de hacer esto, ahora mismo es la unica que encuentro
-	@GetMapping("/advancesearch")
+	@GetMapping("/advanceSearch")
 	public String advanceSearch(@RequestParam String title, @RequestParam String location, @RequestParam String category, Model model ) {
 		List<Event> listaTitle = null;
 		List<Event> listalocation = null;
@@ -190,7 +190,7 @@ public class EventController {
 		if(category != ""){
 		//Buscamos los eventos que tengan esa categoria en concreto
 		TypedQuery<Event> queryEventc= entityManager.createNamedQuery("Tag.getEventTags", Event.class);
-		queryEventc.setParameter("ucategory", Integer.parseInt(category)); 
+		queryEventc.setParameter("ucategory", Long.parseLong(category)); 
 		//Creamos una lista con los ids de los eventos que contienen esos tags
 		listacategories= queryEventc.getResultList();
 		}
