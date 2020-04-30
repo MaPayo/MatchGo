@@ -33,32 +33,39 @@
         	</div>
         
          -->
-        <div class="yourProfile">
-        	<div class="intereses_usuario">
+         <div class="intereses_usuario">
        		    <h2 class="centrado">Intereses:</h2>
         	    <ul class="listaIntereses">
-             	<!--   <li th:each="tag: ${user_tags}"> -->
-                <!-- 	    <span th:text="${tag.getTag()}">tag</span> 
-              	  </li>  -->
+             	   <li th:each="tag: ${user_tags}"> 
+                 	    <span th:text="${tag.getTag()}">tag</span> 
+              	  </li>  
           		</ul>
        		</div>
-       			<div class="events_usuario">
+         
+        <div class="yourProfile">
+        	
+       		<div class="events_usuario">
        		    <h2 class="centrado">Eventos inscritos:</h2>
-        	    <ul class="listaEventos">
-             	<!--   <li th:each="e: ${user_tags}"> -->
-                <!-- 	    <span th:text="${e.getName()}">event</span> 
-              	  </li>  -->
-          		</ul>
+       		    <div class="event-item" th:each="e: ${user_events}">
+              		 <div class="event-icon"> <img id="imagenPequeña" th:src="@{/event/{id}/photo(id=${event.id})}"></div>
+              		 <h4 class="event-title"><span th:text="${e.getName()} "></span></h4>
+             		 <p class="event-description"><span th:text="${e.getDescription()} "></span></p>
+          		</div>
        		</div>
-       			<div class="comentarios_usuario">
-       		    <h2 class="centrado">Comentarios recibidos:</h2>
-        	    <ul class="listaComentarios">
-             	<!--   <li th:each="coment: ${user.getReceivedEvaluation()}"> -->
-                <!-- 	    <span th:text="${coment.getReview()}">coment</span> 
-              	  </li>  -->
-          		</ul>
-       		</div>
-        </div>
+       		
+       		<div id="about" class="background-alt">
+        		<h2 class="heading">Comentarios recibidos:</h2>
+        			<div class="container"  th:each="evaluation: ${user_coments}">
+            			<div class="about shadow-large">                
+               		 		<div class="personal-info">
+                    			<h3><span th:text="${evaluation.getReview()}">review</span></h3>
+                    			<p><span th:text="${evaluation.getScore()}">score</span>
+                    			</p>
+                    		</div>
+                		</div>
+            		</div>
+    		</div> 	
+       	</div>
        
 	</div>
 	

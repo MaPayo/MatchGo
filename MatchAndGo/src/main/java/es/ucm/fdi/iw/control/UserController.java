@@ -41,6 +41,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import es.ucm.fdi.iw.LocalData;
+import es.ucm.fdi.iw.model.Evaluation;
+import es.ucm.fdi.iw.model.Event;
 import es.ucm.fdi.iw.model.Tags;
 import es.ucm.fdi.iw.model.User;
 import es.ucm.fdi.iw.model.User.Role;
@@ -76,15 +78,28 @@ public class UserController {
 	}
 	
 	@GetMapping("/{id}")
+	@Transactional
 	public String getUser(@PathVariable long id, Model model, HttpSession session) {
 		User u = entityManager.find(User.class, id);
 		model.addAttribute("user", u);
-		/*log.warn("HOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+		log.warn("CREANDO LISTADO DE ETIQUETAS");
 		
 		final List<Tags> user_tags = new ArrayList<>(u.getTags()); 
 		log.warn("CREADA LISTA DE TAGS SACADA DEL USUARIO");
 		model.addAttribute("user_tags", user_tags);
-		log.warn("FUNCIONAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");*/
+		log.warn("FUNCIONAAAAAAAAAAAAAAAAAA TAAAAAGS");
+		log.warn("CREANDO LISTADO DE EVENTOS");
+		
+		final List<Event> user_events = new ArrayList<>(u.getJoinedEvents()); 
+		log.warn("CREADA LISTA DE TAGS SACADA DEL USUARIO");
+		model.addAttribute("user_events", user_events);
+		log.warn("FUNCIONAAAAAAAAAAAAAAAAAA EVENTOS");
+	
+		final List<Evaluation> user_coments = new ArrayList<>(u.getReceivedEvaluation()); 
+		log.warn("CREADA LISTA DE COMENTARIOS SACADA DEL USUARIO");
+		model.addAttribute("user_coments", user_coments);
+		log.warn("FUNCIONAAAAAAAAAAAAAAAAAAA COMENTARIOS");
+	
 		return "profile";
 	}
 
@@ -212,7 +227,7 @@ public class UserController {
 	public String register(Model model, HttpServletRequest request, Principal principal, @RequestParam String username,
 			@RequestParam String password, @RequestParam String password2, @RequestParam String email,
 			@RequestParam String firstname, @RequestParam String lastname, @RequestParam String gender,
-			@RequestParam Date birthdate, 
+			@RequestParam String birthdate, 
 			@RequestParam("userPhoto") MultipartFile userPhoto, HttpSession session) {
 
 		
@@ -221,7 +236,7 @@ public class UserController {
 		if (usernameAlreadyInUse(username) || !password.equals(password2)) {
 			return "redirect:/user/login";
 		}
-
+		log.warn("ACEPTA LOS DATOS DE NUEVO USUARIO");
 		// Creación de un usuario
 		User u = new User();
 		u.setUsername(username);
@@ -230,7 +245,7 @@ public class UserController {
 		u.setEmail(email);
 		u.setFirstName(firstname);
 		u.setLastName(lastname);
-		//u.setBirthDate(birthdate);
+		u.setBirthDate(birthdate);
 		u.setGender(gender);
 		u.setEnabled(true);
 		
