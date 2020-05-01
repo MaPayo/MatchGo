@@ -36,7 +36,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import es.ucm.fdi.iw.model.Message;
+import es.ucm.fdi.iw.model.Event;
 import es.ucm.fdi.iw.model.User;
 import es.ucm.fdi.iw.model.User.Role;
 
@@ -51,6 +53,93 @@ public class MessageController {
 	
 	@Autowired
     private EntityManager entityManager;
+
+
+	@Autowired
+	private SimpMessagingTemplate messagingTemplate;
+
+
+
+
+	@GetMapping("/showConversation/event/{id}")
+	@Transactional
+	public void showEventConversation(final Model model, @PathVariable long id) {
+		final List<Message> messages = entityManager.createNamedQuery("Message.getConversationGroup", Message.class).setParameter("idUser", id).getResultList();
+		log.warn(messages.get(0).getText());
+		sendMessageWS(messages,"updateConversation","/showConversation/Event/"+id);
+		//return "mensajes";
+	}
+
+
+	public void sendMessageWS(final List content, final String type, final String destinity) {
+		log.info("Sending message via websocket");
+		final List response = new ArrayList();
+		response.add(type);
+		switch(type){
+			case "sendMessage":
+			response.add(User.asTransferObjects(content));
+			break;
+			case "updateConversation":
+			response.add(Message.asTransferObjects(content));
+			break;
+		}
+		messagingTemplate.convertAndSend(destinity,response);
+	}	
+
+
+
+
+    	public Message(long id, String c, User s, User r,LocalDateTime f, boolean e) {
+		super();
+		this.id = id;
+      		this.text = c;
+		this.sender = s;
+		this.receiver = r;
+		this.sendDate = f;
+		this.read = e;
+	}
+    	public Message(long id, String c, User s, User r,Event ev,LocalDateTime f, boolean e) {
+
+
+	public void insertMessage(String text, User origin, User destinity, Event eventDestinity, LocalDateTime timeStamp, boolean read){
+		boolean flag = false;
+		if(eventDestinity != null && origin != null){
+			
+			Message newMessage = new Message(text,session.u.getId(),null,"asda");
+			flag = true;
+		}else if (eventDestinity == null && origin != null && destinity != null){
+			Message newMessage = new Message()
+			flag = true;
+		}
+
+		if (flag){
+			entityManager.flush();
+		}
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
     /*
      * This method gets all the contacts from the user in the session.
@@ -58,7 +147,7 @@ public class MessageController {
     private List<User> getContactsFromUser (HttpSession session) {
         User usuario = (User) session.getAttribute("user");
 
-        // People we have sent messages to
+	// People we have sent messages to
         Set<User> contacts = new HashSet<User>();
         for (Message m : usuario.getSentMessages()) {
             contacts.add(m.getSender());
@@ -134,5 +223,5 @@ public class MessageController {
 
         return "mensajes";
     }
-    // Para Post: @RequestParam long id
+   // Para Post: @RequestParam long id
 }

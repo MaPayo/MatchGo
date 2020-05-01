@@ -8,7 +8,19 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 @Entity
+/**
+ * @author Carlos Olano
+ */
+@NamedQueries({
+	@NamedQuery(name="Message.getConversationGroup", query= "SELECT m FROM Message m WHERE id_event_id = :idUser")
+})
+
+/**
+ * End
+ */
 public class Message {
 
 	
@@ -21,6 +33,8 @@ public class Message {
 	private User sender;			// La persona que lo envía
 	@ManyToOne(targetEntity = User.class)
 	private User receiver;		// La persona que lo recibe
+	@ManyToOne(targetEntity = Event.class)
+	private Event idEvent; //El grupo que lo recibe
 	private LocalDateTime sendDate;		// Hay que tener en cuenta el tipo java.sql.Date para las query SQL
 	private boolean read;
 
@@ -28,12 +42,21 @@ public class Message {
 		super();
 	}
 
-    public Message(long id, String c, User s, User r,LocalDateTime f, boolean e) {
+    	public Message(long id, String c, User s, User r,LocalDateTime f, boolean e) {
 		super();
 		this.id = id;
-        this.text = c;
+      		this.text = c;
 		this.sender = s;
 		this.receiver = r;
+		this.sendDate = f;
+		this.read = e;
+	}
+    	public Message(long id, String c, User s, User r,Event ev,LocalDateTime f, boolean e) {
+		this.id = id;
+      		this.text = c;
+		this.sender = s;
+		this.receiver = r;
+		this.idEvent = ev;
 		this.sendDate = f;
 		this.read = e;
 	}
@@ -90,7 +113,12 @@ public class Message {
 	public void setReceiver(User receiver) {
 		this.receiver = receiver;
 	}
-
+	public void setGroup(Event ev){
+		this.idEvent = ev;
+	}
+	public Event getGroup(){
+		return this.idEvent;
+	}
 	/**
      * @return the sendDate
      */

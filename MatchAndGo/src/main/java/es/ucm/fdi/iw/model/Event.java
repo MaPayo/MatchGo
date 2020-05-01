@@ -14,6 +14,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import javax.persistence.NamedQueries;
@@ -54,8 +56,10 @@ public class Event {
 	private Boolean isAppropriate;
 
 	@ManyToMany(fetch = FetchType.EAGER)
-
 	private List<Tags> tags;
+	
+	@OneToMany(targetEntity = Message.class)
+	private List<Message> messagesGroup;
 	
 	@ManyToMany
 	private List<User> participants;
@@ -93,7 +97,7 @@ public class Event {
 		private LocalDateTime date;
 		private LocalDateTime publicationDate;
 		private Boolean isAppropriate;
-		
+		private List<Message> messagesGroup;	
 		private List<String> tagNames;
 		private List<Long> participants;
 		private Long creator;
@@ -109,7 +113,7 @@ public class Event {
 			this.isAppropriate = e.getIsAppropriate();
 			this.tagNames = new ArrayList<String>();
 			this.participants = new ArrayList<Long>();
-			
+			this.messagesGroup = new ArrayList<Message>();
 			if(e.creator != null)
 				this.creator = e.getCreator().getId();
 			
@@ -117,6 +121,8 @@ public class Event {
 				e.getTags().forEach(tag -> this.tagNames.add(tag.getTag()));
 			if(e.getParticipants() != null)
 				e.getParticipants().forEach(user -> this.participants.add(user.getId()));
+			if(e.getMessages() != null)
+				e.getMessages().forEach(message -> this.messagesGroup.add(message));
 		}
 
 		public long getId() {
@@ -207,6 +213,13 @@ public class Event {
 			this.creator = creator;
 		}
 
+		public List<Message> getMessages() {
+			return messagesGroup;
+		}
+
+		public void setMessages(ArrayList<Message> messages) {
+			this.messagesGroup = messages;
+		}
 		@Override
 		public String toString() {
 			return "TransferEvent [id=" + id + ", name=" + name + ", description=" + description + ", location="
@@ -267,6 +280,13 @@ public class Event {
 		this.description = description;
 	}
 
+	public List<Message> getMessages() {
+		return messagesGroup;
+	}
+
+	public void setMessages(List<Message> messages) {
+		this.messagesGroup = messages;
+	}
 	public String getLocation() {
 		return location;
 	}
