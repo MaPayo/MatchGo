@@ -63,8 +63,8 @@
        		</div>
          
         <div class="yourProfile">
-        	
-       		<div class="events_usuario">
+        	<div class="displayflex">
+       		<div class="events_usuario" th:if="(${session.u.id} eq ${user.getId()})">
        		    <h2 class="centrado">Eventos inscritos:</h2>
        		    <div class="event-item" th:each="e: ${user_events}">
               		 <div class="event-icon"> <img id="imagenPequeña" th:src="@{/event/{id}/photo(id=${e.getId()})}"></div>
@@ -72,7 +72,7 @@
              		 <p class="event-description"><span th:text="${e.getDescription()} "></span></p>
           		</div>
        		</div>
-       		
+       		</div>
        		<div id="about" class="background-alt">
         		<h2 class="heading">Comentarios recibidos:</h2>
         			<div class="container"  th:each="evaluation: ${user_coments}">

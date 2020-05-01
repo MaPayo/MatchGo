@@ -259,7 +259,7 @@ public class UserController {
 		
 	
 		entityManager.persist(u);
-		entityManager.flush();
+		entityManager.flush(); //guardar bbdd
 		log.info("Creating & logging new user {}, with ID {} and password {}", username, u.getId(), password);
 		
 		//En el momento en que se crea correctamente el usuario se inicia sesion y se redirige al perfil
@@ -279,7 +279,7 @@ public class UserController {
 			log.info("Successfully uploaded photo for {} into {}!", u.getId(), f.getAbsolutePath());
 		}
 		
-		session.setAttribute("user", u);
+		session.setAttribute("u", u);
 		session.setAttribute("ws", request.getRequestURL().toString()
 				.replaceFirst("[^:]*", "ws")		// http[s]://... => ws://...
 				.replaceFirst("/user.*", "/ws"));
@@ -296,7 +296,7 @@ public class UserController {
 	
 	private boolean usernameAlreadyInUse(String userName) {
 		Long usernameAlreadyInUse = entityManager.createNamedQuery("User.hasUsername", Long.class)
-				.setParameter("userName", userName).getSingleResult();
+				.setParameter("username", userName).getSingleResult();
 		if(usernameAlreadyInUse != 0) {
 			return true;
 		}
