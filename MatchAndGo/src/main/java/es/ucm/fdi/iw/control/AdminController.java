@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.ucm.fdi.iw.LocalData;
 import es.ucm.fdi.iw.model.Tags;
+import es.ucm.fdi.iw.model.Evaluation;
 import es.ucm.fdi.iw.model.Event;
 import es.ucm.fdi.iw.model.User;
 /**
@@ -103,7 +104,7 @@ public class AdminController {
 			newState = true;
 		}
 		entityManager.createNamedQuery("User.blockUser").setParameter("idUser", id).setParameter("state", newState)
-				.executeUpdate();
+			.executeUpdate();
 
 		final List<User> usersU = entityManager.createNamedQuery("User.all",User.class).getResultList();
 		sendMessageWS(usersU,"updateUsers");
@@ -114,7 +115,7 @@ public class AdminController {
 	@Transactional
 	public String deleteEvent(final Model model, @RequestParam final long id) {
 		final Event e = (Event) entityManager.createNamedQuery("Event.getEvent", Event.class).setParameter("idUser", id)
-				.getSingleResult();
+			.getSingleResult();
 
 		final List<Tags> tags = new ArrayList<>(e.getTags());
 		log.info("I will Remove all subcribed tags ");
@@ -147,7 +148,7 @@ public class AdminController {
 	@Transactional
 	public String deleteUser(final Model model, @RequestParam final long id) {
 		final User u = (User) entityManager.createNamedQuery("User.getUser", User.class).setParameter("idUser", id)
-				.getSingleResult();
+			.getSingleResult();
 
 		List<Tags> tags = u.getTags();
 		log.info("I will Remove all subcribed tags ");
@@ -170,7 +171,7 @@ public class AdminController {
 				if (participants.size() != 0) {
 					log.info("I will change owned event");
 					final User u2 = (User) entityManager.createNamedQuery("User.getUser", User.class)
-							.setParameter("idUser", participants.get(0).getId()).getSingleResult();
+						.setParameter("idUser", participants.get(0).getId()).getSingleResult();
 					event.setCreator(u2);
 					event.getParticipants().remove(u2);
 					log.info("changed ok");
@@ -185,18 +186,46 @@ public class AdminController {
 					log.info("I will Remove event owned");
 					u.getCreatedEvents().remove(event);
 					entityManager.createNamedQuery("Event.deleteEvent").setParameter("idUser", event.getId())
-							.executeUpdate();
+						.executeUpdate();
 					log.info("Removed event");
 				}
 			}
 
 		}
 
+
+		List<Evaluation> evaluations = new ArrayList<>(u.getReceivedEvaluation());
+		if (evaluations.size() != 0){
+			log.info("I will Remove all received evaluations ");
+			for (final Evaluation eva : evaluations) {
+				List<Evaluation> evaluationsAux = new ArrayList<>(eva.getEvaluator().getSenderEvaluation());
+				evaluationsAux.remove(eva);
+				u.getReceivedEvaluation().remove(eva);
+				entityManager.createNamedQuery("Evaluation.deleteEvaluation").setParameter("idUser", eva.getId()).executeUpdate();
+				log.info("Removed evaluation {} from user {} ", eva.getId(),u.getId());
+			}
+		}
+
+		final User noUser = (User) entityManager.createNamedQuery("User.getUser", User.class).setParameter("idUser", (long)4).getSingleResult();
+		evaluations = new ArrayList<>(u.getSenderEvaluation());
+		if (evaluations.size() != 0){
+			log.info("I will Remove all writedd evaluations");
+
+			for (final Evaluation eva : evaluations) {
+				log.warn(eva.getEvaluator());
+				eva.setevaluator(noUser);
+				u.getSenderEvaluation().remove(eva);
+				log.info("moved evaluation {} from user {} to noUser ", eva.getId(),u.getId());
+				log.warn(eva.getEvaluator());
+			}
+		}
+
 		entityManager.flush();
+		log.warn("holaaaa {}",u.getSenderEvaluation());
 		entityManager.createNamedQuery("User.deleteUser")
 			.setParameter("idUser",id)
 			.executeUpdate();
-		
+
 		final List<User> usersU = entityManager.createNamedQuery("User.all",User.class).getResultList();
 		sendMessageWS(usersU,"updateUsers");
 		return "redirect:/admin/";
@@ -208,11 +237,11 @@ public class AdminController {
 		response.add(type);
 		switch(type){
 			case "updateUsers":
-			response.add(User.asTransferObjects(content));
-			break;
+				response.add(User.asTransferObjects(content));
+				break;
 			case "updateEvents":
-			response.add(Event.asTransferObjects(content));
-			break;
+				response.add(Event.asTransferObjects(content));
+				break;
 		}
 		messagingTemplate.convertAndSend("/topic/admin",response);
 	}	
