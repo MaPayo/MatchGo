@@ -77,6 +77,8 @@ public class Event {
 	@ManyToMany
 	private List<User> participants;
 	
+
+	
 	@ManyToOne(targetEntity = User.class)
 	private User creator;
 	

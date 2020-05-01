@@ -77,9 +77,12 @@ public class EvaluationController {
         e.setEvaluated(evaluated);
         e.setScore(score);
         e.setReview(review);
-
+        evaluator.getSenderEvaluation().add(e);
+        entityManager.persist(evaluator);
         entityManager.persist(e);
         entityManager.flush();
+        session.removeAttribute("u");
+        session.setAttribute("u", evaluator);
         log.info("Review registred between " + evaluator.getUsername() + " and " +evaluated.getUsername() +"with ID " + e.getId());
         return "redirect:/event/"+ id;
     }
