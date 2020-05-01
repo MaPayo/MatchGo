@@ -155,28 +155,6 @@ public class EventController {
 			//Le devolvemos al evento
 		return "redirect:/event/"+id;
 	}
-	//Incluir websocket para poder suscribirme a los mensajes de grupo
-	@GetMapping("/eventMessage/{id}")
-
-	public String getGroupMessages(@PathVariable long id, Model model, HttpSession session){
-		//Obtenemos los miembros del grupo
-		List<User> users = getUsersContacts(id, model);
-		User sender = (User) session.getAttribute("u");
-		/**
-		 * Opciones: 
-		 * -Enviar a todos el mismo mensaje a pelo (necesarios websockets para la subcripcion) 
-		 * -Crear una estructura de mensajes dentro de Evento (Pero habría que seguir utilizando la opcion 1 = riesgo mensajes repetidos)
-		 *
-		 * Se deberia repensar los mensajes, ya que como esta ahora mismo no podría hacerse ya que no puedes filtrar los mensajes por evento
-		 */ 
-		
-
-
-		return "redirect:/event/"+id;
-	}
-
-
-
 
 
 	@GetMapping("/search")
@@ -289,13 +267,7 @@ public class EventController {
 
 		return "event";
 	}
-	//Es la misma funcion que arriba, solo que una se usa para mostrarlo en la vista y la otra como función interna
-	private List<User> getUsersContacts(long id, Model model){
-		TypedQuery<User> idusers = entityManager.createNamedQuery("Event.participants", User.class);
-		idusers.setParameter("eid", id);
-		List<User> users = idusers.getResultList();
-		return users;
-	}
+	
 	
 	@PostMapping("/{id}")
 	@Transactional
