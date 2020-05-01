@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
+import org.apache.commons.logging.Log;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,50 +83,6 @@ public class MessageController {
     }
 
     /*
-     * This method gets all the messages between the user in the session and his contact "contact".
-     */
-    private List<Message> getMessagesFromContact(HttpSession session, User contact) {
-        User usuario = (User) session.getAttribute("u");
-        usuario =  entityManager.find(User.class, usuario.getId());
-        List<Message> messages = new ArrayList<Message>();
-
-        List<Message> sended = usuario.getSentMessages();
-        List<Message> received = usuario.getReceivedMessages();
-
-        for (int i = 0; i < sended.size(); ++i) {
-            if (contact.getId() == sended.get(i).getReceiver().getId()) {
-                messages.add(sended.get(i));
-            }
-        }
-
-        for (int i = 0; i < received.size(); ++i) {
-            if (contact.getId() == received.get(i).getSender().getId()) {
-                messages.add(received.get(i));
-            }
-        }
-
-        messages = orderMessagesByDate(messages);
-
-        return messages;
-    }
-
-    /*
-     * This method order the messages by their date.
-     */
-    private static List<Message> orderMessagesByDate(List<Message> messages) {
-        Collections.sort(messages, new Comparator<Message>() {
-            @Override
-            public int compare(Message o1, Message o2) {
-                if (o1.getSendDate().isBefore(o2.getSendDate())) {
-                    return 0;
-                }
-                return 1;
-            }
-          });
-        return messages;
-    }
-
-    /*
      * Shows all the contacts of the user but doesn't start a chat
      */
     @GetMapping("/messages")
@@ -136,10 +93,49 @@ public class MessageController {
         model.addAttribute("mensajes", new ArrayList<Message> ());
         return "mensajes";
     }
+    
+    /*
+     * Shows the chat between the user and his contact
+     */
+    @GetMapping("/messages/{id}")
+    @Transactional
+    @ResponseBody
+    public List<Message.Transfer> getMessagesUser(@PathVariable long id, Model model, HttpSession session) {
+
+        log.info("Preparando los mensajes del usuario con su contacto " + id + ".");
+        User contact = null;
+        try {
+            contact = entityManager.find(User.class, id);
+        } catch (Exception e) {
+            log.info("Error al buscar el contacto del usuario:");
+            log.info("  - idContacto: {}", id);
+            log.info("  - error: {}", e.getMessage());
+        }
+        User usuario = (User) session.getAttribute("u");
+        usuario =  entityManager.find(User.class, usuario.getId());
+
+        // The messages between the contact and the user
+        List<Message> mensajes = new ArrayList<Message> (entityManager.createNamedQuery("Message.getListMessages")
+            .setParameter("sender", usuario.getId()).setParameter("receiver", id).executeUpdate());
+
+        log.info("Preparando los transfer de los mensajes.");
+        List<Message.Transfer> messagesT = new ArrayList<Message.Transfer> ();
+
+        for (int i = 0; i < mensajes.size(); ++i) {
+            messagesT.add(new Message.Transfer(mensajes.get(i)));
+        }
+
+        log.warn(messagesT);
+
+        log.info("Enviando los transfer al cliente.");
+        return messagesT;
+    }
+    // Para Post: @RequestParam long id
 
     /*
      * Shows the chat between the user and his contact
      */
+    /*
     @GetMapping("/messages/{id}")
     @Transactional
     public String getMessagesUser(@PathVariable long id, Model model, HttpSession session) {
@@ -163,4 +159,5 @@ public class MessageController {
         return "mensajes";
     }
     // Para Post: @RequestParam long id
+    */
 }

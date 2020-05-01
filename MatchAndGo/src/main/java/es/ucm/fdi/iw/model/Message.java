@@ -11,11 +11,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 @Entity
-public class Message {
 
-	
+@NamedQueries({
+	@NamedQuery(name="Message.getListMessages", query= "SELECT m from Message m WHERE (sender_id = :sender AND receiver_id = :receiver) OR (sender_id = :receiver AND receiver_id = :sender)"
+		+ " ORDER BY send_date ASC")
+})
+public class Message {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,7 +40,7 @@ public class Message {
     public Message(long id, String c, User s, User r,LocalDateTime f, boolean e) {
 		super();
 		this.id = id;
-    this.textMessage = c;
+    	this.textMessage = c;
 		this.sender = s;
 		this.receiver = r;
 		this.sendDate = f;
@@ -44,11 +49,6 @@ public class Message {
 	
 	public Message(String c, User s, User r, LocalDateTime f) {
 		super();
-		this.text = c;
-		this.sender = s;
-		this.receiver = r;
-		this.sendDate = f;
-		this.read = false;
 		this.textMessage = c;
 		this.sender = s;
 		this.receiver = r;
