@@ -304,7 +304,7 @@ public class UserController {
 	}
 	
 	
-	
+
 	
 	/**
 	 * Non-interactive authentication; user and password must already exist
