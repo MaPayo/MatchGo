@@ -9,9 +9,11 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 @Entity
+
 @NamedQueries({
 	@NamedQuery(name="Evaluation.getreviews", query= "SELECT r from Evaluation r WHERE r.evaluated.id = :idUser"),
 })
+
 public class Evaluation {
 
 	
