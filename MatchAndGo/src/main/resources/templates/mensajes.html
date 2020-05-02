@@ -14,37 +14,39 @@
         <div class="contenedorGeneral">
             <div class="contenedorContactos">
                 <div class="contenedorContacto" th:each="contacto: ${contactos}">
-                    <p th:text="${ contacto.getUsername() }"></p>
+                    <button class="bContacto" th:id="${contacto.id}" th:attr="data-id=${contacto.id}" th:text="${ contacto.username }">Pepe</button>
                 </div>
             </div>
             <div class="contenedorMensajes">
                 <form class="escribirMensaje" action="" method="POST">
                     <textarea name="textoMensaje" id="texto" class="mensaje" required></textarea>
-                    <!-- <input type="textarea" name="textoMensaje" id="texto" class="mensaje" required> -->
                     <input type="submit" class="botonMensaje" name="boton" value="enviar">
                 </form>
-                <div class="mensajes">
-                    <div class="mensaje" th:each="mensaje: ${mensajes}">
-                        <div class="mensaje" th:switch="__${mensaje.getSender().getUsername()}__">
+                <div class="mensajes" id="M">
+                    
+                    
 
-                            <!-- Si el mensaje es mio (el usuario) se muestra como tal -->
-                            <div class="mensajeMio" th:case="__${session.usuario.getUsername()}__">
-                                <pre th:text="${mensaje.getText()}"></pre>
-                            </div>
 
-                            <!-- Si el mensaje es de mi contacto se muestra como tal -->
-                            <div class="mensajeContacto" th:case="__${contacto.getUsername()}__">
-                                <pre th:text="${mensaje.getText()}"></pre>
-                            </div>
-                        </div>
-                    </div>
                 </div>
-                <div class="contactoMensaje">
+                <div class="contactoMensaje" th:if="${contacto}">
                     <p th:text="${contacto.getUsername()}"></p>
                 </div>
             </div>
         </div>
 
+        <script type="text/javascript">
+			const config = {
+                usuario: "[[${session.u.username}]]",
+				socketUrl: "[[${session.ws}?:'']]",	// vacío indica falso
+				rootUrl: "[[${session.ws}?@{/}:'']]",
+				csrf: {
+					name: "[[${_csrf.parameterName}]]",
+					value: "[[${_csrf.token}]]"
+				},
+			};
+        </script>
+        <script type="text/javascript" th:src="@{/js/iwclient.js}"></script>
+        <script type="text/javascript" th:src="@{/js/messageClient.js}"></script>
         <footer th:replace="fragments/footer.html :: footer"> El Footer de la página </footer>
     </body>
 </html>
