@@ -41,6 +41,7 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 import org.springframework.web.bind.annotation.ResponseBody;
 import es.ucm.fdi.iw.LocalData;
 import es.ucm.fdi.iw.model.User;
+import es.ucm.fdi.iw.model.Evaluation;
 import es.ucm.fdi.iw.model.Event;
 import es.ucm.fdi.iw.model.Event.Access;
 import es.ucm.fdi.iw.model.Tags;
@@ -119,7 +120,7 @@ public class EventController {
 		
 		entityManager.persist(newEvent);
 
-		/*
+		/*Evaluation.getreviews
 		User requester = (User)session.getAttribute("u");
 		if (requester.getId() != target.getCreator().getId() &&
 				! requester.hasRole(Role.ADMIN)) {			
@@ -262,6 +263,16 @@ public class EventController {
 	/**
 	 * @author Carlos Olano
 	 * */
+	@PostMapping(path = "/valorations/{id}", produces = "application/json")
+	@Transactional
+	@ResponseBody
+	public List<Evaluation.Transfer> getEvaluationsUsers(@PathVariable long id, Model model){
+		final User ev = entityManager.createNamedQuery("User.getUser", User.class)
+			.setParameter("idUser", id)
+				.getSingleResult();
+		List<Evaluation> valors = new ArrayList (ev.getReceivedEvaluation());
+		return Evaluation.asTransferObjects(valors);
+	}
 	@PostMapping(path = "/u/{id}", produces = "application/json")
 	@Transactional
 	@ResponseBody

@@ -3,7 +3,7 @@
  * Actions to perform once the page is fully loaded
  */
 document.addEventListener("DOMContentLoaded", () => {
-	
+
 	if (config.socketUrl) {
 		let subs = config.admin ? 
 
@@ -11,10 +11,10 @@ document.addEventListener("DOMContentLoaded", () => {
 		ws.initialize(config.socketUrl, subs);
 	}
 
-			var pageURL = window.location.href;
-			var lastURLSegment = pageURL.substr(pageURL.lastIndexOf('/') + 1);
-			console.log(lastURLSegment);
-			go(config.rootUrl + "event/u/"+lastURLSegment,"POST",null).then(e => listUsers(e,"updateUsersEvent"));
+	var pageURL = window.location.href;
+	var lastURLSegment = pageURL.substr(pageURL.lastIndexOf('/') + 1);
+	console.log(lastURLSegment);
+	go(config.rootUrl + "event/u/"+lastURLSegment,"POST",null).then(e => listUsers(e,"updateUsersEvent"));
 
 	//response.forEach(e => );
 
@@ -26,35 +26,48 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 function listUsers(jsonArray, type){
-	const node = document.getElementById("contUsers");
-	while (node.firstChild) {
-		node.removeChild(node.lastChild);
-	}
 	switch(type){
 		case "updateUsers":
-			jsonArray.forEach(e => appendChild(e,type));
+			var node = document.getElementById("contUsers");
+			while (node.firstChild) {
+				node.removeChild(node.lastChild);
+			}
+			jsonArray.forEach(e => appendChild(node,e,type));
 			break;
 		case "updateUsersEvent":
-			jsonArray.forEach(e => appendChild(e,type));
+			node = document.getElementById("contUsers");
+			while (node.firstChild) {
+				node.removeChild(node.lastChild);
+			}
+			jsonArray.forEach(e => appendChild(node,e,type));
 			var elements = document.getElementsByClassName("anUser");
 			for (i = 0; i < elements.length;i++){
 				elements[i].addEventListener("click",function() {
-					go(config.rootUrl + "valorations/"+this.dataset.id,"POST",null).then(e => listUsers(e,"updateListValuations"));
+					go(config.rootUrl + "event/valorations/"+this.dataset.id,"POST",null).then(e => listUsers(e,"updateListValuations"));
 				});
 			}
 
 			break;
-		case "updateEvents":
-			jsonArray.forEach(e => appendChild(e,type));
+		case "updateListValuations":
+			var node = document.getElementById("contEvaluations");
+			while (node.firstChild) {
+				node.removeChild(node.lastChild);
+			}
+			jsonArray.forEach(e => appendChild(node,e,type));
 			break;
 	}
 }
 
 
-function appendChild(element, type){
+function appendChild(where,element, type){
 
 	let html;
 	switch(type){
+		case "updateListValuations":
+			html = ["<div class='anUser' data-id='"+element.id+"'>" +
+				"<span>"+ element.evaluator +" - "+element.score+" - "+element.review+"</span>" + 
+				"</div>"];
+			break;
 		case "updateUsersEvent":
 			html = ["<div class='anUser' data-id='"+element.id+"'>" +
 				"<span>"+ element.username +" - "+element.firstName+"</span>" + 
@@ -82,7 +95,7 @@ function appendChild(element, type){
 				"</div>"];
 			break;
 		case "updateEvents":
-			 html = ["<div class='eventCard bgwhite'>"+
+			html = ["<div class='eventCard bgwhite'>"+
 				"<div class='cardUpperContainer'>"+
 				"<img src='/img/"+element.id+".png' alt='Imagen de "+element.name+"' class='placeImage'>"+
 				"<h2>"+element.name+"</h2>"+
@@ -107,6 +120,6 @@ function appendChild(element, type){
 				"</div>"];
 			break;
 	}
-	document.getElementById("contUsers").insertAdjacentHTML('beforeend',html);
+	where.insertAdjacentHTML('beforeend',html);
 }
 
