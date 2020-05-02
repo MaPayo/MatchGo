@@ -65,16 +65,23 @@ public class TaskController {
 	@Autowired
 	private LocalData localData;
 	
-	@PostMapping(path = "/listTags", produces = "application/json")
+	@PostMapping(path = "/listTags/{id}", produces = "application/json")
 	@Transactional
 	@ResponseBody
-	public List<Tags> listTagUser (final HttpSession session, String id) {
-		
+	public String listTagUser (final HttpSession session, @PathVariable long id) {
+
 		log.warn("Entra en listagUser");
 		User u = entityManager.find(User.class, id);
 		final List<Tags> user_tags = new ArrayList<>(u.getTags()); 
+		List<String> alltagsUser = new ArrayList<>();
+	/*	for(Tags t: user_tags) {
+			alltagsUser.add(t.toString());
+		}*/
+	
+		
+		
 		log.warn("Manda la lista de tags del user");
-		return user_tags;
+		return user_tags.get(0).toString();
 	}
 
 

@@ -289,7 +289,7 @@ public class UserController {
 	
 	@GetMapping("/logout")
 	public String logout(Model model, HttpSession session) {
-		session.setAttribute("user", null);
+		session.setAttribute("u", null);
 		return "redirect:/index";
 	}
 

@@ -11,7 +11,7 @@
 			document.getElementById("listaEventosInscritos").classList.remove("bgblue");
 			document.getElementById("listaComentarios").classList.remove("bgblue");
 			
-			go(config.rootUrl + "tag/listTags","POST",{"id":3}).then(e => console.log("holaaaaaaaaaa"));
+			go(config.rootUrl + "tag/listTags/1","POST",null).then(e => console.log("holaaaaaaaaaa"));
 
 	  
 	  });
