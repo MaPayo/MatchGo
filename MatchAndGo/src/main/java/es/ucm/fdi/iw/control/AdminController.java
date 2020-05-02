@@ -218,7 +218,6 @@ public class AdminController {
 			}
 		}
 
-	//	@NamedQuery(name="Message.deleteMessagesUser", query= "DELETE FROM Message u WHERE sender_id = :idUser OR receiver_id = :idUser")
 		entityManager.createNamedQuery("Message.deleteMessagesUser").setParameter("idUser",(long)u.getId()).executeUpdate();
 
 		entityManager.flush();

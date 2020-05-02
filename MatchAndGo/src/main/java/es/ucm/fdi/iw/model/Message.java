@@ -17,6 +17,7 @@ import javax.persistence.NamedQuery;
 @Entity
 
 @NamedQueries({
+	@NamedQuery(name="Message.deleteMessagesUser", query= "DELETE FROM Message u WHERE sender_id = :idUser OR receiver_id = :idUser"),
 	@NamedQuery(name="Message.getListMessages", query= "SELECT m from Message m WHERE "
 		+ "(sender_id = :sender AND receiver_id = :receiver) OR (sender_id = :receiver AND receiver_id = :sender) "
 		+ "ORDER BY send_date ASC")
