@@ -11,6 +11,25 @@
      <link rel="stylesheet" type="text/css" th:href="@{/css/stylesindex.css}">
     <title>Registro</title>
   <!--    <th:block th:replace="fragments/header ::header" />   </th:block> -->
+ 
+ <script>
+	const config = {
+			socketUrl: "[[${session.ws}?:'']]",	// vacÃ­o indica falso
+			rootUrl: "[[${session.ws}?@{/}:'']]",
+			csrf: {
+				name: "[[${_csrf.parameterName}]]",
+				value: "[[${_csrf.token}]]"
+			},
+			admin: [[${session.u != null && session.u.hasRole('ADMIN')}?true:false]],
+			userId: [[${session.u != null}?${session.u.id}:-1]]
+		};
+	</script>
+ 
+ 
+ 
+  <script th:src="@{/js/iwclientAdmin.js}" src="js/iwclientAdmin.js" type="text/javascript"></script>
+	<script th:src="@{/js/profile.js}" src="js/profile.js" type="text/javascript"></script>
+	
 </head>
 
 <body>
@@ -41,7 +60,7 @@
              	   <li id="listaTags"><p>Etiquetas</p></li>  
              	   <li id="listaEventosCreados" th:if="(${session.u.id} eq ${user.getId()})"><p>Eventos creados</p></li>  
              	   <li id="listaEventosInscritos" th:if="(${session.u.id} eq ${user.getId()})"><p>Eventos inscritos</p></li>  
-             	   <li id="listaEventosInscritos"><p>Comentarios</p></li>  
+             	   <li id="listaComentarios"><p>Comentarios</p></li>  
           		</ul>        	
         		<div id ="contenedorCosas"></div>
         	</div>
@@ -59,12 +78,17 @@
                 		<option value="">Seleccionar</option>
                 		<option th:each="t: ${allTags}"><span th:text="${t.getTag()}"></span></option>
 					</select>
+					<div class="anadir_tarea">
+              			<input type="text" name="tarea" id="txt_tarea" placeholder="Introduce una nueva tarea">     
+            		</div>
+						
+					
                	</div>
        		</div>
          
         <div class="yourProfile">
-        	
-       		<div class="events_usuario">
+        	<div class="displayflex">
+       		<div class="events_usuario" th:if="(${session.u.id} eq ${user.getId()})">
        		    <h2 class="centrado">Eventos inscritos:</h2>
        		    <div class="event-item" th:each="e: ${user_events}">
               		 <div class="event-icon"> <img id="imagenPequeña" th:src="@{/event/{id}/photo(id=${e.getId()})}"></div>
@@ -72,7 +96,7 @@
              		 <p class="event-description"><span th:text="${e.getDescription()} "></span></p>
           		</div>
        		</div>
-       		
+       		</div>
        		<div id="about" class="background-alt">
         		<h2 class="heading">Comentarios recibidos:</h2>
         			<div class="container"  th:each="evaluation: ${user_coments}">

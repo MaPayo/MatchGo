@@ -260,7 +260,9 @@ public class UserController {
 	
 		log.info("Creating & logging new user {}, with ID {} and password {}", username, u.getId(), password);
 		entityManager.persist(u);
-		entityManager.flush();
+
+		entityManager.flush(); //guardar bbdd
+		log.info("Creating & logging new user {}, with ID {} and password {}", username, u.getId(), password);
 
 		
 		//En el momento en que se crea correctamente el usuario se inicia sesion y se redirige al perfil
@@ -290,7 +292,7 @@ public class UserController {
 	
 	@GetMapping("/logout")
 	public String logout(Model model, HttpSession session) {
-		session.setAttribute("user", null);
+		session.setAttribute("u", null);
 		return "redirect:/index";
 	}
 
@@ -305,7 +307,7 @@ public class UserController {
 	}
 	
 	
-	
+
 	
 	/**
 	 * Non-interactive authentication; user and password must already exist

@@ -11,6 +11,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
+
 @Entity
 
 @NamedQueries({
@@ -90,12 +91,10 @@ public class Tags {
 	@Override
 	public String toString() {
 		return "{" +
-			" id='" + getId() + "'" +
-			", tag='" + getTag() + "'" +
-			", isCategory='" + isCategory() + "'" +
-			", subscribers='" + getSubscribers() + "'" +
-			", events='" + getEvents() + "'" +
+			" \"id\": \"" + getId() + "\"" +
+			", \"tag\": \"" + getTag() + "\"" +
 			"}";
 	}
+	
 	
 }
