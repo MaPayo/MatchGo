@@ -138,7 +138,9 @@ input {
     background-color: #ECECEC;
     color: black!important;
 }
-
+.flex50{
+	flex:50%;
+}
 .cardLowerContainer button,
 .search {
     width: 8em;

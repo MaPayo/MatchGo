@@ -38,6 +38,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
+import org.springframework.web.bind.annotation.ResponseBody;
 import es.ucm.fdi.iw.LocalData;
 import es.ucm.fdi.iw.model.User;
 import es.ucm.fdi.iw.model.Event;
@@ -255,17 +256,33 @@ public class EventController {
 		model.addAttribute("access", Access.MINIMAL); 
 		
 		model.addAttribute("event", e);
-		return "event";
+		return "event_view";
 	}
 
+	/**
+	 * @author Carlos Olano
+	 * */
+	@PostMapping(path = "/u/{id}", produces = "application/json")
+	@Transactional
+	@ResponseBody
+	public List<User.Transfer> getUsersEvent(@PathVariable long id, Model model){
+		final Event ev = entityManager.createNamedQuery("Event.getEvent", Event.class)
+			.setParameter("idUser", id)
+				.getSingleResult();
+		List<User> users = ev.getParticipants();
+		return User.asTransferObjects(users);
+	}
+	/**
+	 * END
+	 * */
+	
+	
 	@GetMapping("/eventusers/{id}")
-	public String getUsers(@PathVariable long id, Model model){
+	public List<User.Transfer> getUsers(@PathVariable long id, Model model){
 		TypedQuery<User> idusers = entityManager.createNamedQuery("Event.participants", User.class);
 		idusers.setParameter("eid", id);
 		List<User> users = idusers.getResultList();
-		model.addAttribute("users", users);
-
-		return "event";
+		return User.asTransferObjects(users);
 	}
 	
 	
