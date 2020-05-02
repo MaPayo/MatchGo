@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.ucm.fdi.iw.LocalData;
 import es.ucm.fdi.iw.model.Tags;
+import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.Evaluation;
 import es.ucm.fdi.iw.model.Event;
 import es.ucm.fdi.iw.model.User;
@@ -198,9 +199,6 @@ public class AdminController {
 		if (evaluations.size() != 0){
 			log.info("I will Remove all received evaluations ");
 			for (final Evaluation eva : evaluations) {
-				List<Evaluation> evaluationsAux = new ArrayList<>(eva.getEvaluator().getSenderEvaluation());
-				evaluationsAux.remove(eva);
-				u.getReceivedEvaluation().remove(eva);
 				entityManager.createNamedQuery("Evaluation.deleteEvaluation").setParameter("idUser", eva.getId()).executeUpdate();
 				log.info("Removed evaluation {} from user {} ", eva.getId(),u.getId());
 			}
@@ -214,29 +212,13 @@ public class AdminController {
 			for (final Evaluation eva : evaluations) {
 				log.warn(eva.getEvaluator());
 				eva.setevaluator(noUser);
-				u.getSenderEvaluation().remove(eva);
 				log.info("moved evaluation {} from user {} to noUser ", eva.getId(),u.getId());
 				log.warn(eva.getEvaluator());
 			}
 		}
 
-		List<Message> messagess = new ArrayList(u.getSentMessages());
-		if (messages.size() != 0){
-			log.info("I will remove all writed Messages");
-			for (final Message ms : messages){
-				u.getSentMessages().remove(ms);
-				log.info("removed message {} from user {}",ms.getId(),u.getId());
-			}
-		}
-
-		messagess = new ArrayList(u.getReceivedMessages());
-		if (messages.size() != 0){
-			log.info("I will remove all received Messages");
-			for (final Message ms : messages){
-				u.getReceivedMessages().remove(ms);
-				log.info("removed message {} from user {}",ms.getId(),u.getId());
-			}
-		}
+	//	@NamedQuery(name="Message.deleteMessagesUser", query= "DELETE FROM Message u WHERE sender_id = :idUser OR receiver_id = :idUser")
+		entityManager.createNamedQuery("Message.deleteMessagesUser").setParameter("idUser",(long)u.getId()).executeUpdate();
 
 		entityManager.flush();
 		entityManager.createNamedQuery("User.deleteUser")
