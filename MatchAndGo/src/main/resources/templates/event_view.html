@@ -20,15 +20,7 @@
 		</script>
 		<script th:src="@{/js/stomp.js}" src="js/stomp.js" type="text/javascript"></script>
 		<script th:src="@{/js/iwclientAdmin.js}" src="js/iwclientAdmin.js" type="text/javascript"></script>
-
-		<script>
-		document.addEventListener("DOMContentLoaded", () => {
-			var pageURL = window.location.href;
-			var lastURLSegment = pageURL.substr(pageURL.lastIndexOf('/') + 1);
-			console.log(lastURLSegment);
-			go(config.rootUrl + "event/u/"+lastURLSegment,"POST",null).then(e => listUsers(e,"updateUsers"));
-		});
-		</script>
+		<script th:src="@{/js/event.js}" src="js/iwclientAdmin.js" type="text/javascript"></script>
 </head>
 
 <body>
