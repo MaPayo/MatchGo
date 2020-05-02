@@ -9,9 +9,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -69,6 +69,15 @@ public class MessageController {
                 contacts.add(user);
             }
         }
+      /*
+        User usuario = (User) session.getAttribute("user");
+
+        // People we have sent messages to
+        Set<User> contacts = new HashSet<User>();
+        for (Message m : usuario.getSentMessages()) {
+            contacts.add(m.getSender());
+        }   
+      */
 
         // People we have received messages from
         // TODO: this has O(n²) runtime due to linear checks for "contains"
@@ -79,7 +88,7 @@ public class MessageController {
                 contacts.add(user);
             }
         }
-        return contacts;
+        return new ArrayList(contacts);
     }
 
     /*

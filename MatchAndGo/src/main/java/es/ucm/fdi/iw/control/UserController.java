@@ -9,7 +9,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
@@ -35,10 +37,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import es.ucm.fdi.iw.LocalData;
+import es.ucm.fdi.iw.model.Evaluation;
+import es.ucm.fdi.iw.model.Event;
+import es.ucm.fdi.iw.model.Tags;
 import es.ucm.fdi.iw.model.User;
 import es.ucm.fdi.iw.model.User.Role;
 
@@ -73,9 +79,32 @@ public class UserController {
 	}
 	
 	@GetMapping("/{id}")
+	@Transactional
 	public String getUser(@PathVariable long id, Model model, HttpSession session) {
 		User u = entityManager.find(User.class, id);
 		model.addAttribute("user", u);
+		log.warn("CREANDO LISTADO DE ETIQUETAS");
+		
+		final List<Tags> user_tags = new ArrayList<>(u.getTags()); 
+		log.warn("CREADA LISTA DE TAGS SACADA DEL USUARIO");
+		model.addAttribute("user_tags", user_tags);
+		log.warn("FUNCIONAAAAAAAAAAAAAAAAAA TAAAAAGS");
+		log.warn("CREANDO LISTADO DE EVENTOS");
+		
+		List<Tags> allTags = (ArrayList<Tags>) entityManager.createQuery("SELECT t FROM Tags t").getResultList();
+
+		model.addAttribute("allTags", allTags);
+		
+		final List<Event> user_events = new ArrayList<>(u.getJoinedEvents()); 
+		log.warn("CREADA LISTA DE TAGS SACADA DEL USUARIO");
+		model.addAttribute("user_events", user_events);
+		log.warn("FUNCIONAAAAAAAAAAAAAAAAAA EVENTOS");
+	
+		final List<Evaluation> user_coments = new ArrayList<>(u.getReceivedEvaluation()); 
+		log.warn("CREADA LISTA DE COMENTARIOS SACADA DEL USUARIO");
+		model.addAttribute("user_coments", user_coments);
+		log.warn("FUNCIONAAAAAAAAAAAAAAAAAAA COMENTARIOS");
+	
 		return "profile";
 	}
 
@@ -203,16 +232,17 @@ public class UserController {
 	public String register(Model model, HttpServletRequest request, Principal principal, @RequestParam String username,
 			@RequestParam String password, @RequestParam String password2, @RequestParam String email,
 			@RequestParam String firstname, @RequestParam String lastname, @RequestParam String gender,
-			@RequestParam Date birthdate, 
+			@RequestParam String birthdate, 
 			@RequestParam("userPhoto") MultipartFile userPhoto, HttpSession session) {
 
-		
+
+		log.warn("ENTRA AL METODO DE REGISTRAR EL USER");
 		//redirigimos al registro si el usrname ya existe o las contraseñas no coinciden
 		//aunq esto lo quiero hacer desde el html y que salga un aviso en la pagina
 		if (usernameAlreadyInUse(username) || !password.equals(password2)) {
 			return "redirect:/user/login";
 		}
-
+		log.warn("ACEPTA LOS DATOS DE NUEVO USUARIO");
 		// Creación de un usuario
 		User u = new User();
 		u.setUsername(username);
@@ -221,16 +251,19 @@ public class UserController {
 		u.setEmail(email);
 		u.setFirstName(firstname);
 		u.setLastName(lastname);
-		//u.setBirthDate(birthdate);
+		u.setBirthDate(birthdate);
 		u.setGender(gender);
 		u.setEnabled(true);
 		
 		//No se como tratar las tags
 		
 	
-		entityManager.persist(u);
-		entityManager.flush();
 		log.info("Creating & logging new user {}, with ID {} and password {}", username, u.getId(), password);
+		entityManager.persist(u);
+
+		entityManager.flush(); //guardar bbdd
+		log.info("Creating & logging new user {}, with ID {} and password {}", username, u.getId(), password);
+
 		
 		//En el momento en que se crea correctamente el usuario se inicia sesion y se redirige al perfil
 		doAutoLogin(username, password, request);
@@ -249,7 +282,7 @@ public class UserController {
 			log.info("Successfully uploaded photo for {} into {}!", u.getId(), f.getAbsolutePath());
 		}
 		
-		session.setAttribute("user", u);
+		session.setAttribute("u", u);
 		session.setAttribute("ws", request.getRequestURL().toString()
 				.replaceFirst("[^:]*", "ws")		// http[s]://... => ws://...
 				.replaceFirst("/user.*", "/ws"));
@@ -259,19 +292,23 @@ public class UserController {
 	
 	@GetMapping("/logout")
 	public String logout(Model model, HttpSession session) {
-		session.setAttribute("user", null);
+		session.setAttribute("u", null);
 		return "redirect:/index";
 	}
 
 	
 	private boolean usernameAlreadyInUse(String userName) {
 		Long usernameAlreadyInUse = entityManager.createNamedQuery("User.hasUsername", Long.class)
-				.setParameter("userName", userName).getSingleResult();
+				.setParameter("username", userName).getSingleResult();
 		if(usernameAlreadyInUse != 0) {
 			return true;
 		}
 		return false;
 	}
+	
+	
+
+	
 	/**
 	 * Non-interactive authentication; user and password must already exist
 	 *

@@ -16,6 +16,7 @@
             <a  th:href="@{/messages/}">Mensajes</a>
             <a th:if="${session.u.hasRole('MOD') || session.u.hasRole('ADMIN')}" th:href="@{/moderator/}">Moderador</a>
             <a th:if="${session.u.hasRole('ADMIN')}" th:href="@{/admin/}">Admin</a>
+            <a  th:href="@{/event/newEvent}">Nuevo Evento</a>
             <a th:href="@{/user/logout}">Salir</a>
         </div>
         <div class="menu" th:unless="${session.u}">

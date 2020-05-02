@@ -8,8 +8,17 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+
 
 @Entity
+
+@NamedQueries({
+	@NamedQuery(name="Tag.getCategories", query="SELECT t FROM Tags t WHERE t.isCategory IS TRUE"),
+	@NamedQuery(name="Tag.getEventTagsByName", query="SELECT t FROM Tags t Where lower(t.tag) = :tagname")
+})
+
 public class Tags {
 
 	@Id
@@ -35,9 +44,7 @@ public class Tags {
 	}
 
 
-	public void setisCategory(boolean isCategory) {
-		this.isCategory = isCategory;
-	}
+	
 
 
 	public List<Event> getEvents() {
@@ -69,8 +76,9 @@ public class Tags {
 	public boolean getIsCategory() {
 		return isCategory;
 	}
-	public void setIsCategory(boolean categoriaTipo) {
-		this.isCategory = categoriaTipo;
+	
+	public void setisCategory(boolean isCategory) {
+		this.isCategory = isCategory;
 	}
 	
 	public List<User> getSubscribers() {
@@ -83,12 +91,10 @@ public class Tags {
 	@Override
 	public String toString() {
 		return "{" +
-			" id='" + getId() + "'" +
-			", tag='" + getTag() + "'" +
-			", isCategory='" + isCategory() + "'" +
-			", subscribers='" + getSubscribers() + "'" +
-			", events='" + getEvents() + "'" +
+			" \"id\": \"" + getId() + "\"" +
+			", \"tag\": \"" + getTag() + "\"" +
 			"}";
 	}
+	
 	
 }

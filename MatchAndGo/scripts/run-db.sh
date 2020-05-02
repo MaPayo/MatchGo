@@ -1,5 +1,6 @@
 #!/bin/bash
 cd ..
+rm -Rf db
 mkdir db
 cd db
 ls 

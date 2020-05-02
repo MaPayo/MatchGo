@@ -24,7 +24,7 @@
         <div id="lead-form">
             <div class="signup">
                 <h2>¿Todavía no tienes cuenta? Únete!</h2>
-                <form th:action="@{/user/signup}" method="POST" enctype="multipart/form-data">
+                <form th:action="@{/user/signupUser}" method="POST" enctype="multipart/form-data">
               
                     <div class="form_texto">
                         <label for="txt_username">Nombre de usuario:</label>
@@ -72,7 +72,7 @@
             <div class="login">
                 <h2>Si ya eres miembro de Match&Go inicia sesión aquí</h2>
 
-                <form th:action="@{/login}" method="POST">
+                <form th:action="@{/loginUser}" method="POST">
                     <div class="form_texto">
                         <label>Nombre de usuario:</label> 
                         <input  name="userName"  required>

@@ -5,8 +5,24 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 @Entity
+
+/**
+ * @author Carlos Olano
+ */
+@NamedQueries({
+	@NamedQuery(name="Evaluation.getreviews", query= "SELECT r from Evaluation r WHERE r.evaluated.id = :idUser"),
+	@NamedQuery(name="Evaluation.deleteEvaluation", query= "DELETE FROM Evaluation u WHERE id = :idUser")
+})
+
+
+/**
+ * End
+ */
+
 public class Evaluation {
 
 	
