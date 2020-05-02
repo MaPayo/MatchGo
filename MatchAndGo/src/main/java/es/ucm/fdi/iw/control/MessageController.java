@@ -115,8 +115,8 @@ public class MessageController {
         usuario =  entityManager.find(User.class, usuario.getId());
 
         // The messages between the contact and the user
-        List<Message> mensajes = new ArrayList<Message> (entityManager.createNamedQuery("Message.getListMessages")
-            .setParameter("sender", usuario.getId()).setParameter("receiver", id).executeUpdate());
+        List<Message> mensajes = new ArrayList (entityManager.createNamedQuery("Message.getListMessages")
+            .setParameter("sender", usuario.getId()).setParameter("receiver", id).getResultList());
 
         log.info("Preparando los transfer de los mensajes.");
         List<Message.Transfer> messagesT = new ArrayList<Message.Transfer> ();
