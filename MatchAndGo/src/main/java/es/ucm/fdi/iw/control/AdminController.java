@@ -220,8 +220,25 @@ public class AdminController {
 			}
 		}
 
+		List<Message> messagess = new ArrayList(u.getSentMessages());
+		if (messages.size() != 0){
+			log.info("I will remove all writed Messages");
+			for (final Message ms : messages){
+				u.getSentMessages().remove(ms);
+				log.info("removed message {} from user {}",ms.getId(),u.getId());
+			}
+		}
+
+		messagess = new ArrayList(u.getReceivedMessages());
+		if (messages.size() != 0){
+			log.info("I will remove all received Messages");
+			for (final Message ms : messages){
+				u.getReceivedMessages().remove(ms);
+				log.info("removed message {} from user {}",ms.getId(),u.getId());
+			}
+		}
+
 		entityManager.flush();
-		log.warn("holaaaa {}",u.getSenderEvaluation());
 		entityManager.createNamedQuery("User.deleteUser")
 			.setParameter("idUser",id)
 			.executeUpdate();
