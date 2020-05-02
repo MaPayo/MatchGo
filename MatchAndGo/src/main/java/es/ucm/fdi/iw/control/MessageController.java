@@ -61,14 +61,27 @@ public class MessageController {
         User usuario = (User) session.getAttribute("u");
         usuario =  entityManager.find(User.class, usuario.getId());
         
+//Como he a;adido mensajes a eventos esta funcion no rula simplemente porque puedes haber escrito un mensaje a un evento los cuales el receiver es null simplemente voy a generar la misma funcion pero preguntando que dicho campo sea distinto a null
+//Tambien se podria hacer creando la consulta SQL en el modelo
+
+
         // The contacts of the user
-        List<User> contacts = new ArrayList<User>();
-        for (int i = 0; i < usuario.getSentMessages().size(); ++i) {
-            User user = usuario.getSentMessages().get(i).getReceiver();
-            if (!contacts.contains(user)) {
-                contacts.add(user);
-            }
-        }
+//        List<User> contacts = new ArrayList<User>();
+//        for (int i = 0; i < usuario.getSentMessages().size(); ++i) {
+//          User user = usuario.getSentMessages().get(i).getReceiver();
+//            if (!contacts.contains(user)) {
+//                contacts.add(user);
+//            }
+//        }
+
+	   List<User> contacts = new ArrayList<User>();
+	   List<Message> messages = new ArrayList(usuario.getSentMessages());
+	   for (final Message ms : messages){
+		   User u = ms.getReceiver();
+		if (u != null && !contacts.contains(u))
+			contacts.add(u);
+	   }
+
       /*
         User usuario = (User) session.getAttribute("user");
 

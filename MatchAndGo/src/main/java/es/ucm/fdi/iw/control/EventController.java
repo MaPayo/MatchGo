@@ -41,6 +41,7 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 import org.springframework.web.bind.annotation.ResponseBody;
 import es.ucm.fdi.iw.LocalData;
 import es.ucm.fdi.iw.model.User;
+import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.Evaluation;
 import es.ucm.fdi.iw.model.Event;
 import es.ucm.fdi.iw.model.Event.Access;
@@ -263,6 +264,15 @@ public class EventController {
 	/**
 	 * @author Carlos Olano
 	 * */
+	@PostMapping(path = "/m/{id}", produces = "application/json")
+	@Transactional
+	@ResponseBody
+	public List<Message.Transfer> getEventMessages(@PathVariable long id, Model model){
+		final List<Message> mes = entityManager.createNamedQuery("Message.getEventMessages", Message.class)
+			.setParameter("idUser", id)
+				.getResultList();
+		return Message.asTransferObjects(mes);
+	}
 	@PostMapping(path = "/valorations/{id}", produces = "application/json")
 	@Transactional
 	@ResponseBody

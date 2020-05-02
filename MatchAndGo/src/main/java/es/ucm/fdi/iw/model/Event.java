@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -60,7 +61,8 @@ public class Event {
 	private Boolean privateDate;
 	private String agePreference;
 	private String genderPreference;
-	
+	@OneToMany(targetEntity = Message.class)
+	private List<Message> messagesGroup;
 
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
