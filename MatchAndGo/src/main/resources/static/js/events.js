@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	document.getElementById("search").addEventListener("click",function() {
 		const text = document.getElementById("textS").value;
 		const cat = document.getElementById("tagS").value;
-		go(config.rootUrl + "event/eventToSearch"+lastURLSegment,"POST",{textS:text,catS:cat}).then(e => listUsers(e,"updateEvent"));
+		go(config.rootUrl + "event/eventToSearch","POST",{textS:text,tagS:cat}).then(e => listUsers(e,"updateEvents"));
 	});
 
 	//response.forEach(e => );
@@ -51,9 +51,7 @@ function appendChild(where,element, type){
 					"<div>"+
 						"<div>"+element.description+"</div>"+
 						"<div class='tagBox'>";
-			element.tagsName.forEach(e => function(e){
-				html +=  "<span class='tag'>"+e.tagName+"</span>";
-			});
+			element.tagNames.forEach(e => html +=  "<span class='tag'>"+e+"</span>");
 			html +=
 						"</div>"+
 					"</div>"+

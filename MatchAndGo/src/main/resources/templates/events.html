@@ -6,6 +6,22 @@
 		<link rel="stylesheet" th:href="@{/css/styles.css}" />
 		<title>Busqueda</title>
 		<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" media="screen">
+		<script type="text/javascript">
+			const config = {
+				socketUrl: "[[${session.ws}?:'']]",	// vacío indica falso
+				rootUrl: "[[${session.ws}?@{/}:'']]",
+				csrf: {
+					name: "[[${_csrf.parameterName}]]",
+					value: "[[${_csrf.token}]]"
+				},
+				admin: [[${session.u != null && session.u.hasRole('ADMIN')}?true:false]],
+				userId: [[${session.u != null}?${session.u.id}:-1]]
+			};
+		</script>
+
+		<script th:src="@{/js/stomp.js}" src="js/stomp.js" type="text/javascript"></script>
+		<script th:src="@{/js/iwclientAdmin.js}" src="js/iwclientAdmin.js" type="text/javascript"></script>
+		<script th:src="@{/js/events.js}" src="js/admin.js" type="text/javascript"></script>
 		<nav th:replace="fragments/nav.html :: nav">
 			El navegador
 		</nav>
@@ -14,8 +30,8 @@
 	<body>
 		<form id="formSearch" th:action="@{/event/eventToSearch}" method="POST">
 			<input placeholder="Texto a Buscar" id="textS"  type="search" name="title" />
-			<label>Categoria: </label><select id="tagS" name="category">
-				<option value="NOCAT" selected >Categoria</option>
+			<label>Buscar en: </label><select id="tagS" name="category">
+				<option value=-1 selected >todas las categoria</option>
 				<option th:each="categories: ${category}" th:value="${categories.getId()}"><span th:text="${categories.getTag()}"></span></option>
 			</select>
 			<!--Desplegable-->

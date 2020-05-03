@@ -141,6 +141,9 @@ input {
 .flex50{
 	flex:50%;
 }
+.cgreen{
+	color:green;
+}
 .cardLowerContainer button,
 .search {
     width: 8em;
