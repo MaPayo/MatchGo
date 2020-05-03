@@ -14,7 +14,6 @@ const ws = {
 	 */
 	receive: (text) => {
 		listUsers(text[1],text[0]);
-
 		console.log("updating view updated list received via socket");
 	},
 
@@ -93,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	if (config.socketUrl) {
 		let subs = config.admin ? 
 
-			["/topic/admin", "/user/queue/updates"] : ["/user/queue/updates"]
+			["/topic/admin", "/user/queue/updates","/event/queue/updates"] : ["/user/queue/updates","/event/queue/updates"]
 		ws.initialize(config.socketUrl, subs);
 	}
 

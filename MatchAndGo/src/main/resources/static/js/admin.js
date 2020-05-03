@@ -31,8 +31,6 @@ document.addEventListener("DOMContentLoaded", () => {
 	//   (assuming you do not care about order-of-execution, all such handlers will be called correctly)
 });
 
-
-
 function listUsers(jsonArray, type){
 	const node = document.getElementById("contUsers");
 	while (node.firstChild) {

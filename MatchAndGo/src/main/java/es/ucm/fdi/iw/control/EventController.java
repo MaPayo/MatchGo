@@ -39,6 +39,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -65,6 +66,8 @@ public class EventController {
 	
 	private static final Logger log = LogManager.getLogger(EventController.class);
 	
+	@Autowired
+	private SimpMessagingTemplate messagingTemplate;
 	@Autowired 
 	private EntityManager entityManager;
 	
@@ -269,6 +272,25 @@ public class EventController {
 	/**
 	 * @author Carlos Olano
 	 * */
+
+	public void sendMessageWS(final List content, final String type,long id) {
+		log.info("Sending updated " + type + " via websocket");
+		List response = new ArrayList();
+		response.add(type);
+		switch(type){
+			case "updateMessages":
+				response.add(Message.asTransferObjects(content));
+				break;
+			case "updateUsers":
+				response.add(User.asTransferObjects(content));
+				break;
+			case "updateEvents":
+				response.add(Event.asTransferObjects(content));
+				break;
+		}
+		messagingTemplate.convertAndSend("/topic/event/"+id,response);
+	}	
+
 	@PostMapping(path = "/nm/{id}", produces = "application/json")
 	@Transactional
 	@ResponseBody
@@ -283,6 +305,7 @@ public class EventController {
 		final List<Message> mes = entityManager.createNamedQuery("Message.getEventMessages", Message.class)
 			.setParameter("idUser", id)
 				.getResultList();
+		sendMessageWS(mes,"updateMessages",id);
 		return Message.asTransferObjects(mes);
 	}
 	@PostMapping(path = "/m/{id}", produces = "application/json")
