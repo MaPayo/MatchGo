@@ -33,10 +33,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+
 
 import org.springframework.web.bind.annotation.ResponseBody;
 import es.ucm.fdi.iw.LocalData;
@@ -264,6 +269,22 @@ public class EventController {
 	/**
 	 * @author Carlos Olano
 	 * */
+	@PostMapping(path = "/nm/{id}", produces = "application/json")
+	@Transactional
+	@ResponseBody
+	public List<Message.Transfer> insertEventMessages(@PathVariable long id,@RequestBody JsonNode nodej, Model model){
+		Event e = entityManager.find(Event.class, id);
+		User u = entityManager.find(User.class, Long.parseLong(nodej.get("idU").asText()));
+		LocalDateTime lt = LocalDateTime.now();
+		String text = nodej.get("textMessage").asText();
+		Message ms = new Message(text,u, null, lt, false, e);
+		entityManager.persist(ms);
+		entityManager.flush();
+		final List<Message> mes = entityManager.createNamedQuery("Message.getEventMessages", Message.class)
+			.setParameter("idUser", id)
+				.getResultList();
+		return Message.asTransferObjects(mes);
+	}
 	@PostMapping(path = "/m/{id}", produces = "application/json")
 	@Transactional
 	@ResponseBody

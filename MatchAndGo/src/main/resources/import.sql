@@ -171,4 +171,4 @@ INSERT INTO MESSAGE (ID, text_message, sender_id, receiver_id, send_date, read_m
 
 
 INSERT INTO MESSAGE (ID, text_message, sender_id, receiver_id, send_date, read_message, ID_EVENT_ID) VALUES (6,'Hola que tal',1,null,NOW(),0,1);
-INSERT INTO MESSAGE (ID, text_message, sender_id, receiver_id, send_date, read_message, ID_EVENT_ID) VALUES (7,'que tal',1,null,NOW(),0,1);
+INSERT INTO MESSAGE (ID, text_message, sender_id, receiver_id, send_date, read_message, ID_EVENT_ID) VALUES (7,'que tal',2,null,NOW(),0,1);

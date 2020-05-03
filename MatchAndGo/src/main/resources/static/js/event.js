@@ -4,6 +4,10 @@
  */
 document.addEventListener("DOMContentLoaded", () => {
 
+	var html = ["<input hidden id='_csrf' name='_csrf' value='"+config.csrf.value+"'>"];
+	document.getElementById("contentMess").insertAdjacentHTML('afterbegin',html);
+	var pageURL = window.location.href;
+	var lastURLSegment = pageURL.substr(pageURL.lastIndexOf('/') + 1);
 	if (config.socketUrl) {
 		let subs = config.admin ? 
 
@@ -11,9 +15,12 @@ document.addEventListener("DOMContentLoaded", () => {
 		ws.initialize(config.socketUrl, subs);
 	}
 
-	var pageURL = window.location.href;
-	var lastURLSegment = pageURL.substr(pageURL.lastIndexOf('/') + 1);
-	console.log(lastURLSegment);
+	document.getElementById("sendMessage").addEventListener("click",function() {
+		const text = document.getElementById("texto").value;
+		go(config.rootUrl + "event/nm/"+lastURLSegment,"POST",{textMessage:text,idU:config.userId}).then(e => listUsers(e,"updateMessages"));
+	});
+
+
 	go(config.rootUrl + "event/m/"+lastURLSegment,"POST",null).then(e => listUsers(e,"updateMessages"));
 	go(config.rootUrl + "event/u/"+lastURLSegment,"POST",null).then(e => listUsers(e,"updateUsersEvent"));
 
@@ -74,18 +81,18 @@ function appendChild(where,element, type){
 				"</div>"];
 			break;
 		case "updateMessages":
-        		if (element.sender == "[[${session.u.id}]]" ) {
-            			html = ["<div class='mensaje'>"+
-				    	"<div class='mensajeMio'>"+
-            				"<p> "+ element.textMessage +"</p>"+
-            				"</div>"+
-				    "</div>"];
-		        } else {
-            			html = ["<div class='mensaje'>"+
-				    	"<div class='mensajeContacto'>"+
-            				"<p> "+ element.textMessage +"</p>"+
-            				"</div>"+
-				    "</div>"];
+			if (element.sender == config.username ) {
+				html = ["<div class='mensaje'>"+
+					"<div class='mensajeMio'>"+
+					"<p> "+ element.textMessage +"</p>"+
+					"</div>"+
+					"</div>"];
+			} else {
+				html = ["<div class='mensaje'>"+
+					"<div class='mensajeContacto'>"+
+					"<p> "+ element.textMessage +"</p>"+
+					"</div>"+
+					"</div>"];
 			}
 			break;
 

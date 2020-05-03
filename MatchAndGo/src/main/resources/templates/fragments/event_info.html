@@ -4,10 +4,12 @@
 <div th:fragment="messages" class="flex50">
 	<h2>Mensajes</h2>
 	<div class="mensajes" id="M">asasas</div>
-	<form class="escribirMensaje" action="" method="POST">
-		<textarea name="textoMensaje" id="texto" class="mensaje" required></textarea>
-		<input type="submit" class="botonMensaje" name="boton" value="enviar">
+	<!--@{/event/nm/{id}(id=${event.id})}-->
+	<form id="contentMess"  class='escribirMensaje'>
+		<textarea name='textoMensaje' id='texto' class='mensaje' required></textarea>
+		<input id='sendMessage' type='button' class='botonMensaje' name='boton' value='enviar'>
 	</form>
+
 </div>
 <div th:fragment="users" class="flex50">
 	<h2>Usuarios</h2>

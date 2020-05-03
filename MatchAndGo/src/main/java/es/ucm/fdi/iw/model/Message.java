@@ -42,9 +42,8 @@ public class Message {
 		super();
 	}
 
-	public Message(long id, String c, User s, User r,LocalDateTime f, boolean e, Event ev) {
+	public Message(String c, User s, User r,LocalDateTime f, boolean e, Event ev) {
 		super();
-		this.id = id;
 		this.textMessage = c;
 		this.sender = s;
 		this.receiver = r;
