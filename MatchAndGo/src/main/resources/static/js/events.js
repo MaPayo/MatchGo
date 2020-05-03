@@ -10,6 +10,14 @@ document.addEventListener("DOMContentLoaded", () => {
 		ws.initialize(config.socketUrl, subs);
 	}
 
+	document.getElementById("textS").addEventListener("keypress",function(keyPress) {
+		if (keyPress.keyCode == 13){
+			event.preventDefault();
+			const text = document.getElementById("textS").value;
+			const cat = document.getElementById("tagS").value;
+			go(config.rootUrl + "event/eventToSearch","POST",{textS:text,tagS:cat}).then(e => listUsers(e,"updateEvents"));
+		}
+	});
 	document.getElementById("search").addEventListener("click",function() {
 		const text = document.getElementById("textS").value;
 		const cat = document.getElementById("tagS").value;

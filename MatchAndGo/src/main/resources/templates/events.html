@@ -28,8 +28,8 @@
 	</head>
 
 	<body>
-		<form id="formSearch" th:action="@{/event/eventToSearch}" method="POST">
-			<input placeholder="Texto a Buscar" id="textS"  type="search" name="title" />
+		<form id="formSearch">
+			<input placeholder="Texto a Buscar" id="textS"  type="text" name="title" />
 			<label>Buscar en: </label><select id="tagS" name="category">
 				<option value=-1 selected >todas las categoria</option>
 				<option th:each="categories: ${category}" th:value="${categories.getId()}"><span th:text="${categories.getTag()}"></span></option>

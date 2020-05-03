@@ -52,7 +52,7 @@ function appendChild(element, type){
 	let html;
 	switch(type){
 		case "updateUsers":
-			html = ["<div class='eventCard bgwhite'>" + 
+			html = ["<div class='margin1030 bggreen eventCard'>" + 
 				"<div class='cardUpperContainer'>" +
 				"<h2 id='nombre'><span>"+ element.username +" - "+element.firstName+" "+ element.lastName+"</span></h2>" + 
 				"</div>" +
@@ -73,15 +73,15 @@ function appendChild(element, type){
 				"</div>"];
 			break;
 		case "updateEvents":
-			 html = ["<div class='eventCard bgwhite'>"+
+			var dt = new Date(element.date);
+			var when = dt.getDate()+"-"+(dt.getMonth()+1)+"-"+dt.getFullYear();
+			dt = new Date(element.publicationDate);
+			var publicationDate =  dt.getDate()+"-"+(dt.getMonth()+1)+"-"+dt.getFullYear();
+			 html = ["<div class='margin1030 bggreen eventCard'>"+
 				"<div class='cardUpperContainer'>"+
-				"<img src='/img/"+element.id+".png' alt='Imagen de "+element.name+"' class='placeImage'>"+
-				"<h2>"+element.name+"</h2>"+
-				"</div>"+
-				"<div class='cardLowerContainer'>"+
-				"<div>"+
-				"<div><span>"+element.description+"</span> Para: <span>"+element.date+"></span> Publicada: <span>"+element.publicationDate+"></span></div>"+
-				"<form method='post' action='/admin/deleteEvent'>" +
+				"<h2>"+element.name+"</h2><div class='width100 textalignright'> Para: <span>"+when+"</span> Publicada: <span>"+publicationDate+"</span>"+
+				"<div class='displayflex textalignright'>"+
+				"<form method='post' class='width100' action='/admin/deleteEvent'>" +
 				"<input type='hidden' name='_csrf' value='"+config.csrf.value+"' />" +
 				"<input hidden type='number' name='id' value="+ element.id +">" +
 				"<input type='submit' class='declineButton' value='Eliminar' />" +
@@ -91,6 +91,12 @@ function appendChild(element, type){
 				"<input hidden type='number' name='id' value="+ element.id +">" +
 				"<input type='submit' class='declineButton' value='Bloquear' />" +
 				"</form>" +
+				"</div>"+
+				 "</div>"+
+				"</div>"+
+				"<div class='cardLowerContainer'>"+
+				"<div>"+
+				"<div><span>"+element.description+"</span></div>"+
 				"<div class='tagBox'>" +
 				"</div>"+
 				"</div>"+

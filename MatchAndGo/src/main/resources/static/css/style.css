@@ -3,8 +3,11 @@
     padding: 0;
 }
 
+.bggreen {
+    background-color: #afeea0;
+}
 .bgblue {
-    background-color: #e9f5ff;
+    background-color: #74808a;
 }
 
 .brtop {
@@ -54,16 +57,6 @@ body {
 	height:100%
 }
 
-nav {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    margin-left: 2em;
-    margin-top: auto;
-    height: 4em;
-    flex-direction: column;
-    background: linear-gradient(to bottom, green, lightgreen);
-}
 
 a {
     text-decoration: none;
@@ -80,8 +73,15 @@ nav a {
     color: white;
     font-size: 1.7em;
     margin-top: auto;
+    border-radius: 4px;
+    padding:2px;
+    border: 1px solid #afeea0;
 }
 
+menu a:hover{
+	background-color:#afeea0;
+	color:rgb(15,105,20) !important;
+}
 nav>a>img {
     width: 50px;
 }
@@ -102,7 +102,6 @@ header {
     height: 8em;
     display: flex;
     flex-direction: column;
-    background: linear-gradient(to bottom, green, lightgreen);
     text-align: center;
     top: 0;
     left: 0;
@@ -140,6 +139,12 @@ input {
 }
 .flex50{
 	flex:50%;
+}
+.width100{
+	width100%;
+}
+.textalignright{
+	text-align:right;
 }
 .cgreen{
 	color:green;
@@ -532,6 +537,7 @@ nav {
     flex-shrink: 1px;
     height: auto;
     width: 100%;
+    background-color:#74808a;
 }
 
 nav .logo {
@@ -543,6 +549,15 @@ nav .logo #imagenNormal {
     width: 200px;
     height: auto;
 }
+.displayflex{
+	display-flex;
+}
+.margin1030{
+	margin:10px 30px;
+}
+.flexwrap{
+	flex-flow:wrap;
+}
 
 nav .menu {
     justify-self: right;
@@ -552,6 +567,7 @@ nav .menu {
 footer {
     display: flex;
     flex-direction: row;
+    background-color:#74808a;
 }
 
 footer * {
@@ -569,7 +585,6 @@ footer #imagenNormal {
 
 li>a>img {
     width: 50px;
-<<<<<<< HEAD
 }
 
 .div-centered {
@@ -581,6 +596,4 @@ li>a>img {
     width: 200px;
     height: 100px;
     font-size: 2em;
-=======
->>>>>>> merche
 }
