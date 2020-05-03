@@ -272,7 +272,20 @@ public class EventController {
 	/**
 	 * @author Carlos Olano
 	 * */
-
+		
+	@PostMapping(path = "/evetToSearch", produces = "application/json")
+	@Transactional
+	@ResponseBody
+	public List<Event.TransferEvent> getSearchedEvent(@RequestBody JsonNode nodej, Model model){
+		final String textToSearch = nodej.get("stringS").asText();
+		final String tag = nodej.get("tagS").asText(); 
+		final String creator = nodej.get("creatorS").asText(); 
+		final List<Event> events = entityManager.createNamedQuery("Event.getEventSearch", Message.class)
+			.setParameter("testToSearch", textToSearch)
+			.setParameter("tagToSearch", tag)
+				.getResultList();
+		return Event.asTransferObjects(mes);
+	}
 	public void sendMessageWS(final List content, final String type,long id) {
 		log.info("Sending updated " + type + " via websocket");
 		List response = new ArrayList();
@@ -291,10 +304,10 @@ public class EventController {
 		messagingTemplate.convertAndSend("/topic/event/"+id,response);
 	}	
 
-	@PostMapping(path = "/nm/{id}", produces = "application/json")
+	@PostMapping(path = "/nm/{id}")
 	@Transactional
 	@ResponseBody
-	public List<Message.Transfer> insertEventMessages(@PathVariable long id,@RequestBody JsonNode nodej, Model model){
+	public void insertEventMessages(@PathVariable long id,@RequestBody JsonNode nodej, Model model){
 		Event e = entityManager.find(Event.class, id);
 		User u = entityManager.find(User.class, Long.parseLong(nodej.get("idU").asText()));
 		LocalDateTime lt = LocalDateTime.now();
@@ -306,7 +319,6 @@ public class EventController {
 			.setParameter("idUser", id)
 				.getResultList();
 		sendMessageWS(mes,"updateMessages",id);
-		return Message.asTransferObjects(mes);
 	}
 	@PostMapping(path = "/m/{id}", produces = "application/json")
 	@Transactional
