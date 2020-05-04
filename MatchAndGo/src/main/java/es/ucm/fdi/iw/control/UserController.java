@@ -289,6 +289,17 @@ public class UserController {
 
 		return "redirect:/user/" + u.getId();
 	}
+
+	@GetMapping("/guest")
+	public String loginGuest(Model model, HttpSession session, HttpServletRequest request){
+		User u = entityManager.createNamedQuery("User.byUsername", User.class).setParameter("username", "guest").getSingleResult();
+		doAutoLogin(u.getUsername(), "aa", request);
+		session.setAttribute("u", u);
+		session.setAttribute("ws", request.getRequestURL().toString()
+				.replaceFirst("[^:]*", "ws")		// http[s]://... => ws://...
+				.replaceFirst("/user.*", "/ws"));
+		return "redirect:/event/";
+	}
 	
 	@GetMapping("/logout")
 	public String logout(Model model, HttpSession session) {

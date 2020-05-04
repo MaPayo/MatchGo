@@ -13,15 +13,14 @@
         <div class="menu" th:if="${session.u}">
             <a th:href="@{/user/{id}(id=${session.u.id})}">Mi perfil</a>
             <a  th:href="@{/event/}">Eventos</a>
-            <a  th:href="@{/messages/}">Mensajes</a>
+            <a th:if="!${session.u.hasRole('GUEST')}" th:href="@{/messages/}">Mensajes</a>
             <a th:if="${session.u.hasRole('MOD') || session.u.hasRole('ADMIN')}" th:href="@{/moderator/}">Moderador</a>
             <a th:if="${session.u.hasRole('ADMIN')}" th:href="@{/admin/}">Admin</a>
-            <a  th:href="@{/event/newEvent}">Nuevo Evento</a>
+            <a th:if="!${session.u.hasRole('GUEST')}" th:href="@{/event/newEvent}">Nuevo Evento</a>
             <a th:href="@{/user/logout}">Salir</a>
         </div>
         <div class="menu" th:unless="${session.u}">
-            <a th:href="@{/login}" href="/login">Iniciar sesión</a>
-            <a th:href="@{user/signup}">Registrarse</a>
+            <a th:href="@{/login}" href="/login">Iniciar sesión/Registrarse</a>
             	<!--/*
 
 				Esto es un comentario "thymeleaf" - no se verÃ¡ en el HTML
@@ -31,14 +30,14 @@
 
 			<div class="debug" th:if="${application.debug}">
 				<form th:action="@{/login}" method="post">
-					<input type="hidden" name="username" value="nombre">
+					<input type="hidden" name="userName" value="n">
 					<input type="hidden" name="password" value="aa">
-					<button type="submit">a</button>
+					<button type="submit">Admin</button>
   				</form>				
 				<form th:action="@{/login}" method="post">
-					<input type="hidden" name="username" value="nombre 2">
+					<input type="hidden" name="userName" value="n2">
 					<input type="hidden" name="password" value="aa">
-					<button type="submit">b</button>
+					<button type="submit">User</button>
   				</form> 
   			</div>
         </div>

@@ -57,7 +57,7 @@ public class User {
 	private static BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
 	public enum Role{
-		USER,ADMIN,MOD
+		USER,ADMIN,MOD,GUEST
 	}	
 	
 	@Id

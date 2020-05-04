@@ -276,13 +276,6 @@ public class EventController {
 	@GetMapping("/{id}")
 	public String getEventPost(@PathVariable long id, Model model, HttpServletRequest request, HttpSession session) {
 		Event e = entityManager.find(Event.class, id);
-	//	if(session.getAttribute("ws") == null){
-	//		UserController  u = new UserController();
-	//		u.doAutoLogin("n", "aa", request);
-	//		session.setAttribute("ws", request.getRequestURL().toString()
-	//				.replaceFirst("[^:]*", "ws")		// http[s]://... => ws://...
-	//				.replaceFirst("/event.*", "/ws"));
-	//	}
 		if (session.getAttribute("u") != null){
 			User requester = (User)session.getAttribute("u");
 			requester = entityManager.find(User.class, requester.getId());
