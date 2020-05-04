@@ -430,7 +430,9 @@ public class Event {
 	public void setIsAppropriate(Boolean isAppropriate) {
 		this.isAppropriate = isAppropriate;
 	}
-
+	public List<Message> getMessages(){
+		return messagesGroup;
+	}
 	@Override
 	public String toString() {
 		return "Event [id=" + id + ", name=" + name + ", description=" + description + ", location=" + location + "]";

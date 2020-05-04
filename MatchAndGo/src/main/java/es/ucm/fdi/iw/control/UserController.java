@@ -290,6 +290,10 @@ public class UserController {
 		return "redirect:/user/" + u.getId();
 	}
 
+
+	/**
+	 * login as guest
+	 */
 	@GetMapping("/guest")
 	public String loginGuest(Model model, HttpSession session, HttpServletRequest request){
 		User u = entityManager.createNamedQuery("User.byUsername", User.class).setParameter("username", "guest").getSingleResult();
@@ -301,6 +305,19 @@ public class UserController {
 		return "redirect:/event/";
 	}
 	
+	/**
+	 * with id event produce json joined users
+	 */
+	@PostMapping(path = "/event/{id}", produces = "application/json")
+	@Transactional
+	@ResponseBody
+	public List<User.Transfer> getUsersEvent(@PathVariable long id, Model model){
+		final Event ev = entityManager.createNamedQuery("Event.getEvent", Event.class)
+			.setParameter("idUser", id)
+			.getSingleResult();
+		List<User> users = ev.getParticipants();
+		return User.asTransferObjects(users);
+	}
 	@GetMapping("/logout")
 	public String logout(Model model, HttpSession session) {
 		session.setAttribute("u", null);

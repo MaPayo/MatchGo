@@ -271,8 +271,6 @@ public class EventController {
 	/**
 	 * @author Carlos Olano
 	 * */
-
-
 	@GetMapping("/{id}")
 	public String getEventPost(@PathVariable long id, Model model, HttpServletRequest request, HttpSession session) {
 		Event e = entityManager.find(Event.class, id);
@@ -325,7 +323,6 @@ public class EventController {
 		}
 		messagingTemplate.convertAndSend("/topic/event/"+id,response);
 	}	
-
 	@PostMapping(path = "/nm/{id}")
 	@Transactional
 	@ResponseBody
@@ -350,26 +347,6 @@ public class EventController {
 			.setParameter("idUser", id)
 			.getResultList();
 		return Message.asTransferObjects(mes);
-	}
-	@PostMapping(path = "/valorations/{id}", produces = "application/json")
-	@Transactional
-	@ResponseBody
-	public List<Evaluation.Transfer> getEvaluationsUsers(@PathVariable long id, Model model){
-		final User ev = entityManager.createNamedQuery("User.getUser", User.class)
-			.setParameter("idUser", id)
-			.getSingleResult();
-		List<Evaluation> valors = new ArrayList (ev.getReceivedEvaluation());
-		return Evaluation.asTransferObjects(valors);
-	}
-	@PostMapping(path = "/u/{id}", produces = "application/json")
-	@Transactional
-	@ResponseBody
-	public List<User.Transfer> getUsersEvent(@PathVariable long id, Model model){
-		final Event ev = entityManager.createNamedQuery("Event.getEvent", Event.class)
-			.setParameter("idUser", id)
-			.getSingleResult();
-		List<User> users = ev.getParticipants();
-		return User.asTransferObjects(users);
 	}
 	/**
 	 * END

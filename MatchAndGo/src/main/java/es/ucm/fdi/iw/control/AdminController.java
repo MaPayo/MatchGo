@@ -90,7 +90,7 @@ public class AdminController {
 			.executeUpdate();
 
 		List<Event> eventsU = entityManager.createNamedQuery("Event.all",Event.class).getResultList();
-		sendMessageWS(eventsU,"updateEvents");
+		sendMessageWS(eventsU,"updateEvents","/topic/admin");
 		return "redirect:/admin/";
 	}	
 
@@ -108,7 +108,7 @@ public class AdminController {
 			.executeUpdate();
 
 		final List<User> usersU = entityManager.createNamedQuery("User.all",User.class).getResultList();
-		sendMessageWS(usersU,"updateUsers");
+		sendMessageWS(usersU,"updateUsers","/topic/admin");
 		return "redirect:/admin/";
 	}
 
@@ -117,6 +117,13 @@ public class AdminController {
 	public String deleteEvent(final Model model, @RequestParam final long id) {
 		final Event e = (Event) entityManager.createNamedQuery("Event.getEvent", Event.class).setParameter("idUser", id)
 			.getSingleResult();
+		
+		
+		final List<Message> messages = new ArrayList<>(e.getMessages());
+		log.info("I will Remove all Messages ");
+		entityManager.createNamedQuery("Message.deleteEventMessages").setParameter("idUser", e.getId()).executeUpdate();
+		log.info("removed all messages");
+
 
 		final List<Tags> tags = new ArrayList<>(e.getTags());
 		log.info("I will Remove all subcribed tags ");
@@ -141,7 +148,9 @@ public class AdminController {
 
 		entityManager.flush();
 		final List<Event> eventsU = entityManager.createNamedQuery("Event.all",Event.class).getResultList();
-		sendMessageWS(eventsU,"updateEvents");
+		sendMessageWS(eventsU,"updateEvents","/topic/admin");
+		log.info("all visitors redirect to other page this page is deleted");
+		sendMessageWS(eventsU,"pleaseExit","/topic/event/"+id);
 		return "redirect:/admin/";
 	}
 
@@ -162,7 +171,10 @@ public class AdminController {
 		log.info("I will Remove from all Events Joined");
 		for (final Event event : events) {
 			event.getParticipants().remove(u);
-			log.info("Remove user from event " + event.getId());
+			long idE = event.getId();
+			log.info("Remove user from event " + idE);
+			log.info("Sending new userlist to topic event");
+			sendMessageWS(event.getParticipants(),"updateUsers","/topic/event/"+idE);
 		}
 
 		events = new ArrayList<>(u.getCreatedEvents());
@@ -226,15 +238,15 @@ public class AdminController {
 			.executeUpdate();
 
 		final List<User> usersU = entityManager.createNamedQuery("User.all",User.class).getResultList();
-		sendMessageWS(usersU,"updateUsers");
+		sendMessageWS(usersU,"updateUsers","/topic/admin");
 		if (flag){
 			final List<Event> eventsU = entityManager.createNamedQuery("Event.all",Event.class).getResultList();
-			sendMessageWS(eventsU,"updateEvents");
+			sendMessageWS(eventsU,"updateEvents","/topic/admin");
 		}
 		return "redirect:/admin/";
 	}
 
-	public void sendMessageWS(final List content, final String type) {
+	public void sendMessageWS(final List content, final String type, final String topic) {
 		log.info("Sending updated " + type + " via websocket");
 		final List response = new ArrayList();
 		response.add(type);
@@ -245,7 +257,9 @@ public class AdminController {
 			case "updateEvents":
 				response.add(Event.asTransferObjects(content));
 				break;
+			default:
+				response.add("sorry");
 		}
-		messagingTemplate.convertAndSend("/topic/admin",response);
+		messagingTemplate.convertAndSend(topic,response);
 	}	
 }

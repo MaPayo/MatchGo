@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	});
 
 	go(config.rootUrl + "event/m/"+lastURLSegment,"POST",null).then(e => listUsers(e,"updateMessages"));
-	go(config.rootUrl + "event/u/"+lastURLSegment,"POST",null).then(e => listUsers(e,"updateUsersEvent"));
+	go(config.rootUrl + "user/event/"+lastURLSegment,"POST",null).then(e => listUsers(e,"updateUsersEvent"));
 
 	//response.forEach(e => );
 
@@ -56,7 +56,7 @@ function listUsers(jsonArray, type){
 			var elements = document.getElementsByClassName("anUser");
 			for (i = 0; i < elements.length;i++){
 				elements[i].addEventListener("click",function() {
-					go(config.rootUrl + "event/valorations/"+this.dataset.id,"POST",null).then(e => listUsers(e,"updateListValuations"));
+					go(config.rootUrl + "reviews/user/"+this.dataset.id,"POST",null).then(e => listUsers(e,"updateListValuations"));
 				});
 			}
 

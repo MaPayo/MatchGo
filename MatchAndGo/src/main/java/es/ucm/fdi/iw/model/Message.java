@@ -18,6 +18,7 @@ import javax.persistence.NamedQuery;
 
 @NamedQueries({
 @NamedQuery(name="Message.getEventMessages", query= "SELECT m FROM Message m WHERE id_event_id = :idUser ORDER BY send_date"),
+@NamedQuery(name="Message.deleteEventMessages", query= "DELETE FROM Message u WHERE id_event_id = :idUser"),
 @NamedQuery(name="Message.deleteMessagesUser", query= "DELETE FROM Message u WHERE sender_id = :idUser OR receiver_id = :idUser"),
 @NamedQuery(name="Message.getListMessages", query= "SELECT m from Message m WHERE "
 + "(sender_id = :sender AND receiver_id = :receiver AND id_event_id = null) OR (sender_id = :receiver AND receiver_id = :sender AND id_event_id = null) "

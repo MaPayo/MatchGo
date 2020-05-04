@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.springframework.web.bind.annotation.ResponseBody;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -52,6 +53,7 @@ import es.ucm.fdi.iw.model.User.Role;
  * @author MaPayo
  */
 @Controller()
+@RequestMapping("reviews")
 public class EvaluationController {
     private static final Logger log = LogManager.getLogger(EventController.class);
 	
@@ -96,5 +98,20 @@ public class EvaluationController {
 		model.addAttribute("review", review);
         return "user";
     }
-
+	/**
+	 * @author Carlos Olano
+	 * **/
+	@PostMapping(path = "/user/{id}", produces = "application/json")
+	@Transactional
+	@ResponseBody
+	public List<Evaluation.Transfer> getEvaluationsUsers(@PathVariable long id, Model model){
+		final User ev = entityManager.createNamedQuery("User.getUser", User.class)
+			.setParameter("idUser", id)
+			.getSingleResult();
+		List<Evaluation> valors = new ArrayList (ev.getReceivedEvaluation());
+		return Evaluation.asTransferObjects(valors);
+	}
+	/**
+	 * END
+	 **/
 }
