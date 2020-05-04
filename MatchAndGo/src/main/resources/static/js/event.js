@@ -3,15 +3,11 @@
  * Actions to perform once the page is fully loaded
  */
 document.addEventListener("DOMContentLoaded", () => {
-
-	var html = ["<input hidden id='_csrf' name='_csrf' value='"+config.csrf.value+"'>"];
-	document.getElementById("contentMess").insertAdjacentHTML('afterbegin',html);
 	var pageURL = window.location.href;
 	var lastURLSegment = pageURL.substr(pageURL.lastIndexOf('/') + 1);
 	if (config.socketUrl) {
 		let subs = config.admin ? 
-
-			["/topic/admin", "/user/queue/updates","/topic/event/"+lastURLSegment] : ["/user/queue/updates","/topic/event/"+lastURLSegment]
+			["/topic/admin", "/user/queue/updates","/topic/event/"+lastURLSegment] : ["/topic/event/"+lastURLSegment]
 		ws.initialize(config.socketUrl, subs);
 	}
 
@@ -19,7 +15,6 @@ document.addEventListener("DOMContentLoaded", () => {
 		const text = document.getElementById("texto").value;
 		go(config.rootUrl + "event/nm/"+lastURLSegment,"POST",{textMessage:text,idU:config.userId}).then(e => listUsers(e,"updateMessages"));
 	});
-
 
 	go(config.rootUrl + "event/m/"+lastURLSegment,"POST",null).then(e => listUsers(e,"updateMessages"));
 	go(config.rootUrl + "event/u/"+lastURLSegment,"POST",null).then(e => listUsers(e,"updateUsersEvent"));

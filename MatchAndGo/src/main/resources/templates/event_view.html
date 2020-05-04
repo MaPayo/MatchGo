@@ -16,13 +16,15 @@
 				},
 				admin: [[${session.u != null && session.u.hasRole('ADMIN')}?true:false]],
 				userId: [[${session.u != null}?${session.u.id}:-1]],
-				username: "[[${session.u.username}?:'']]"
+				username: "[[${session.u != null}?${session.u.username}:'nop']]"
 
 			};
+
+
 		</script>
 		<script th:src="@{/js/stomp.js}" src="js/stomp.js" type="text/javascript"></script>
 		<script th:src="@{/js/iwclientAdmin.js}" src="js/iwclientAdmin.js" type="text/javascript"></script>
-		<script th:src="@{/js/event.js}" src="js/iwclientAdmin.js" type="text/javascript"></script>
+		<script th:src="@{/js/event.js}" src="js/event.js" type="text/javascript"></script>
 </head>
 
 <body>

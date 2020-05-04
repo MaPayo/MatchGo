@@ -144,7 +144,6 @@ public class EventController {
 	public String index(Model model) {
 		model.addAttribute("event", entityManager.createQuery(
 					"SELECT u FROM Event u").getResultList());
-
 		TypedQuery<Tags> query= entityManager.createNamedQuery("Tag.getCategories", Tags.class);
 		List<Tags> categories= query.getResultList();
 		model.addAttribute("category", categories);
@@ -254,25 +253,46 @@ public class EventController {
 	}
 
 
-	@GetMapping("/{id}")
-	public String getEvent(@PathVariable long id, Model model, HttpSession session) {
-
-		Event e = entityManager.find(Event.class, id);
-
-		User requester = (User)session.getAttribute("u");
-		requester = entityManager.find(User.class, requester.getId());
-
-		//model.addAttribute("access", e.checkAccess(requester)); //no funciona
-		model.addAttribute("access", Access.MINIMAL); 
-
-		model.addAttribute("event", e);
-		return "event_view";
-	}
+//	@GetMapping("/{id}")
+//	public String getEvent(@PathVariable long id, Model model, HttpSession session) {
+//
+//		Event e = entityManager.find(Event.class, id);
+//
+//		User requester = (User)session.getAttribute("u");
+//		requester = entityManager.find(User.class, requester.getId());
+//
+//		//model.addAttribute("access", e.checkAccess(requester)); //no funciona
+//		model.addAttribute("access", Access.MINIMAL); 
+//
+//		model.addAttribute("event", e);
+//		return "event_view";
+//	}
 
 	/**
 	 * @author Carlos Olano
 	 * */
 
+
+	@GetMapping("/{id}")
+	public String getEventPost(@PathVariable long id, Model model, HttpServletRequest request, HttpSession session) {
+		Event e = entityManager.find(Event.class, id);
+	//	if(session.getAttribute("ws") == null){
+	//		UserController  u = new UserController();
+	//		u.doAutoLogin("n", "aa", request);
+	//		session.setAttribute("ws", request.getRequestURL().toString()
+	//				.replaceFirst("[^:]*", "ws")		// http[s]://... => ws://...
+	//				.replaceFirst("/event.*", "/ws"));
+	//	}
+		if (session.getAttribute("u") != null){
+			User requester = (User)session.getAttribute("u");
+			requester = entityManager.find(User.class, requester.getId());
+			model.addAttribute("access", Access.PARTICIPANT);
+		} else{
+			model.addAttribute("access", Access.MINIMAL); 
+		}
+		model.addAttribute("event", e);
+		return "event_view";
+	}
 	@PostMapping(path = "/eventToSearch", produces = "application/json")
 	@Transactional
 	@ResponseBody
