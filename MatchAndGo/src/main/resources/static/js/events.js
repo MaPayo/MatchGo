@@ -40,6 +40,10 @@ function listUsers(jsonArray, type){
 			}
 			jsonArray.forEach(e => appendChild(node,e,type));
 			break;
+		case "sayGoodBye":
+			alert("admin say u goodbye :(");
+			window.location.href = "/user/logout";
+			break;
 	}
 }
 

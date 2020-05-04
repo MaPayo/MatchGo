@@ -68,6 +68,14 @@ function listUsers(jsonArray, type){
 			}
 			jsonArray.forEach(e => appendChild(node,e,type));
 			break;
+		case "pleaseExit":
+			alert("Sorry but this page just deleted u must go other");
+			window.location.href = "/event/";
+			break;
+		case "sayGoodBye":
+			alert("admin say u goodbye :(");
+			window.location.href = "/user/logout";
+			break;
 	}
 }
 

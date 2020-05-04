@@ -117,9 +117,7 @@ public class AdminController {
 	public String deleteEvent(final Model model, @RequestParam final long id) {
 		final Event e = (Event) entityManager.createNamedQuery("Event.getEvent", Event.class).setParameter("idUser", id)
 			.getSingleResult();
-		
-		
-		final List<Message> messages = new ArrayList<>(e.getMessages());
+	
 		log.info("I will Remove all Messages ");
 		entityManager.createNamedQuery("Message.deleteEventMessages").setParameter("idUser", e.getId()).executeUpdate();
 		log.info("removed all messages");
@@ -238,6 +236,8 @@ public class AdminController {
 			.executeUpdate();
 
 		final List<User> usersU = entityManager.createNamedQuery("User.all",User.class).getResultList();
+		sendMessageWS(usersU,"sayGoodBye","/user/"+u.getUsername()+"/queue/updates");
+		log.info("If user connected ");
 		sendMessageWS(usersU,"updateUsers","/topic/admin");
 		if (flag){
 			final List<Event> eventsU = entityManager.createNamedQuery("Event.all",Event.class).getResultList();

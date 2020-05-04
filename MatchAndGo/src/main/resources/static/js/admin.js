@@ -43,6 +43,14 @@ function listUsers(jsonArray, type){
 		case "updateEvents":
 			jsonArray.forEach(e => appendChild(e,type));
 			break;
+		case "pleaseExit":
+			alert("Sorry but this page just deleted u must go other");
+			window.location.href = "/event/";
+			break;
+		case "sayGoodBye":
+			alert("admin say u goodbye :(");
+			window.location.href = "/user/logout";
+			break;
 	}
 }
 
