@@ -77,6 +77,16 @@ public class EventController {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
+	@GetMapping("/")
+	public String index(Model model) {
+		model.addAttribute("event", entityManager.createQuery(
+					"SELECT u FROM Event u").getResultList());
+		TypedQuery<Tags> query= entityManager.createNamedQuery("Tag.getCategories", Tags.class);
+		List<Tags> categories= query.getResultList();
+		model.addAttribute("category", categories);
+		return "events";
+	}
+	
 	@GetMapping("/newEvent")
 	public String getNewEvent(Model model, HttpSession session) {
 
@@ -87,7 +97,8 @@ public class EventController {
 
 
 		model.addAttribute("user", requester);
-		model.addAttribute("newEvent", true); 
+		model.addAttribute("newEvent", true);
+		model.addAttribute("viewEvent", false);
 		model.addAttribute("categories", categories);
 		return "event";
 	}
@@ -140,15 +151,6 @@ public class EventController {
 			return "redirect:/user/" + requester.getId();
 	}
 
-	@GetMapping("/")
-	public String index(Model model) {
-		model.addAttribute("event", entityManager.createQuery(
-					"SELECT u FROM Event u").getResultList());
-		TypedQuery<Tags> query= entityManager.createNamedQuery("Tag.getCategories", Tags.class);
-		List<Tags> categories= query.getResultList();
-		model.addAttribute("category", categories);
-		return "events";
-	}
 
 	@PostMapping("/subscribe/{id}")
 	@Transactional
@@ -252,38 +254,47 @@ public class EventController {
 		return "events";
 	}
 
-
-//	@GetMapping("/{id}")
-//	public String getEvent(@PathVariable long id, Model model, HttpSession session) {
-//
-//		Event e = entityManager.find(Event.class, id);
-//
-//		User requester = (User)session.getAttribute("u");
-//		requester = entityManager.find(User.class, requester.getId());
-//
-//		//model.addAttribute("access", e.checkAccess(requester)); //no funciona
-//		model.addAttribute("access", Access.MINIMAL); 
-//
-//		model.addAttribute("event", e);
-//		return "event_view";
-//	}
-
-	/**
-	 * @author Carlos Olano
-	 * */
+	
 	@GetMapping("/{id}")
 	public String getEventPost(@PathVariable long id, Model model, HttpServletRequest request, HttpSession session) {
 		Event e = entityManager.find(Event.class, id);
-		if (session.getAttribute("u") != null){
-			User requester = (User)session.getAttribute("u");
-			requester = entityManager.find(User.class, requester.getId());
-			model.addAttribute("access", Access.PARTICIPANT);
-		} else{
-			model.addAttribute("access", Access.MINIMAL); 
+		
+		User requester = (User)session.getAttribute("u");
+		requester = entityManager.find(User.class, requester.getId());
+		
+		long categoryId = 0;
+		StringBuilder tags = new StringBuilder();
+		boolean found = false;
+		int i = 0;
+		while(!found && i < e.getTags().size()) {
+			if(e.getTags().get(i).getIsCategory()) {
+				categoryId = e.getTags().get(i).getId();
+				found = true;
+			}
+			else 
+				tags.append(e.getTags().get(i).getTag() + "\n");
+			i++;
 		}
+		
+		for(int j = i; j < e.getTags().size(); j++) {
+			tags.append(e.getTags().get(j).getTag() + "\n");
+		}
+		
+		ArrayList<Tags> categories = (ArrayList<Tags>) entityManager.createQuery("SELECT t FROM Tags t WHERE t.isCategory IS TRUE")
+				.getResultList();
+
+		model.addAttribute("user", requester);
+		model.addAttribute("newEvent", false);
+		model.addAttribute("viewEvent", true);
+		
 		model.addAttribute("event", e);
-		return "event_view";
+		model.addAttribute("categoryId", categoryId);
+		model.addAttribute("tags", tags.toString());
+		model.addAttribute("categories", categories);
+		model.addAttribute("date", e.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+		return "event";
 	}
+	
 	@PostMapping(path = "/eventToSearch", produces = "application/json")
 	@Transactional
 	@ResponseBody
