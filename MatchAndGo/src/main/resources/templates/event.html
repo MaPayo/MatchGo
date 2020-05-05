@@ -10,7 +10,7 @@
 
 <body>
 	  <nav th:replace="fragments/nav.html :: nav">Nav goes here</nav> 
-
+	 <div th:fragment="infoVEvent">
     <form class="eventContainer formEvento" method="POST" th:action="@{/event/newEvent}">
         <div class="cardUpperContainer">
             <img th:src="@{/img/noImage.png}" alt="" class="eventImg">
@@ -53,7 +53,7 @@
             <div th:if="${newEvent}" class="marginAuto"><button type="submit" class="acceptButton">Crear</button></div>
         </div>
     </form>
-
+    </div>
     <footer th:replace="fragments/footer.html :: footer"> Footer goes here </footer>
 </body>
 

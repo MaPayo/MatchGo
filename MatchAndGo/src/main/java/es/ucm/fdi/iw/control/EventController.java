@@ -292,7 +292,7 @@ public class EventController {
 		model.addAttribute("tags", tags.toString());
 		model.addAttribute("categories", categories);
 		model.addAttribute("date", e.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-		return "event";
+		return "event_view";
 	}
 	
 	@PostMapping(path = "/eventToSearch", produces = "application/json")
