@@ -32,7 +32,7 @@ public class Evaluation {
 
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
 	@ManyToOne
@@ -47,6 +47,14 @@ public class Evaluation {
 		super();
 	}
 
+
+	public Evaluation(User evaluator,User evaluated,double score,String review) {
+		super();
+		this.evaluator = evaluator;
+		this.evaluated = evaluated;
+		this.score = score;
+		this.review = review;
+	}
 
 	public long getId() {
 		return id;
