@@ -172,7 +172,7 @@ public class AdminController {
 			long idE = event.getId();
 			log.info("Remove user from event " + idE);
 			log.info("Sending new userlist to topic event");
-			sendMessageWS(event.getParticipants(),"updateUsers","/topic/event/"+idE);
+			sendMessageWS(event.getParticipants(),"updateUsersEvent","/topic/event/"+idE);
 		}
 
 		events = new ArrayList<>(u.getCreatedEvents());
@@ -251,6 +251,7 @@ public class AdminController {
 		final List response = new ArrayList();
 		response.add(type);
 		switch(type){
+			case "updateUsersEvent":
 			case "updateUsers":
 				response.add(User.asTransferObjects(content));
 				break;
