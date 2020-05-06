@@ -16,6 +16,7 @@
 				},
 				admin: [[${session.u != null && session.u.hasRole('ADMIN')}?true:false]],
 				userId: [[${session.u != null}?${session.u.id}:-1]],
+				guest: [[${session.u != null && session.u.hasRole('GUEST')}?true:false]],
 				username: "[[${session.u != null}?${session.u.username}:'nop']]"
 
 			};

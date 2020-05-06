@@ -10,18 +10,18 @@ document.addEventListener("DOMContentLoaded", () => {
 			["/topic/admin", "/user/queue/updates","/topic/event/"+lastURLSegment] : ["/topic/event/"+lastURLSegment]
 		ws.initialize(config.socketUrl, subs);
 	}
-
-	document.getElementById("sendValuation").addEventListener("click",function() {
-		const id = document.getElementById("idUs").value;
-		const score = document.getElementById("score").value;
-		const text = document.getElementById("textoV").value;
-		go(config.rootUrl + "reviews/add","POST",{textN:text,idU:id,score:score}).then(e => listUsers(e,"updateListValuations"));
-	});
-	document.getElementById("sendMessage").addEventListener("click",function() {
-		const text = document.getElementById("texto").value;
-		go(config.rootUrl + "event/nm/"+lastURLSegment,"POST",{textMessage:text,idU:config.userId}).then(e => listUsers(e,"updateMessages"));
-	});
-
+	if (!config.guest){
+		document.getElementById("sendValuation").addEventListener("click",function() {
+			const id = document.getElementById("idUs").value;
+			const score = document.getElementById("score").value;
+			const text = document.getElementById("textoV").value;
+			go(config.rootUrl + "reviews/add","POST",{textN:text,idU:id,score:score}).then(e => listUsers(e,"updateListValuations"));
+		});
+		document.getElementById("sendMessage").addEventListener("click",function() {
+			const text = document.getElementById("texto").value;
+			go(config.rootUrl + "event/nm/"+lastURLSegment,"POST",{textMessage:text,idU:config.userId}).then(e => listUsers(e,"updateMessages"));
+		});
+	}
 	go(config.rootUrl + "event/m/"+lastURLSegment,"POST",null).then(e => listUsers(e,"updateMessages"));
 	go(config.rootUrl + "user/event/"+lastURLSegment,"POST",null).then(e => listUsers(e,"updateUsersEvent"));
 
@@ -62,6 +62,7 @@ function listUsers(jsonArray, type){
 			var elements = document.getElementsByClassName("anUser");
 			for (i = 0; i < elements.length;i++){
 				elements[i].addEventListener("click",function() {
+					if (!config.guest)
 					document.getElementById("idUs").value = this.dataset.id;
 					go(config.rootUrl + "reviews/user/"+this.dataset.id,"POST",null).then(e => listUsers(e,"updateListValuations"));
 				});

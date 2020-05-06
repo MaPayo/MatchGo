@@ -4,9 +4,9 @@
 </div>
 <div th:fragment="messages" class="flex50">
 	<h2>Mensajes</h2>
-	<div class="mensajes" id="M">asasas</div>
+	<div class="mensajes" th:classappend="${session.u.hasRole('GUEST')}?blur" id="M">asasas</div>
 	<!--@{/event/nm/{id}(id=${event.id})}-->
-	<form id="contentMess"  class='escribirMensaje'>
+	<form th:if="!${session.u.hasRole('GUEST')}" id="contentMess"  class="escribirMensaje">
 		<textarea name='textoMensaje' id='texto' class='mensaje' required></textarea>
 		<input id='sendMessage' type='button' class='botonMensaje' name='boton' value='enviar'>
 	</form>
@@ -19,8 +19,8 @@
 </div>
 <div th:fragment="valorations" class="flex50">
 	<h2>Valorations</h2>
-	<div id="contEvaluations"></div>
-	<form id="contentVal"  class='escribirMensaje'>
+	<div id="contEvaluations"  th:classappend="${session.u.hasRole('GUEST')}?blur"></div>
+	<form  th:if="!${session.u.hasRole('GUEST')}" id="contentVal"  class='escribirMensaje'>
 		<input hidden readonly id='idUs' name='idU' type="number" required />
 		<input id='score' name='score' type="number" required />
 		<input name='textoMensaje' id='textoV' type="text" class='mensaje' required />
