@@ -71,7 +71,12 @@ public class AdminController {
 	@ResponseBody
 	public List<User.Transfer> retrieveUsers(final HttpSession session) {
 		log.info("Generating User List");
-		List<User> users = entityManager.createNamedQuery("User.all",User.class).getResultList();
+		List<User> users = new ArrayList();
+		for(User u : entityManager.createNamedQuery("User.all",User.class).getResultList()){
+			if(!u.hasRole(User.Role.SYS)){
+				users.add(u);
+			}
+		}
 		return User.asTransferObjects(users);
 	}
 	@PostMapping("/blockEvent")
@@ -107,8 +112,13 @@ public class AdminController {
 		entityManager.createNamedQuery("User.blockUser").setParameter("idUser", id).setParameter("state", newState)
 			.executeUpdate();
 
-		final List<User> usersU = entityManager.createNamedQuery("User.all",User.class).getResultList();
-		sendMessageWS(usersU,"updateUsers","/topic/admin");
+		List<User> users = new ArrayList();
+		for(User u : entityManager.createNamedQuery("User.all",User.class).getResultList()){
+			if(!u.hasRole(User.Role.SYS)){
+				users.add(u);
+			}
+		}
+		sendMessageWS(users,"updateUsers","/topic/admin");
 		return "redirect:/admin/";
 	}
 
@@ -155,7 +165,7 @@ public class AdminController {
 	@PostMapping("/deleteUser")
 	@Transactional
 	public String deleteUser(final Model model, @RequestParam final long id) {
-		final User u = (User) entityManager.createNamedQuery("User.getUser", User.class).setParameter("idUser", id)
+		User u = (User) entityManager.createNamedQuery("User.getUser", User.class).setParameter("idUser", id)
 			.getSingleResult();
 
 		List<Tags> tags = u.getTags();
@@ -215,7 +225,7 @@ public class AdminController {
 			}
 		}
 
-		final User noUser = (User) entityManager.createNamedQuery("User.getUser", User.class).setParameter("idUser", (long)4).getSingleResult();
+		final User noUser = (User) entityManager.createNamedQuery("User.getUser", User.class).setParameter("idUser", (long)3).getSingleResult();
 		evaluations = new ArrayList<>(u.getSenderEvaluation());
 		if (evaluations.size() != 0){
 			log.info("I will Remove all writedd evaluations");
@@ -235,10 +245,16 @@ public class AdminController {
 			.setParameter("idUser",id)
 			.executeUpdate();
 
-		final List<User> usersU = entityManager.createNamedQuery("User.all",User.class).getResultList();
-		sendMessageWS(usersU,"sayGoodBye","/user/"+u.getUsername()+"/queue/updates");
+		List<User> users = new ArrayList();
+		for(User u2 : entityManager.createNamedQuery("User.all",User.class).getResultList()){
+			if(!u2.hasRole(User.Role.SYS)){
+				users.add(u2);
+			}
+		}
 		log.info("If user connected ");
-		sendMessageWS(usersU,"updateUsers","/topic/admin");
+		sendMessageWS(users,"sayGoodBye","/user/"+u.getUsername()+"/queue/updates");
+		log.info("broadcast admin");
+		sendMessageWS(users,"updateUsers","/topic/admin");
 		if (flag){
 			final List<Event> eventsU = entityManager.createNamedQuery("Event.all",Event.class).getResultList();
 			sendMessageWS(eventsU,"updateEvents","/topic/admin");
