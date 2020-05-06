@@ -79,7 +79,13 @@ public class EventController {
 	private PasswordEncoder passwordEncoder;
 
 	@GetMapping("/")
-	public String index(Model model) {
+	public String index(Model model, HttpSession session) {
+	/**
+	 * logearse como invitado si no tiene sesion
+	 **/
+		if (session.getAttribute("u") == null){
+			return "redirect:/user/guest";
+		}
 		model.addAttribute("event", entityManager.createQuery(
 					"SELECT u FROM Event u").getResultList());
 		TypedQuery<Tags> query= entityManager.createNamedQuery("Tag.getCategories", Tags.class);
@@ -259,7 +265,12 @@ public class EventController {
 	@GetMapping("/{id}")
 	public String getEventPost(@PathVariable long id, Model model, HttpServletRequest request, HttpSession session) {
 		Event e = entityManager.find(Event.class, id);
-		
+	/**
+	 * logearse como invitado si no tiene sesion
+	 **/
+		if (session.getAttribute("u") == null){
+			return "redirect:/user/guest";
+		}
 		User requester = (User)session.getAttribute("u");
 		requester = entityManager.find(User.class, requester.getId());
 		
