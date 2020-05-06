@@ -36,7 +36,6 @@ import es.ucm.fdi.iw.model.User.Role;
 	@NamedQuery(name="Event.blockEvent", query= "UPDATE Event SET isAppropriate = :state " + "WHERE id = :idUser"),
 	@NamedQuery(name="Event.getEvent", query= "SELECT u from Event u WHERE u.id = :idUser"),
 	@NamedQuery(name="Event.getEventSearchWC", query= "SELECT u from Event u inner join u.tags t WHERE "+
-		"u.id = t.id AND "+
        		"(lower(name) LIKE :textToSearch OR lower(description) LIKE :textToSearch OR lower(location) LIKE :textToSearch) "+
 		"AND t.id = :tagToSearch"),
 	@NamedQuery(name="Event.getEventSearch", query= "SELECT u from Event u WHERE "+

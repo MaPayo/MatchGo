@@ -56,7 +56,8 @@ import es.ucm.fdi.iw.model.User.Role;
 
 /**
  * User-administration controller
- * 
+ * @author Carlos Olano
+ * @author Vronika
  * @author mfreire
  * @author MaPayo
  */
@@ -301,8 +302,6 @@ public class EventController {
 	public List<Event.TransferEvent> getSearchedEvent(@RequestBody JsonNode nodej, Model model){
 		final String textToSearch = nodej.get("textS").asText().toLowerCase();
 		final long tag = Long.parseLong(nodej.get("tagS").asText()); 
-		//	final String creator = nodej.get("creatorS").asText(); 
-		//
 		List<Event> events;
 		if (tag != -1){
 			events = entityManager.createNamedQuery("Event.getEventSearchWC", Event.class)
