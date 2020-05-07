@@ -17,7 +17,19 @@ document.addEventListener("DOMContentLoaded", () => {
 		}
 	});
 	document.getElementById("search").addEventListener("click",function() {
-		go(config.rootUrl + "admin/eventlist","POST",null).then(e => sendSearch(e));
+		var flag = false;
+		if (document.getElementById("dateFS").value != "" && document.getElementById("dateTS").value != ""){
+			flag = (document.getElementById("dateTS").min > document.getElementById("dateTS").value) ? true:false; 
+		}
+		if (!flag){
+			go(config.rootUrl + "admin/eventlist","POST",null).then(e => sendSearch(e));
+		} else{
+			alert("compruebe las fechas");
+		}
+	});
+
+	document.getElementById("dateTS").addEventListener("focus",function(){
+		document.getElementById("dateTS").min = document.getElementById("dateFS").value; 
 	});
 
 	//response.forEach(e => );
@@ -56,11 +68,11 @@ function sendSearch(jsonArray){
 		}
 		if (!flag_add && !dateF == "" || !dateT == ""){
 			if (!dateF == "" && !dateT == ""){
-				flag_add = (Date.parse(ev.date) <= Date.parse(dateF) && Date.parse(ev.date) >= Date.parse(dateT)) ? false:true;
+				flag_add = (Date.parse(ev.date) >= Date.parse(dateF) && Date.parse(ev.date) <= Date.parse(dateT)) ? false:true;
 			} else if (!dateF == ""){
-				flag_add = (Date.parse(ev.date) <= Date.parse(dateF)) ? false:true;
+				flag_add = (Date.parse(ev.date) >= Date.parse(dateF)) ? false:true;
 			} else if (!dateT == ""){
-				flag_add = (Date.parse(ev.date) >= Date.parse(dateT)) ? false:true;
+				flag_add = (Date.parse(ev.date) <= Date.parse(dateT)) ? false:true;
 			}
 
 		}
