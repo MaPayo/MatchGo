@@ -36,9 +36,10 @@
 		</header>
 		<div class="margintop150px bgblue">
 			<div class="container bgwhite">
-				<ul class="noliststyle displayflex">
-					<li id="listUsers" class="bgblue brtop padding30"><a>Usuarios</a></li>
-					<li id="listEvents" class="brtop padding30"><a>Eventos</a></li>
+				<ul class="noliststyle displayflex" id="menuDisplayE">
+					<li id="listUsers" class="bgblue brtop padding30" data-action="updateUsers" data-id="admin/userlist">Usuarios</li>
+					<li id="listEvents" class="brtop padding30" data-action="updateEvents" data-id="admin/eventlist">Eventos</li>
+					<li id="listTags" class="brtop padding30" data-action="updateTags" data-id="admin/taglist">Tags</li>
 				</ul>
 			</div> 
 			<div id="contUsers" class="width100 displayflex flexwrap"></div>

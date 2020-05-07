@@ -11,24 +11,19 @@ document.addEventListener("DOMContentLoaded", () => {
 		ws.initialize(config.socketUrl, subs);
 	}
 
-	document.getElementById("listEvents").addEventListener("click",function() {
-		document.getElementById("listEvents").classList.add("bgblue");
-		document.getElementById("listUsers").classList.remove("bgblue");
-		go(config.rootUrl + "admin/eventlist","POST",null).then(e => listUsers(e,"updateEvents"));
-	});
-	document.getElementById("listUsers").addEventListener("click",function() {
-		document.getElementById("listEvents").classList.remove("bgblue");
-		document.getElementById("listUsers").classList.add("bgblue");
-		go(config.rootUrl + "admin/userlist","POST",null).then(e => listUsers(e,"updateUsers"));
+	document.getElementById("menuDisplayE").addEventListener("click",function() {
+		if(event.target.matches("li")){
+			const childrens =  document.getElementById("menuDisplayE").children;
+			for (i = 0; i < childrens.length; i++) {
+				childrens[i].classList.remove("bgblue");
+			}
+			event.target.classList.add("bgblue");
+			const command = event.target.dataset.action;
+			go(config.rootUrl + event.target.dataset.id,"POST",null).then(result => listUsers(result,command));
+		}
 	});
 
 	go(config.rootUrl + "admin/userlist","POST",null).then(e => listUsers(e,"updateUsers"));
-
-	//response.forEach(e => );
-
-	// add your after-page-loaded JS code here; or even better, call 
-	// 	 document.addEventListener("DOMContentLoaded", () => { /* your-code-here */ });
-	//   (assuming you do not care about order-of-execution, all such handlers will be called correctly)
 });
 
 function listUsers(jsonArray, type){
@@ -37,10 +32,9 @@ function listUsers(jsonArray, type){
 		node.removeChild(node.lastChild);
 	}
 	switch(type){
-		case "updateUsers":
-			jsonArray.forEach(e => appendChild(e,type));
-			break;
+		case "updateTags":
 		case "updateEvents":
+		case "updateUsers":
 			jsonArray.forEach(e => appendChild(e,type));
 			break;
 		case "pleaseExit":
