@@ -79,14 +79,14 @@ public class AdminController {
 		}
 		return User.asTransferObjects(users);
 	}
-//	@PostMapping(path = "/taglist", produces = "application/json")
-//	@Transactional
-//	@ResponseBody
-//	public List<Tags.Transfer> retrieveTags(final HttpSession session) {
-//		log.info("Generating Tag List");
-//		List<Tags> tags = entityManager.createNamedQuery("Tags.all",Tags.class).getResultList();
-//		return Tags.asTransferObjects(tags);
-//	}
+	@PostMapping(path = "/taglist", produces = "application/json")
+	@Transactional
+	@ResponseBody
+	public List<Tags.Transfer> retrieveTags(final HttpSession session) {
+		log.info("Generating Tag List");
+		List<Tags> tags = entityManager.createNamedQuery("Tags.all",Tags.class).getResultList();
+		return Tags.asTransferObjects(tags);
+	}
 	@PostMapping("/blockEvent")
 	@Transactional
 	public String blockEvent(Model model, @RequestParam long id) {
