@@ -53,6 +53,20 @@ function appendChild(element, type){
 
 	let html;
 	switch(type){
+		case "updateTags":
+			html = ["<div class='margin1030 bggreen eventCard'>" + 
+				"<div class='cardUpperContainer'>" +
+				"<h2>"+element.tag+"</h2>" + 
+				"</div>" +
+				"<div class='cardLowerContainer'>" +
+				"<form method='post' action='/admin/deleteUser'>" +
+				"<input hidden readonly name='_csrf' value='"+config.csrf.value+"' />" +
+				"<input hidden readonly type='number' name='id' value="+ element.id +">" +
+				"<input type='submit' class='declineButton' value='Eliminar' />" +
+				"</form>" +
+				"</div>" +
+				"</div>"];
+			break;
 		case "updateUsers":
 			html = ["<div class='margin1030 bggreen eventCard'>" + 
 				"<div class='cardUpperContainer'>" +
@@ -62,13 +76,13 @@ function appendChild(element, type){
 				"<p id='edad'><span>"+ element.birthDate +"</span></p>" +
 				"<p id='sexo'><span>"+ element.gender +"</span></p>" +
 				"<form method='post' action='/admin/deleteUser'>" +
-				"<input type='hidden' name='_csrf' value='"+config.csrf.value+"' />" +
-				"<input hidden type='number' name='id' value="+ element.id +">" +
+				"<input hidden readonly name='_csrf' value='"+config.csrf.value+"' />" +
+				"<input hidden readonly type='number' name='id' value="+ element.id +">" +
 				"<input type='submit' class='declineButton' value='Eliminar' />" +
 				"</form>" +
 				"<form method='post' action='/admin/blockUser?id="+ element.id +"'>" +
-				"<input type='hidden' name='_csrf' value='"+config.csrf.value+"' />" +
-				"<input hidden type='number' name='id' value="+ element.id +">" +
+				"<input hidden readonly name='_csrf' value='"+config.csrf.value+"' />" +
+				"<input hidden readonly type='number' name='id' value="+ element.id +">" +
 				"<input type='submit' class='declineButton' value='Bloquear' />" +
 				"</form>" +
 				"</div>" +
@@ -84,13 +98,13 @@ function appendChild(element, type){
 				"<h2>"+element.name+"</h2><div class='width100 textalignright'> Para: <span>"+when+"</span> Publicada: <span>"+publicationDate+"</span>"+
 				"<div class='displayflex textalignright'>"+
 				"<form method='post' class='width100' action='/admin/deleteEvent'>" +
-				"<input type='hidden' name='_csrf' value='"+config.csrf.value+"' />" +
-				"<input hidden type='number' name='id' value="+ element.id +">" +
+				"<input hidden readonly name='_csrf' value='"+config.csrf.value+"' />" +
+				"<input hidden readonly type='number' name='id' value="+ element.id +">" +
 				"<input type='submit' class='declineButton' value='Eliminar' />" +
 				"</form>" +
 				"<form method='post' action='/admin/blockEvent?id="+ element.id +"'>" +
-				"<input type='hidden' name='_csrf' value='"+config.csrf.value+"' />" +
-				"<input hidden type='number' name='id' value="+ element.id +">" +
+				"<input hidden readonly name='_csrf' value='"+config.csrf.value+"' />" +
+				"<input hidden readonly type='number' name='id' value="+ element.id +">" +
 				"<input type='submit' class='declineButton' value='Bloquear' />" +
 				"</form>" +
 				"</div>"+
