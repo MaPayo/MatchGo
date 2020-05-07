@@ -29,7 +29,22 @@
 
 	<body>
 		<form id="formSearch">
-			<input placeholder="Texto a Buscar" id="textS"  type="text" name="title" />
+			<input placeholder="Titulo o descripcion a Buscar" id="textS"  type="text" name="title" />
+			<input placeholder="En un lugar concreto" id="locS"  type="text" name="title" />
+                    	<label>Desde: <input type="date" name="date" id="dateFS" /> </input>
+                    	<label>Hasta: <input type="date" name="date" id="dateTS" /> </input>
+                	<select id="ageS" name="ageS" th:readonly="${viewEvent}">
+                		<option value="">Edad de los participantes</option>
+				<option value="18-24">18 - 24 años</option>
+				<option value="25-29">25 - 29 años</option>
+				<option value="30-39">30 - 39 años</option>
+				<option value=">40">mayores de 40 años</option>	
+			</select>
+			<select id="genderS" name="genderS" th:readonly="${viewEvent}">
+				<option value="">Genero preferido</option>
+				<option value="Femenino">Femenino</option>
+				<option value="Masculino">Masculino</option>
+			</select>
 			<label>Buscar en: </label><select id="tagS" name="category">
 				<option value=-1 selected >todas las categoria</option>
 				<option th:each="categories: ${category}" th:value="${categories.getId()}"><span th:text="${categories.getTag()}"></span></option>

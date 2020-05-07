@@ -307,26 +307,7 @@ public class EventController {
 		return "event_view";
 	}
 	
-	@PostMapping(path = "/eventToSearch", produces = "application/json")
-	@Transactional
-	@ResponseBody
-	public List<Event.TransferEvent> getSearchedEvent(@RequestBody JsonNode nodej, Model model){
-		final String textToSearch = nodej.get("textS").asText().toLowerCase();
-		final long tag = Long.parseLong(nodej.get("tagS").asText()); 
-		List<Event> events;
-		if (tag != -1){
-			events = entityManager.createNamedQuery("Event.getEventSearchWC", Event.class)
-				.setParameter("textToSearch", "%"+textToSearch+"%")
-				.setParameter("tagToSearch", tag)
-				.getResultList();
 
-		} else {
-			events = entityManager.createNamedQuery("Event.getEventSearch", Event.class)
-				.setParameter("textToSearch", "%"+textToSearch+"%")
-				.getResultList();
-		}
-		return Event.asTransferObjects(events);
-	}
 	public void sendMessageWS(final List content, final String type,long id) {
 		log.info("Sending updated " + type + " via websocket");
 		List response = new ArrayList();
