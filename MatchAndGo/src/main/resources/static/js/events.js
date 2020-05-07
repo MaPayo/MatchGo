@@ -13,11 +13,11 @@ document.addEventListener("DOMContentLoaded", () => {
 	document.getElementById("textS").addEventListener("keypress",function(keyPress) {
 		if (keyPress.keyCode == 13){
 			event.preventDefault();
-			sendSearch();
+			go(config.rootUrl + "admin/eventlist","POST",null).then(e => sendSearch(e));
 		}
 	});
 	document.getElementById("search").addEventListener("click",function() {
-		sendSearch();
+		go(config.rootUrl + "admin/eventlist","POST",null).then(e => sendSearch(e));
 	});
 
 	//response.forEach(e => );
@@ -27,78 +27,10 @@ document.addEventListener("DOMContentLoaded", () => {
 	//   (assuming you do not care about order-of-execution, all such handlers will be called correctly)
 });
 
-function sendSearch(){
-	
-
-
-		/**
-		 * take all events and compare them with conditions, if all pased append to events
-		 **/
-	//	List<Event> allEvents = entityManager.createNamedQuery("Event.all", Event.class).getResultList();
-	//	for (Event e : allEvents){
-			/**
-			 * Global flag say if add or not event
-			 **/
-	//		boolean flag_add = false;
-			//Compare tags
-	//		if (tag != -1){
-	//			boolean flag_find = false;
-	//			for (Tags t : e.getTags()){
-	//				if (t.getId() == tag){
-	//					flag_find = true;
-	//					break;
-	//				}
-	//			}
-	//			if (!flag_find){
-	//				flag_add = true;
-	//			}
-	//		}
-			//Compare Gender
-	//		if (!flag_add && !"".equals(genderToSearch)){
-	//			log.warn("comparo genero");
-	//			if (!e.getGenderPreference().equals(genderToSearch)){
-	//				flag_add = true;
-	//			}
-	//		}
-			//Compare Age
-	//		if (!flag_add && !"".equals(ageToSearch)){
-	//			log.warn("comparo edad");
-	//			if (!e.getAgePreference().equals(ageToSearch)){
-	//				flag_add = true;
-	//			}
-	//		}
-			//Compare site
-	//		if (!flag_add && !"".equals(siteToSearch)){
-	//			log.warn("comparo sitio");
-	//			if (!e.getLocation().contains(siteToSearch)){
-	//				flag_add = true;
-	//			}
-	//		}
-			//Compare title
-	//		if (!flag_add && !"".equals(textToSearch)){
-	//			log.warn("comparo titulo");
-	//			if (!e.getName().contains(textToSearch)){
-	//				log.warn("titulo no acierta");
-	//				flag_add = true;
-	//			} else{
-	//				log.warn(" acierta");
-	//			}
-	//		}
-			//Compare description 
-	//		if (!flag_add && !"".equals(textToSearch)){
-	//			log.warn("comparo descripcion");
-	//			if (!e.getDescription().contains(textToSearch)){
-	//				flag_add = true;
-	//			}
-	//		}
-	//		if (!flag_add){
-	//			events.add(e);
-	//		}
-	//	}
-
-
-
-
+function sendSearch(jsonArray){
+	/**
+	 * take all events and compare them with conditions, if all pased append to events
+	 **/
 
 	const text = document.getElementById("textS").value;
 	const loc = document.getElementById("locS").value;
@@ -107,7 +39,40 @@ function sendSearch(){
 	const age = document.getElementById("ageS").value;
 	const gender = document.getElementById("genderS").value;
 	const cat = document.getElementById("tagS").value;
-	go(config.rootUrl + "event/eventToSearch","POST",{textS:text,tagS:cat,date_from:dateF,date_to:dateT,locS:loc,ageS:age,genderS:gender}).then(e => listUsers(e,"updateEvents"));
+	var arrayEvents = new Array();
+	jsonArray.forEach(function(ev){
+		var flag_add = false;
+		if (!text == ""){
+			flag_add = (ev.name.includes(text) || ev.description.includes(text)) ? false:true;
+		}
+		if (!flag_add && !loc == ""){
+			flag_add = (ev.location.includes(loc)) ? false:true;
+		}
+		if (!flag_add && !gender == ""){
+			flag_add = (ev.genderPreference.includes(gender)) ? false:true;
+		}
+		if (!flag_add && !age == ""){
+			flag_add = (ev.agePreference.includes(age)) ? false:true;
+		}
+		if (!flag_add && !dateF == "" || !dateT == ""){
+			if (!dateF == "" && !dateT == ""){
+				flag_add = (Date.parse(ev.date) <= Date.parse(dateF) && Date.parse(ev.date) >= Date.parse(dateT)) ? false:true;
+			} else if (!dateF == ""){
+				flag_add = (Date.parse(ev.date) <= Date.parse(dateF)) ? false:true;
+			} else if (!dateT == ""){
+				flag_add = (Date.parse(ev.date) >= Date.parse(dateT)) ? false:true;
+			}
+
+		}
+		if (!flag_add && !cat == ""){
+			flag_add = (ev.tagNames.includes(cat)) ? false:true;
+		}
+		if (!flag_add){
+			arrayEvents.push(ev);
+		}
+	});
+	console.log(arrayEvents);
+	listUsers(arrayEvents, "updateEvents");
 }
 
 function listUsers(jsonArray, type){
