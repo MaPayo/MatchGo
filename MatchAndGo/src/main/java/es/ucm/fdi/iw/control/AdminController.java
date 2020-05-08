@@ -130,6 +130,35 @@ public class AdminController {
 		return "redirect:/admin/";
 	}
 
+	@PostMapping("/deleteTag")
+	@Transactional
+	public String deleteTag(final Model model, @RequestParam final long id) {
+		final Tags t = (Tags) entityManager.createNamedQuery("Tags.getTag", Tags.class).setParameter("idTag", id)
+			.getSingleResult();
+	
+		log.info("I will Remove tag from users");
+		final List<User> users = new ArrayList<>(t.getSubscribers());
+		log.info("I will Remove all subcriptors");
+		for (final User u : users) {
+			t.getSubscribers().remove(u);
+			log.info("Remove uer from tag " + t.getId());
+		}
+
+		final List<Event> events = new ArrayList<>(t.getEvents());
+		log.info("I will Remove from all Events");
+		for (final Event e : events) {
+			t.getEvents().remove(e);
+			log.info("Remove event " + e.getId() + " from tag "+ t.getId());
+		}
+		log.info("update Tag");
+		entityManager.flush();
+		log.info("deleting tag");
+		entityManager.createNamedQuery("Tags.deleteTag").setParameter("idTag",id).executeUpdate();
+		log.info("update clients with new info");
+	//	final List<Event> eventsU = entityManager.createNamedQuery("Event.all",Event.class).getResultList();
+	//	sendMessageWS(eventsU,"updateEvents","/topic/admin");
+		return "redirect:/admin/";
+	}
 	@PostMapping("/deleteEvent")
 	@Transactional
 	public String deleteEvent(final Model model, @RequestParam final long id) {
