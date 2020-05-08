@@ -1,8 +1,9 @@
 function validateStrings(form){
-	const badWords = ['delete','select','rm','update'];
+	const badWords = "select.*from|delete.*from|update.*set|http|https|porno|viagra";
+	const re = new RegExp(badWords);
 	let inputs = form.querySelectorAll('input[type=text]');
 	for (var i = 0; i < inputs.length;i++){
-		if (badWords.includes(inputs[i].value)){
+		if (re.test(inputs[i].value)){
 			alert("bad Boy");
 			return false;
 		}
