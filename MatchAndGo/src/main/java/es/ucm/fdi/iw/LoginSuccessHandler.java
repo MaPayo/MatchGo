@@ -17,6 +17,8 @@ import org.springframework.stereotype.Component;
 
 import es.ucm.fdi.iw.model.User;
 
+import java.time.LocalDateTime;
+import javax.transaction.Transactional;
 /**
  * Called when a user is first authenticated (via login).
  * Called from SecurityConfig; see https://stackoverflow.com/a/53353324
@@ -41,6 +43,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
      * Called whenever a user authenticates correctly.
      */
     @Override
+    @Transactional
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {
 	    String username = ((org.springframework.security.core.userdetails.User)
@@ -62,6 +65,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 		session.setAttribute("apiUrl", request.getRequestURL().toString()
 			.replaceFirst("/[^/]*$", ""));
 		
+		entityManager.createNamedQuery("User.updateLastLogin").setParameter("idUser", u.getId()).executeUpdate(); // Update Last Login
 		// redirects to 'admin' or 'user/{id}', depending on the user
 		response.sendRedirect(u.hasRole(User.Role.ADMIN) ? 
 				"admin/" :
