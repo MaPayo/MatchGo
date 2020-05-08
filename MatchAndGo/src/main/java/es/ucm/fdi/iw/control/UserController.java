@@ -42,6 +42,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import es.ucm.fdi.iw.LocalData;
+import es.ucm.fdi.iw.control.PrivateUtilities;
 import es.ucm.fdi.iw.model.Evaluation;
 import es.ucm.fdi.iw.model.Event;
 import es.ucm.fdi.iw.model.Tags;
@@ -56,55 +57,55 @@ import es.ucm.fdi.iw.model.User.Role;
 @Controller()
 @RequestMapping("user")
 public class UserController {
-	
+
 	private static final Logger log = LogManager.getLogger(UserController.class);
-	
+
 	@Autowired 
 	private EntityManager entityManager;
-	
+
 	@Autowired
 	private LocalData localData;
-	
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
-	
+
 	@GetMapping("/")
 	public String getUserSession(Model model, HttpSession session) {
 		User u = (User) session.getAttribute("u"); 
-        u = entityManager.find(User.class, u.getId()); 
+		u = entityManager.find(User.class, u.getId()); 
 		return "redirect:/user/"+u.getId();
 	}
-	
+
 	@GetMapping("/{id}")
 	@Transactional
 	public String getUser(@PathVariable long id, Model model, HttpSession session) {
 		User u = entityManager.find(User.class, id);
 		model.addAttribute("user", u);
 		log.warn("CREANDO LISTADO DE ETIQUETAS");
-		
+
 		final List<Tags> user_tags = new ArrayList<>(u.getTags()); 
 		log.warn("CREADA LISTA DE TAGS SACADA DEL USUARIO");
 		model.addAttribute("user_tags", user_tags);
 		log.warn("FUNCIONAAAAAAAAAAAAAAAAAA TAAAAAGS");
 		log.warn("CREANDO LISTADO DE EVENTOS");
-		
+
 		List<Tags> allTags = (ArrayList<Tags>) entityManager.createQuery("SELECT t FROM Tags t").getResultList();
 
 		model.addAttribute("allTags", allTags);
-		
+
 		final List<Event> user_events = new ArrayList<>(u.getJoinedEvents()); 
 		log.warn("CREADA LISTA DE TAGS SACADA DEL USUARIO");
 		model.addAttribute("user_events", user_events);
 		log.warn("FUNCIONAAAAAAAAAAAAAAAAAA EVENTOS");
-	
+
 		final List<Evaluation> user_coments = new ArrayList<>(u.getReceivedEvaluation()); 
 		log.warn("CREADA LISTA DE COMENTARIOS SACADA DEL USUARIO");
 		model.addAttribute("user_coments", user_coments);
 		log.warn("FUNCIONAAAAAAAAAAAAAAAAAAA COMENTARIOS");
-	
+
 		return "profile";
 	}
 
@@ -118,22 +119,22 @@ public class UserController {
 			Model model, HttpSession session) throws IOException {
 		User target = entityManager.find(User.class, id);
 		model.addAttribute("user", target);
-		
+
 		User requester = (User)session.getAttribute("u");
 		if (requester.getId() != target.getId() &&
 				! requester.hasRole(Role.ADMIN)) {			
 			response.sendError(HttpServletResponse.SC_FORBIDDEN, 
 					"No eres administrador, y éste no es tu perfil");
-		}
-		
+				}
+
 		if (edited.getPassword() != null && edited.getPassword().equals(pass2)) {
 			// save encoded version of password
 			target.setPassword(passwordEncoder.encode(edited.getPassword()));
 		}		
 		target.setUsername(edited.getUsername());
 		return "profile";
-	}	
-	
+			}	
+
 	@GetMapping(value="/{id}/photo")
 	public StreamingResponseBody getPhoto(@PathVariable long id, Model model) throws IOException {		
 		File f = localData.getFile("user", ""+id);
@@ -151,46 +152,46 @@ public class UserController {
 			}
 		};
 	}
-	
+
 	@PostMapping("/{id}/photo")
 	public String postPhoto(
 			HttpServletResponse response,
 			@RequestParam("photo") MultipartFile photo,
 			@PathVariable("id") String id, Model model, HttpSession session) throws IOException {
-		User target = entityManager.find(User.class, Long.parseLong(id));
-		model.addAttribute("user", target);
-		
-		// check permissions
-		User requester = (User)session.getAttribute("u");
-		if (requester.getId() != target.getId() &&
-				! requester.hasRole(Role.ADMIN)) {
-			response.sendError(HttpServletResponse.SC_FORBIDDEN, 
-					"No eres administrador, y éste no es tu perfil");
-			return "profile";
-		}
-		
-		log.info("Updating photo for user {}", id);
-		File f = localData.getFile("user", id);
-		if (photo.isEmpty()) {
-			log.info("failed to upload photo: emtpy file?");
-		} else {
-			try (BufferedOutputStream stream =
-					new BufferedOutputStream(new FileOutputStream(f))) {
-				byte[] bytes = photo.getBytes();
-				stream.write(bytes);
-			} catch (Exception e) {
-				log.warn("Error uploading " + id + " ", e);
+			User target = entityManager.find(User.class, Long.parseLong(id));
+			model.addAttribute("user", target);
+
+			// check permissions
+			User requester = (User)session.getAttribute("u");
+			if (requester.getId() != target.getId() &&
+					! requester.hasRole(Role.ADMIN)) {
+				response.sendError(HttpServletResponse.SC_FORBIDDEN, 
+						"No eres administrador, y éste no es tu perfil");
+				return "profile";
+					}
+
+			log.info("Updating photo for user {}", id);
+			File f = localData.getFile("user", id);
+			if (photo.isEmpty()) {
+				log.info("failed to upload photo: emtpy file?");
+			} else {
+				try (BufferedOutputStream stream =
+						new BufferedOutputStream(new FileOutputStream(f))) {
+					byte[] bytes = photo.getBytes();
+					stream.write(bytes);
+				} catch (Exception e) {
+					log.warn("Error uploading " + id + " ", e);
+				}
+				log.info("Successfully uploaded photo for {} into {}!", id, f.getAbsolutePath());
 			}
-			log.info("Successfully uploaded photo for {} into {}!", id, f.getAbsolutePath());
-		}
-		return "profile";
-	}
-	
+			return "profile";
+			}
+
 	@GetMapping("/login")
 	public String getLogin(Model model, HttpSession session) {
 		if(session.getAttribute("user") != null) 
 			return "redirect:/user/" + ((User) session.getAttribute("user")).getId();
-	
+
 		return "login";
 	}
 
@@ -199,25 +200,25 @@ public class UserController {
 	public String login(Model model, HttpServletRequest request, @RequestParam String userName,
 			@RequestParam String password, HttpSession session) {
 
-		if (usernameAlreadyInUse(userName)) {
-			// Se saca la constraseña del usuario que se está loggeando
-			String pass = entityManager.createNamedQuery("User.Password", String.class)
+			if (usernameAlreadyInUse(userName)) {
+				// Se saca la constraseña del usuario que se está loggeando
+				String pass = entityManager.createNamedQuery("User.Password", String.class)
 					.setParameter("userName", userName).getSingleResult();
 
-			// Se compara la contraseña introducida con la contraseña cifrada de la BD
-			boolean correct = passwordEncoder.matches(password, pass);
-			log.info("The passwords match: {}", correct);
-			if (correct) {
-				User u = entityManager.createNamedQuery("User.byUsername", User.class).setParameter("userName", userName)
+				// Se compara la contraseña introducida con la contraseña cifrada de la BD
+				boolean correct = passwordEncoder.matches(password, pass);
+				log.info("The passwords match: {}", correct);
+				if (correct) {
+					User u = entityManager.createNamedQuery("User.byUsername", User.class).setParameter("userName", userName)
 						.getSingleResult();
 
-				session.setAttribute("user", u);
-				return "redirect:/user/" + u.getId(); // Devuelve el usuario loggeado
-			} else {
-				return "redirect:/user/login";
+					session.setAttribute("user", u);
+					return "redirect:/user/" + u.getId(); // Devuelve el usuario loggeado
+				} else {
+					return "redirect:/user/login";
+				}
 			}
-		}
-		return "redirect:/index";
+			return "redirect:/index";
 	}
 
 	@GetMapping("/signup")
@@ -226,7 +227,7 @@ public class UserController {
 			return "redirect:/user/" + ((User) session.getAttribute("user")).getId();
 		return "login";
 	}
-	
+
 	@PostMapping("/signup")
 	@Transactional
 	public String register(Model model, HttpServletRequest request, Principal principal, @RequestParam String username,
@@ -234,60 +235,67 @@ public class UserController {
 			@RequestParam String firstname, @RequestParam String lastname, @RequestParam String gender,
 			@RequestParam String birthdate, 
 			@RequestParam("userPhoto") MultipartFile userPhoto, HttpSession session) {
+			/**
+			 * First we test all params are clean
+			 **/
+			PrivateUtilities privateUtilities = new PrivateUtilities();
+			List<String> wordsToCheck = new ArrayList(List.of(username,password,password2,email,firstname,lastname,gender,birthdate));
+			if (!privateUtilities.checkStrings(wordsToCheck)){
+
+				log.warn("ENTRA AL METODO DE REGISTRAR EL USER");
+				//redirigimos al registro si el usrname ya existe o las contraseñas no coinciden
+				//aunq esto lo quiero hacer desde el html y que salga un aviso en la pagina
+				if (usernameAlreadyInUse(username) || !password.equals(password2)) {
+					return "redirect:/user/login";
+				}
+				log.warn("ACEPTA LOS DATOS DE NUEVO USUARIO");
+				// Creación de un usuario
+				User u = new User();
+				u.setUsername(username);
+				u.setPassword(passwordEncoder.encode(password));
+				u.setUserRole("USER");
+				u.setEmail(email);
+				u.setFirstName(firstname);
+				u.setLastName(lastname);
+				u.setBirthDate(birthdate);
+				u.setGender(gender);
+				u.setEnabled(true);
+
+				//No se como tratar las tags
 
 
-		log.warn("ENTRA AL METODO DE REGISTRAR EL USER");
-		//redirigimos al registro si el usrname ya existe o las contraseñas no coinciden
-		//aunq esto lo quiero hacer desde el html y que salga un aviso en la pagina
-		if (usernameAlreadyInUse(username) || !password.equals(password2)) {
-			return "redirect:/user/login";
-		}
-		log.warn("ACEPTA LOS DATOS DE NUEVO USUARIO");
-		// Creación de un usuario
-		User u = new User();
-		u.setUsername(username);
-		u.setPassword(passwordEncoder.encode(password));
-		u.setUserRole("USER");
-		u.setEmail(email);
-		u.setFirstName(firstname);
-		u.setLastName(lastname);
-		u.setBirthDate(birthdate);
-		u.setGender(gender);
-		u.setEnabled(true);
-		
-		//No se como tratar las tags
-		
-	
-		log.info("Creating & logging new user {}, with ID {} and password {}", username, u.getId(), password);
-		entityManager.persist(u);
+				log.info("Creating & logging new user {}, with ID {} and password {}", username, u.getId(), password);
+				entityManager.persist(u);
 
-		entityManager.flush(); //guardar bbdd
-		log.info("Creating & logging new user {}, with ID {} and password {}", username, u.getId(), password);
+				entityManager.flush(); //guardar bbdd
+				log.info("Creating & logging new user {}, with ID {} and password {}", username, u.getId(), password);
 
-		
-		//En el momento en que se crea correctamente el usuario se inicia sesion y se redirige al perfil
-		doAutoLogin(username, password, request);
-		
-		log.info("Created & logged new user {}, with ID {} and password {}", username, u.getId(), password);
-		
-		
-		if (!userPhoto.isEmpty()) {
-			File f = localData.getFile("user", String.valueOf(u.getId()));
-			try (BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(f))) {
-				byte[] bytes = userPhoto.getBytes();
-				stream.write(bytes);
-			} catch (Exception e) {
-				log.info("Error uploading photo for user with ID {}", u.getId());
+
+				//En el momento en que se crea correctamente el usuario se inicia sesion y se redirige al perfil
+				doAutoLogin(username, password, request);
+
+				log.info("Created & logged new user {}, with ID {} and password {}", username, u.getId(), password);
+
+
+				if (!userPhoto.isEmpty()) {
+					File f = localData.getFile("user", String.valueOf(u.getId()));
+					try (BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(f))) {
+						byte[] bytes = userPhoto.getBytes();
+						stream.write(bytes);
+					} catch (Exception e) {
+						log.info("Error uploading photo for user with ID {}", u.getId());
+					}
+					log.info("Successfully uploaded photo for {} into {}!", u.getId(), f.getAbsolutePath());
+				}
+
+				session.setAttribute("u", u);
+				session.setAttribute("ws", request.getRequestURL().toString()
+						.replaceFirst("[^:]*", "ws")		// http[s]://... => ws://...
+						.replaceFirst("/user.*", "/ws"));
+
+				return "redirect:/user/" + u.getId();
 			}
-			log.info("Successfully uploaded photo for {} into {}!", u.getId(), f.getAbsolutePath());
-		}
-		
-		session.setAttribute("u", u);
-		session.setAttribute("ws", request.getRequestURL().toString()
-				.replaceFirst("[^:]*", "ws")		// http[s]://... => ws://...
-				.replaceFirst("/user.*", "/ws"));
-
-		return "redirect:/user/" + u.getId();
+			return "redirect:/login?erno=1";
 	}
 
 
@@ -304,7 +312,7 @@ public class UserController {
 				.replaceFirst("/user.*", "/ws"));
 		return "redirect:/event/";
 	}
-	
+
 	/**
 	 * with id event produce json joined users
 	 */
@@ -324,19 +332,19 @@ public class UserController {
 		return "redirect:/index";
 	}
 
-	
+
 	private boolean usernameAlreadyInUse(String userName) {
 		Long usernameAlreadyInUse = entityManager.createNamedQuery("User.hasUsername", Long.class)
-				.setParameter("username", userName).getSingleResult();
+			.setParameter("username", userName).getSingleResult();
 		if(usernameAlreadyInUse != 0) {
 			return true;
 		}
 		return false;
 	}
-	
-	
 
-	
+
+
+
 	/**
 	 * Non-interactive authentication; user and password must already exist
 	 *

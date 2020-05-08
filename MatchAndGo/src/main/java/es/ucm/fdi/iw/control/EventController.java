@@ -54,6 +54,7 @@ import es.ucm.fdi.iw.model.Event.Access;
 import es.ucm.fdi.iw.model.Tags;
 import es.ucm.fdi.iw.model.User.Role;
 
+import es.ucm.fdi.iw.control.PrivateUtilities;
 /**
  * User-administration controller
  * @author Carlos Olano
@@ -80,9 +81,9 @@ public class EventController {
 
 	@GetMapping("/")
 	public String index(Model model, HttpSession session) {
-	/**
-	 * logearse como invitado si no tiene sesion
-	 **/
+		/**
+		 * logearse como invitado si no tiene sesion
+		 **/
 		if (session.getAttribute("u") == null){
 			return "redirect:/user/guest";
 		}
@@ -93,7 +94,7 @@ public class EventController {
 		model.addAttribute("category", categories);
 		return "events";
 	}
-	
+
 	@GetMapping("/newEvent")
 	public String getNewEvent(Model model, HttpSession session) {
 
@@ -118,44 +119,49 @@ public class EventController {
 			@RequestParam String location, @RequestParam Long category,
 			@RequestParam String tagsAll, HttpSession session) {
 
-			User requester = (User)session.getAttribute("u");
-			requester = entityManager.find(User.class, requester.getId());
-			model.addAttribute("user", requester);
-			Event newEvent = new Event();
-			newEvent.setName(name);
-			newEvent.setDescription(description);
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-			newEvent.setDate(LocalDate.parse(date, formatter).atStartOfDay());
-			newEvent.setPublicationDate(LocalDateTime.now());
-			newEvent.setLocation(location);
-			newEvent.setAgePreference(agePreference);
-			newEvent.setGenderPreference(genderPreference);
-			newEvent.setCreator(requester);
-			List<Tags> tags = new ArrayList();
+			PrivateUtilities privateUtilities = new PrivateUtilities();
+			List<String> wordsToCheck = new ArrayList(List.of(name,description,date,agePreference,genderPreference,location,tagsAll));
+			if (!privateUtilities.checkStrings(wordsToCheck)){
+				User requester = (User)session.getAttribute("u");
+				requester = entityManager.find(User.class, requester.getId());
+				model.addAttribute("user", requester);
+				Event newEvent = new Event();
+				newEvent.setName(name);
+				newEvent.setDescription(description);
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+				newEvent.setDate(LocalDate.parse(date, formatter).atStartOfDay());
+				newEvent.setPublicationDate(LocalDateTime.now());
+				newEvent.setLocation(location);
+				newEvent.setAgePreference(agePreference);
+				newEvent.setGenderPreference(genderPreference);
+				newEvent.setCreator(requester);
+				List<Tags> tags = new ArrayList();
 
-			String[] tagNames = tagsAll.split("\n");
-			for(String tagName : tagNames) {
-				Tags t = new Tags();
-				t.setisCategory(false);
-				t.setTag(tagName);
-				tags.add(t);
-				entityManager.persist(t);
+				String[] tagNames = tagsAll.split("\n");
+				for(String tagName : tagNames) {
+					Tags t = new Tags();
+					t.setisCategory(false);
+					t.setTag(tagName);
+					tags.add(t);
+					entityManager.persist(t);
+				}
+
+				tags.add(entityManager.find(Tags.class, category));
+				newEvent.setTags(tags);
+
+				entityManager.persist(newEvent);
+
+				/*Evaluation.getreviews
+				  User requester = (User)session.getAttribute("u");
+				  if (requester.getId() != target.getCreator().getId() &&
+				  ! requester.hasRole(Role.ADMIN)) {			
+				  response.sendError(HttpServletResponse.SC_FORBIDDEN, 
+				  "No eres administrador, y éste no es tu evento");
+				  }
+				  */
+				return "redirect:/user/" + requester.getId();
 			}
-
-			tags.add(entityManager.find(Tags.class, category));
-			newEvent.setTags(tags);
-
-			entityManager.persist(newEvent);
-
-			/*Evaluation.getreviews
-			  User requester = (User)session.getAttribute("u");
-			  if (requester.getId() != target.getCreator().getId() &&
-			  ! requester.hasRole(Role.ADMIN)) {			
-			  response.sendError(HttpServletResponse.SC_FORBIDDEN, 
-			  "No eres administrador, y éste no es tu evento");
-			  }
-			  */
-			return "redirect:/user/" + requester.getId();
+			return "redirect:/event/newEvent?erno=1";
 	}
 
 
@@ -261,19 +267,19 @@ public class EventController {
 		return "events";
 	}
 
-	
+
 	@GetMapping("/{id}")
 	public String getEventPost(@PathVariable long id, Model model, HttpServletRequest request, HttpSession session) {
 		Event e = entityManager.find(Event.class, id);
-	/**
-	 * logearse como invitado si no tiene sesion
-	 **/
+		/**
+		 * logearse como invitado si no tiene sesion
+		 **/
 		if (session.getAttribute("u") == null){
 			return "redirect:/user/guest";
 		}
 		User requester = (User)session.getAttribute("u");
 		requester = entityManager.find(User.class, requester.getId());
-		
+
 		long categoryId = 0;
 		StringBuilder tags = new StringBuilder();
 		boolean found = false;
@@ -287,18 +293,18 @@ public class EventController {
 				tags.append(e.getTags().get(i).getTag() + "\n");
 			i++;
 		}
-		
+
 		for(int j = i; j < e.getTags().size(); j++) {
 			tags.append(e.getTags().get(j).getTag() + "\n");
 		}
-		
+
 		ArrayList<Tags> categories = (ArrayList<Tags>) entityManager.createQuery("SELECT t FROM Tags t WHERE t.isCategory IS TRUE")
-				.getResultList();
+			.getResultList();
 
 		model.addAttribute("user", requester);
 		model.addAttribute("newEvent", false);
 		model.addAttribute("viewEvent", true);
-		
+
 		model.addAttribute("event", e);
 		model.addAttribute("categoryId", categoryId);
 		model.addAttribute("tags", tags.toString());
@@ -306,7 +312,7 @@ public class EventController {
 		model.addAttribute("date", e.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 		return "event_view";
 	}
-	
+
 
 	public void sendMessageWS(final List content, final String type,long id) {
 		log.info("Sending updated " + type + " via websocket");
@@ -333,13 +339,17 @@ public class EventController {
 		User u = entityManager.find(User.class, Long.parseLong(nodej.get("idU").asText()));
 		LocalDateTime lt = LocalDateTime.now();
 		String text = nodej.get("textMessage").asText();
-		Message ms = new Message(text,u, null, lt, false, e);
-		entityManager.persist(ms);
-		entityManager.flush();
-		final List<Message> mes = entityManager.createNamedQuery("Message.getEventMessages", Message.class)
-			.setParameter("idUser", id)
-			.getResultList();
-		sendMessageWS(mes,"updateMessages",id);
+		PrivateUtilities privateUtilities = new PrivateUtilities();
+		List<String> wordsToCheck = new ArrayList(List.of(text));
+		if (!privateUtilities.checkStrings(wordsToCheck)){
+			Message ms = new Message(text,u, null, lt, false, e);
+			entityManager.persist(ms);
+			entityManager.flush();
+			final List<Message> mes = entityManager.createNamedQuery("Message.getEventMessages", Message.class)
+				.setParameter("idUser", id)
+				.getResultList();
+			sendMessageWS(mes,"updateMessages",id);
+		}
 	}
 	@PostMapping(path = "/m/{id}", produces = "application/json")
 	@Transactional

@@ -15,24 +15,20 @@ document.addEventListener("DOMContentLoaded", () => {
 			const id = document.getElementById("idUs").value;
 			const score = document.getElementById("score").value;
 			const text = document.getElementById("textoV").value;
-			go(config.rootUrl + "reviews/add","POST",{textN:text,idU:id,score:score}).then(e => listUsers(e,"updateListValuations"));
+			if (validateStrings(document.getElementById("contentVal"))){
+				go(config.rootUrl + "reviews/add","POST",{textN:text,idU:id,score:score}).then(e => listUsers(e,"updateListValuations"));
+			}
 		});
 		document.getElementById("sendMessage").addEventListener("click",function() {
 			const text = document.getElementById("texto").value;
-			go(config.rootUrl + "event/nm/"+lastURLSegment,"POST",{textMessage:text,idU:config.userId}).then(e => listUsers(e,"updateMessages"));
+			if (validateStrings(document.getElementById("contentMess"))){
+				go(config.rootUrl + "event/nm/"+lastURLSegment,"POST",{textMessage:text,idU:config.userId}).then(e => listUsers(e,"updateMessages"));
+			}
 		});
 	}
 	go(config.rootUrl + "event/m/"+lastURLSegment,"POST",null).then(e => listUsers(e,"updateMessages"));
 	go(config.rootUrl + "user/event/"+lastURLSegment,"POST",null).then(e => listUsers(e,"updateUsersEvent"));
-
-	//response.forEach(e => );
-
-	// add your after-page-loaded JS code here; or even better, call 
-	// 	 document.addEventListener("DOMContentLoaded", () => { /* your-code-here */ });
-	//   (assuming you do not care about order-of-execution, all such handlers will be called correctly)
 });
-
-
 function listUsers(jsonArray, type, page){
 	var pageURL = window.location.href;
 	var lastURLSegment = pageURL.substr(pageURL.lastIndexOf('/') + 1);
@@ -67,7 +63,6 @@ function listUsers(jsonArray, type){
 					go(config.rootUrl + "reviews/user/"+this.dataset.id,"POST",null).then(e => listUsers(e,"updateListValuations"));
 				});
 			}
-
 			break;
 		case "updateListValuations":
 			var node = document.getElementById("contEvaluations");
@@ -86,8 +81,6 @@ function listUsers(jsonArray, type){
 			break;
 	}
 }
-
-
 function appendChild(where,element, type){
 
 	let html;

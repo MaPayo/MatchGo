@@ -51,6 +51,7 @@ import es.ucm.fdi.iw.model.Event.Access;
 import es.ucm.fdi.iw.model.Tags;
 import es.ucm.fdi.iw.model.User.Role;
 
+import es.ucm.fdi.iw.control.PrivateUtilities;
 /**
  * User-administration controller
  *@author Carlos Olano 
@@ -116,10 +117,13 @@ public class EvaluationController {
 		final User v = (User)session.getAttribute("u");
 		final User eva = (User) entityManager.createNamedQuery("User.getUser", User.class)
 			.setParameter("idUser", idU).getSingleResult();
-		Evaluation e = new Evaluation(v, eva,(long)score,text);
-		entityManager.persist(e);
-		entityManager.flush();
-		
+		PrivateUtilities privateUtilities = new PrivateUtilities();
+		List<String> wordsToCheck = new ArrayList(List.of(text));
+		if (!privateUtilities.checkStrings(wordsToCheck)){
+			Evaluation e = new Evaluation(v, eva,(long)score,text);
+			entityManager.persist(e);
+			entityManager.flush();
+		}
 		return Evaluation.asTransferObjects(eva.getReceivedEvaluation());
 	}
 	@PostMapping(path = "/user/{id}", produces = "application/json")
