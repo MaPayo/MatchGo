@@ -10,15 +10,15 @@ public class PrivateUtilities {
 	public PrivateUtilities(){
 	}
 	public boolean checkStrings(List<String> words){
-		log.warn("i will check words");
+		log.info("i will check words");
 		for(String word : words){
-			log.warn("checking {}",word);
+			log.info("checking {}",word);
 			if(badWords.contains(word)){
 				log.warn("They want do something bad");
 				return true;
 			}
 		}
-		log.warn("All clean");
+		log.info("All clean");
 		return false;
 	}
 }
