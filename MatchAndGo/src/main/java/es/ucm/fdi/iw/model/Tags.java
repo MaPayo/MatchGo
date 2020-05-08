@@ -19,6 +19,7 @@ import javax.persistence.NamedQuery;
 
 @NamedQueries({
 @NamedQuery(name="Tags.deleteTag", query="DELETE FROM Tags  WHERE id = :idTag"),
+@NamedQuery(name="Tags.getTag", query="SELECT t FROM Tags t WHERE id = :idTag"),
 @NamedQuery(name="Tags.all", query="SELECT t FROM Tags t"),
 @NamedQuery(name="Tag.getCategories", query="SELECT t FROM Tags t WHERE t.isCategory IS TRUE"),
 @NamedQuery(name="Tag.getEventTagsByName", query="SELECT t FROM Tags t Where lower(t.tag) = :tagname")

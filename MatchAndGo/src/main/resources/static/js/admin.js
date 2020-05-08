@@ -59,7 +59,7 @@ function appendChild(element, type){
 				"<h2>"+element.tag+"</h2>" + 
 				"</div>" +
 				"<div class='cardLowerContainer'>" +
-				"<form method='post' action='/admin/deleteUser'>" +
+				"<form method='post' action='/admin/deleteTag'>" +
 				"<input hidden readonly name='_csrf' value='"+config.csrf.value+"' />" +
 				"<input hidden readonly type='number' name='id' value="+ element.id +">" +
 				"<input type='submit' class='declineButton' value='Eliminar' />" +
