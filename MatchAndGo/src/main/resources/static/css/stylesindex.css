@@ -481,6 +481,14 @@ footer {
     text-align: center;
 }
 
+.inputRed{
+	background-color: #ff8080;
+}
+.inputGreen{
+	background-color: #80ff80;
+}
+
+
 .login{
     
     margin-right: auto;
