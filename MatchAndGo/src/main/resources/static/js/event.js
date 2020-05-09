@@ -60,7 +60,7 @@ function listUsers(jsonArray, type){
 			var elements = document.getElementsByClassName("anUser");
 			for (i = 0; i < elements.length;i++){
 				elements[i].addEventListener("click",function() {
-					if (!config.guest)
+					if (!config.guest && config.canEvaluate)
 						document.getElementById("idUs").value = this.dataset.id;
 					go(config.rootUrl + "reviews/user/"+this.dataset.id,"POST",null).then(e => listUsers(e,"updateListValuations"));
 				});
