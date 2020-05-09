@@ -55,10 +55,10 @@ function sendSearch(jsonArray){
 	jsonArray.forEach(function(ev){
 		var flag_add = false;
 		if (!text == ""){
-			flag_add = (ev.name.includes(text) || ev.description.includes(text)) ? false:true;
+			flag_add = (ev.name.toLowerCase().includes(text) || ev.description.toLowerCase().includes(text)) ? false:true;
 		}
 		if (!flag_add && !loc == ""){
-			flag_add = (ev.location.includes(loc)) ? false:true;
+			flag_add = (ev.location.toLowerCase().includes(loc)) ? false:true;
 		}
 		if (!flag_add && !gender == ""){
 			flag_add = (ev.genderPreference.includes(gender)) ? false:true;

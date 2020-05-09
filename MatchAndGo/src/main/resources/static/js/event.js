@@ -31,17 +31,6 @@ document.addEventListener("DOMContentLoaded", () => {
 	go(config.rootUrl + "event/m/"+lastURLSegment,"POST",null).then(e => listUsers(e,"updateMessages"));
 	go(config.rootUrl + "user/event/"+lastURLSegment,"POST",null).then(e => listUsers(e,"updateUsersEvent"));
 });
-function listUsers(jsonArray, type, page){
-	var pageURL = window.location.href;
-	var lastURLSegment = pageURL.substr(pageURL.lastIndexOf('/') + 1);
-	if (page == lastURLSegment){
-		var node = document.getElementById("M");
-		while (node.firstChild) {
-			node.removeChild(node.lastChild);
-		}
-		jsonArray.forEach(e => appendChild(node,e,type));
-	}
-}
 function listUsers(jsonArray, type){
 	switch(type){
 		case "updateMessages":
