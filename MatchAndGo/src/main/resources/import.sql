@@ -96,7 +96,7 @@ INSERT INTO EVENT(ID, NAME, DESCRIPTION, LOCATION, DATE, PUBLICATION_DATE,CREATO
 	'Nombre Evento 3',
 	'Descripcion Evnto 3',
 	'El retiro',
-	NOW(),
+	NOW + 2 DAY,
 	NOW(),
 	5
 );

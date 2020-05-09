@@ -11,14 +11,16 @@ document.addEventListener("DOMContentLoaded", () => {
 		ws.initialize(config.socketUrl, subs);
 	}
 	if (!config.guest){
-		document.getElementById("sendValuation").addEventListener("click",function() {
-			const id = document.getElementById("idUs").value;
-			const score = document.getElementById("score").value;
-			const text = document.getElementById("textoV").value;
-			if (validateStrings(document.getElementById("contentVal"))){
-				go(config.rootUrl + "reviews/add","POST",{textN:text,idU:id,score:score}).then(e => listUsers(e,"updateListValuations"));
-			}
-		});
+		if(config.canEvaluate){
+			document.getElementById("sendValuation").addEventListener("click",function() {
+				const id = document.getElementById("idUs").value;
+				const score = document.getElementById("score").value;
+				const text = document.getElementById("textoV").value;
+				if (validateStrings(document.getElementById("contentVal"))){
+					go(config.rootUrl + "reviews/add","POST",{textN:text,idU:id,score:score}).then(e => listUsers(e,"updateListValuations"));
+				}
+			});
+		}
 		document.getElementById("sendMessage").addEventListener("click",function() {
 			const text = document.getElementById("texto").value;
 			if (validateStrings(document.getElementById("contentMess"))){
@@ -59,7 +61,7 @@ function listUsers(jsonArray, type){
 			for (i = 0; i < elements.length;i++){
 				elements[i].addEventListener("click",function() {
 					if (!config.guest)
-					document.getElementById("idUs").value = this.dataset.id;
+						document.getElementById("idUs").value = this.dataset.id;
 					go(config.rootUrl + "reviews/user/"+this.dataset.id,"POST",null).then(e => listUsers(e,"updateListValuations"));
 				});
 			}

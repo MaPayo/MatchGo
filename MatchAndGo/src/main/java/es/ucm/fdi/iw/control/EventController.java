@@ -277,6 +277,7 @@ public class EventController {
 		if (session.getAttribute("u") == null){
 			return "redirect:/user/guest";
 		}
+		model.addAttribute("timestamp", LocalDateTime.now());
 		User requester = (User)session.getAttribute("u");
 		requester = entityManager.find(User.class, requester.getId());
 
