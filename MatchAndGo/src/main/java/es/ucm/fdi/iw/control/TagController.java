@@ -45,6 +45,7 @@ import es.ucm.fdi.iw.LocalData;
 import es.ucm.fdi.iw.model.Evaluation;
 import es.ucm.fdi.iw.model.Event;
 import es.ucm.fdi.iw.model.Tags;
+import es.ucm.fdi.iw.model.Tags.Transfer;
 import es.ucm.fdi.iw.model.User;
 import es.ucm.fdi.iw.model.User.Role;
 
@@ -55,9 +56,9 @@ import es.ucm.fdi.iw.model.User.Role;
  */
 @Controller()
 @RequestMapping("tag")
-public class TaskController {
+public class TagController {
 	
-	private static final Logger log = LogManager.getLogger(TaskController.class);
+	private static final Logger log = LogManager.getLogger(TagController.class);
 	
 	@Autowired 
 	private EntityManager entityManager;
@@ -68,20 +69,19 @@ public class TaskController {
 	@PostMapping(path = "/listTags/{id}", produces = "application/json")
 	@Transactional
 	@ResponseBody
-	public String listTagUser (final HttpSession session, @PathVariable long id) {
+	public List<Transfer> listTagUser (final HttpSession session, @PathVariable long id) {
 
 		log.warn("Entra en listagUser");
 		User u = entityManager.find(User.class, id);
 		final List<Tags> user_tags = new ArrayList<>(u.getTags()); 
-		List<String> alltagsUser = new ArrayList<>();
+		List<Transfer> alltagsUser = Tags.asTransferObjects(user_tags);
+	
 	/*	for(Tags t: user_tags) {
 			alltagsUser.add(t.toString());
 		}*/
 	
-		
-		
 		log.warn("Manda la lista de tags del user");
-		return user_tags.get(0).toString();
+		return alltagsUser;
 	}
 
 

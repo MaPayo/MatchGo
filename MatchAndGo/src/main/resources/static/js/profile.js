@@ -2,7 +2,6 @@
 /**
  * Actions to perform once the page is fully loaded
  */
-  let id="{'id':3}";
   
   document.addEventListener("DOMContentLoaded", () => {
 	  document.getElementById("listaTags").addEventListener("click",function() {
@@ -10,8 +9,9 @@
 			document.getElementById("listaEventosCreados").classList.remove("bgblue");
 			document.getElementById("listaEventosInscritos").classList.remove("bgblue");
 			document.getElementById("listaComentarios").classList.remove("bgblue");
-			
-			go(config.rootUrl + "tag/listTags/1","POST",null).then(e => console.log("holaaaaaaaaaa"));
+			var pageURL = window.location.href;
+			var lastURLSegment = pageURL.substr(pageURL.lastIndexOf('/') + 1);
+			go(config.rootUrl + "tag/listTags/"+ lastURLSegment,"POST",null).then(e => console.log("holaaaaaaaaaa"));
 
 	  
 	  });
