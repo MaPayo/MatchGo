@@ -32,7 +32,7 @@ import es.ucm.fdi.iw.model.User.Role;
  * @author RoNiTo0
  */
 @NamedQueries({
-
+	@NamedQuery(name="Event.getEventsByTags", query= "Select e from Event e inner join e.tags t where t.id = :idCat"),
 	@NamedQuery(name="Event.blockEvent", query= "UPDATE Event SET isAppropriate = :state " + "WHERE id = :idUser"),
 	@NamedQuery(name="Event.getEvent", query= "SELECT u from Event u WHERE u.id = :idUser"),
 	@NamedQuery(name="Event.getEventSearchWC", query= "SELECT u from Event u inner join u.tags t WHERE "+
