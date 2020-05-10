@@ -3,7 +3,7 @@
  * Actions to perform once the page is fully loaded
  */
 document.addEventListener("DOMContentLoaded", () => {
-	
+
 	if (config.socketUrl) {
 		let subs = config.admin ? 
 
@@ -18,13 +18,115 @@ document.addEventListener("DOMContentLoaded", () => {
 				childrens[i].classList.remove("bgblue");
 			}
 			event.target.classList.add("bgblue");
+			const id = event.target.dataset.id;
 			const command = event.target.dataset.action;
-			go(config.rootUrl + event.target.dataset.id,"POST",null).then(result => listUsers(result,command));
+			document.getElementById("textS").dataset.id = id;//update finder
+			go(config.rootUrl + id,"POST",null).then(result => listUsers(result,command));
 		}
 	});
 
+	document.getElementById("textS").addEventListener("keypress",function(key) {
+		if (key.keyCode == 13){
+			const whatFind = document.getElementById("textS").dataset.id;
+			go(config.rootUrl + whatFind,"POST",null).then(e => finder(e,whatFind));
+		}
+	});
 	go(config.rootUrl + "admin/userlist","POST",null).then(e => listUsers(e,"updateUsers"));
 });
+
+function finder(jsonArrayEvents, whatFind){
+
+	const text = document.getElementById("textS").value;
+	var arrayToPrint = new Array();
+
+	switch(whatFind){
+		case "admin/eventlist":
+			jsonArrayEvents.forEach(function(ev){
+				var flag_add = false;
+				if (!text == ""){
+					flag_add = (ev.name.toLowerCase().includes(text) || ev.description.toLowerCase().includes(text)) ? true:false;
+				}
+				if (!flag_add){
+					flag_add = (ev.location.toLowerCase().includes(text)) ? true:false;
+				}
+				if (!flag_add){
+					flag_add = (ev.genderPreference.includes(text)) ? true:false;
+				}
+				if (!flag_add){
+					flag_add = (ev.agePreference.includes(text)) ? true:false;
+				}
+				if (!flag_add){
+					if (!dateF == "" && !dateT == ""){
+						flag_add = (Date.parse(ev.date) >= Date.parse(dateF) && Date.parse(ev.date) <= Date.parse(dateT)) ? false:true;
+					} else if (!dateF == ""){
+						flag_add = (Date.parse(ev.date) >= Date.parse(dateF)) ? false:true;
+					} else if (!dateT == ""){
+						flag_add = (Date.parse(ev.date) <= Date.parse(dateT)) ? false:true;
+					}	
+				}
+				if (!flag_add){
+					flag_add = (ev.tagNames.includes(text)) ? true:false;
+				}
+				if (flag_add){
+					arrayToPrint.push(ev);
+				}
+			});
+			console.log(arrayToPrint);
+			listUsers(arrayToPrint,"updateEvents");
+			break;
+		case "admin/userlist":
+			jsonArrayEvents.forEach(function(ev){
+				var flag_add = false;
+				if (!text == ""){
+					flag_add = (ev.firstName.toLowerCase().includes(text)) ? true:false;
+				}
+				if (!flag_add){
+					flag_add = (ev.lastName.toLowerCase().includes(text)) ? true:false;
+				}
+				if (!flag_add){
+					flag_add = (ev.username.toLowerCase().includes(text)) ? true:false;
+				}
+				if (!flag_add){
+					flag_add = (ev.email.toLowerCase().includes(text)) ? true:false;
+				}
+				if (!flag_add){
+					flag_add = (ev.gender.toLowerCase().includes(text)) ? true:false;
+				}
+
+			//	if (!flag_add){
+			//		if (!dateF == "" && !dateT == ""){
+			//			flag_add = (Date.parse(ev.date) >= Date.parse(dateF) && Date.parse(ev.date) <= Date.parse(dateT)) ? false:true;
+			//		} else if (!dateF == ""){
+			//			flag_add = (Date.parse(ev.date) >= Date.parse(dateF)) ? false:true;
+			//		} else if (!dateT == ""){
+			//			flag_add = (Date.parse(ev.date) <= Date.parse(dateT)) ? false:true;
+			//		}	
+			//	}
+				if (!flag_add){
+					flag_add = (ev.tags.includes(text)) ? true:false;
+				}
+				if (flag_add){
+					arrayToPrint.push(ev);
+				}
+			});
+			console.log(arrayToPrint);
+			listUsers(arrayToPrint,"updateUsers");
+			break;
+		case "admin/taglist":
+			jsonArrayEvents.forEach(function(ev){
+				var flag_add = false;
+				if (!text == ""){
+					flag_add = (ev.tag.toLowerCase().includes(text)) ? true:false;
+				}
+				if (flag_add){
+					arrayToPrint.push(ev);
+				}
+			});
+			console.log(arrayToPrint);
+			listUsers(arrayToPrint,"updateTags");
+			break;
+	}
+}
 
 function listUsers(jsonArray, type){
 	const node = document.getElementById("contUsers");
@@ -93,7 +195,7 @@ function appendChild(element, type){
 			var when = dt.getDate()+"-"+(dt.getMonth()+1)+"-"+dt.getFullYear();
 			dt = new Date(element.publicationDate);
 			var publicationDate =  dt.getDate()+"-"+(dt.getMonth()+1)+"-"+dt.getFullYear();
-			 html = ["<div class='bggreen eventCard'>"+
+			html = ["<div class='bggreen eventCard'>"+
 				"<div class='cardUpperContainer'>"+
 				"<h2>"+element.name+"</h2><div class='width100 textalignright'> Para: <span>"+when+"</span> Publicada: <span>"+publicationDate+"</span>"+
 				"<div class='displayflex textalignright'>"+
@@ -108,7 +210,7 @@ function appendChild(element, type){
 				"<button type='submit' class='button warnButton'><span>Bloquear</span></button>" +
 				"</form>" +
 				"</div>"+
-				 "</div>"+
+				"</div>"+
 				"</div>"+
 				"<div class='cardLowerContainer'>"+
 				"<div>"+
