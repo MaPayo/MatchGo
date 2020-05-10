@@ -14,6 +14,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -80,6 +83,7 @@ public class EventController {
 	private PasswordEncoder passwordEncoder;
 
 	@GetMapping("/")
+	@Transactional
 	public String index(Model model, HttpSession session) {
 		/**
 		 * logearse como invitado si no tiene sesion
@@ -87,8 +91,35 @@ public class EventController {
 		if (session.getAttribute("u") == null){
 			return "redirect:/user/guest";
 		}
-		model.addAttribute("event", entityManager.createQuery(
-					"SELECT u FROM Event u").getResultList());
+
+		//generate list event with user preferences tags
+		//first map with events duplicated
+		User me = entityManager.find(User.class, ((User)session.getAttribute("u")).getId());
+		List<Event> finalList = new ArrayList<Event>();
+		Map<Long,Event> mapEvents = new HashMap<Long,Event>();
+		log.warn("Generating Event List evnts with User Tags");
+		final List<Tags> userTags = new ArrayList<Tags>(me.getTags()); 
+		log.warn("Tags taken");
+		if(userTags.size() != 0){
+		for (Tags t : userTags){
+			log.info("Take all events with tag {}",t.getId());
+			List<Event> listAux = entityManager.createNamedQuery("Event.getEventsByTags", Event.class).setParameter("idCat", t.getId()).getResultList();
+			for (Event e : listAux){
+				log.info("Adding Event to Map");
+				mapEvents.put(e.getId(),e);
+			}
+		}
+		//generate final clean list
+		log.warn("Cleaning final list events with user tags");
+		for(Entry<Long,Event> p : mapEvents.entrySet()){
+			finalList.add(p.getValue());
+		}
+		} else {
+			finalList = entityManager.createNamedQuery("Event.all", Event.class).getResultList();
+		}
+		model.addAttribute("event",finalList);
+		//model.addAttribute("event", entityManager.createQuery(
+		//			"SELECT u FROM Event u").getResultList());
 		TypedQuery<Tags> query= entityManager.createNamedQuery("Tag.getCategories", Tags.class);
 		List<Tags> categories= query.getResultList();
 		model.addAttribute("category", categories);
