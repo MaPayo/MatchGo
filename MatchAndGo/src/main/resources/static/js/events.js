@@ -37,7 +37,6 @@ document.addEventListener("DOMContentLoaded", () => {
 	});
 
 });
-function 
 function sendSearch(jsonArray){
 	/**
 	 * take all events and compare them with conditions, if all pased append to events
