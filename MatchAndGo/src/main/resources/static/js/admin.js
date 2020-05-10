@@ -54,7 +54,7 @@ function appendChild(element, type){
 	let html;
 	switch(type){
 		case "updateTags":
-			html = ["<div class='margin1030 bggreen eventCard'>" + 
+			html = ["<div class='widthauto bggreen eventCard'>" + 
 				"<div class='cardUpperContainer'>" +
 				"<h2>"+element.tag+"</h2>" + 
 				"</div>" +
@@ -62,13 +62,13 @@ function appendChild(element, type){
 				"<form method='post' action='/admin/deleteTag'>" +
 				"<input hidden readonly name='_csrf' value='"+config.csrf.value+"' />" +
 				"<input hidden readonly type='number' name='id' value="+ element.id +">" +
-				"<input type='submit' class='declineButton' value='Eliminar' />" +
+				"<button type='submit' class='button declineButton'><span>Eliminar</span></button>" +
 				"</form>" +
 				"</div>" +
 				"</div>"];
 			break;
 		case "updateUsers":
-			html = ["<div class='margin1030 bggreen eventCard'>" + 
+			html = ["<div class='bggreen eventCard'>" + 
 				"<div class='cardUpperContainer'>" +
 				"<h2 id='nombre'><span>"+ element.username +" - "+element.firstName+" "+ element.lastName+"</span></h2>" + 
 				"</div>" +
@@ -78,12 +78,12 @@ function appendChild(element, type){
 				"<form method='post' action='/admin/deleteUser'>" +
 				"<input hidden readonly name='_csrf' value='"+config.csrf.value+"' />" +
 				"<input hidden readonly type='number' name='id' value="+ element.id +">" +
-				"<input type='submit' class='declineButton' value='Eliminar' />" +
+				"<button type='submit' class='button declineButton'><span>Eliminar</span></button>" +
 				"</form>" +
 				"<form method='post' action='/admin/blockUser?id="+ element.id +"'>" +
 				"<input hidden readonly name='_csrf' value='"+config.csrf.value+"' />" +
 				"<input hidden readonly type='number' name='id' value="+ element.id +">" +
-				"<input type='submit' class='declineButton' value='Bloquear' />" +
+				"<button type='submit' class='button warnButton'><span>Bloquear</span></button>" +
 				"</form>" +
 				"</div>" +
 				"</div>"];
@@ -93,19 +93,19 @@ function appendChild(element, type){
 			var when = dt.getDate()+"-"+(dt.getMonth()+1)+"-"+dt.getFullYear();
 			dt = new Date(element.publicationDate);
 			var publicationDate =  dt.getDate()+"-"+(dt.getMonth()+1)+"-"+dt.getFullYear();
-			 html = ["<div class='margin1030 bggreen eventCard'>"+
+			 html = ["<div class='bggreen eventCard'>"+
 				"<div class='cardUpperContainer'>"+
 				"<h2>"+element.name+"</h2><div class='width100 textalignright'> Para: <span>"+when+"</span> Publicada: <span>"+publicationDate+"</span>"+
 				"<div class='displayflex textalignright'>"+
 				"<form method='post' class='width100' action='/admin/deleteEvent'>" +
 				"<input hidden readonly name='_csrf' value='"+config.csrf.value+"' />" +
 				"<input hidden readonly type='number' name='id' value="+ element.id +">" +
-				"<input type='submit' class='declineButton' value='Eliminar' />" +
+				"<button type='submit' class='button declineButton'><span>Eliminar</span></button>" +
 				"</form>" +
 				"<form method='post' action='/admin/blockEvent?id="+ element.id +"'>" +
 				"<input hidden readonly name='_csrf' value='"+config.csrf.value+"' />" +
 				"<input hidden readonly type='number' name='id' value="+ element.id +">" +
-				"<input type='submit' class='declineButton' value='Bloquear' />" +
+				"<button type='submit' class='button warnButton'><span>Bloquear</span></button>" +
 				"</form>" +
 				"</div>"+
 				 "</div>"+

@@ -110,19 +110,17 @@ header h1 {
 	width: 5%;
 	margin-right: 2em;
 }
-
-.eventCard,
-input {
-	margin: 10px 10%;
+#events{
+	display:flex;
+	flex-wrap:wrap;
+}
+.eventCard {
+	margin: auto;
+	width:30%;
 	border: 1px solid black;
 	box-shadow: 3px 3px 10px grey;
 	padding: 1em;
 	border-radius: 2em;
-}
-
-input {
-	margin-right: 10px !important;
-	justify-content: center;
 }
 
 .search {
@@ -174,14 +172,6 @@ input {
 	display: inline-block;
 }
 
-.acceptButton {
-	background-color: green;
-}
-
-.declineButton {
-	background-color: red;
-}
-
 .tagBox {
 	padding: 0.5em;
 }
@@ -194,14 +184,49 @@ input {
 	display: inline-block;
 }
 
+.button{
+	height:3em;
+	width:8em;
+	color:white;
+	font-weight:bold;
+	padding:10px;
+	border-radius: 0.5em;
+}
+
+.button span {
+	cursor: pointer;
+	display: inline-block;
+	position: relative;
+	transition: 0.5s;
+}
+
+.button span:after {
+	content: '\00bb';
+	position: absolute;
+	opacity: 0;
+	top: 0;
+	right: -20px;
+	transition: 0.5s;
+}
+
+.button:hover span {
+	padding-right: 25px;
+}
+
+.button:hover span:after {
+	opacity: 1;
+	right: 0;
+}
+
 .acceptButton {
-	background-color: green;
+	background-color:rgb(33,136,56);
 }
-
+.warnButton{
+	background-color:rgb(224,168,0);
+}
 .declineButton {
-	background-color: red;
+	background-color:rgb(200,35,51);
 }
-
 .formEvento {
 	margin: 10% 18%;
 	border: 1px solid black;
@@ -223,10 +248,11 @@ input {
 	width: 20em;
 	height: 1.5em;
 }
-
+.widthauto{
+	width:auto;
+}
 .block>select {
 	width: 20em;
-	height: 1.8em;
 }
 
 .block {
@@ -236,7 +262,6 @@ input {
 .cardLowerContainer select {
 	width: 20em;
 	margin: 1em 2em;
-	height: 1.5em;
 }
 
 .marginAuto {
