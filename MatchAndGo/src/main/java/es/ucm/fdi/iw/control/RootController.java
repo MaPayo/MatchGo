@@ -39,6 +39,10 @@ public class RootController {
 		return "index";
 	}
 
+	@GetMapping("/leeme")
+public String lee(Model model) {
+		return "leeme";
+	}
 	@GetMapping("/index")
 	public String welcome(Model model) {
 		return "index";
