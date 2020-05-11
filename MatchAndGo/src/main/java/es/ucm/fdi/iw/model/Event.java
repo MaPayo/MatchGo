@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -31,9 +32,14 @@ import es.ucm.fdi.iw.model.User.Role;
  * @author RoNiTo0
  */
 @NamedQueries({
-
+	@NamedQuery(name="Event.getEventsByTags", query= "Select e from Event e inner join e.tags t where t.id = :idCat"),
 	@NamedQuery(name="Event.blockEvent", query= "UPDATE Event SET isAppropriate = :state " + "WHERE id = :idUser"),
 	@NamedQuery(name="Event.getEvent", query= "SELECT u from Event u WHERE u.id = :idUser"),
+	@NamedQuery(name="Event.getEventSearchWC", query= "SELECT u from Event u inner join u.tags t WHERE "+
+       		"(lower(name) LIKE :textToSearch OR lower(description) LIKE :textToSearch OR lower(location) LIKE :textToSearch) "+
+		"AND t.id = :tagToSearch"),
+	@NamedQuery(name="Event.getEventSearch", query= "SELECT u from Event u WHERE "+
+       		"(lower(name) LIKE :textToSearch OR lower(description) LIKE :textToSearch OR lower(location) LIKE :textToSearch)"),
 	@NamedQuery(name="Event.all", query= "SELECT u from Event u"),
 	@NamedQuery(name="Event.deleteEvent", query= "DELETE FROM Event u WHERE "
 		+ "u.id = :idUser"),
@@ -60,7 +66,8 @@ public class Event {
 	private Boolean privateDate;
 	private String agePreference;
 	private String genderPreference;
-	
+	@OneToMany(targetEntity = Message.class)
+	private List<Message> messagesGroup;
 
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -422,7 +429,9 @@ public class Event {
 	public void setIsAppropriate(Boolean isAppropriate) {
 		this.isAppropriate = isAppropriate;
 	}
-
+	public List<Message> getMessages(){
+		return messagesGroup;
+	}
 	@Override
 	public String toString() {
 		return "Event [id=" + id + ", name=" + name + ", description=" + description + ", location=" + location + "]";

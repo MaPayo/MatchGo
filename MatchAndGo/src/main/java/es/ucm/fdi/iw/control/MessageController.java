@@ -58,8 +58,6 @@ public class MessageController {
     @Transactional
     public String sendMessage(Model model, HttpSession session) {
 
-
-
         return "mensajes";
     }
 
