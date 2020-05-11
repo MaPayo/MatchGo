@@ -14,7 +14,6 @@ const ws = {
 	 */
 	receive: (text) => {
 		listUsers(text[1],text[0]);
-
 		console.log("updating view updated list received via socket");
 	},
 
@@ -89,107 +88,18 @@ function go(url, method, data = {}) {
 /**
  * Actions to perform once the page is fully loaded
  */
-document.addEventListener("DOMContentLoaded", () => {
-	if (config.socketUrl) {
-		let subs = config.admin ? 
+//document.addEventListener("DOMContentLoaded", () => {
+//	if (config.socketUrl) {
+//		let subs = config.admin ? 
+//
+//			["/topic/admin", "/user/queue/updates","/event/queue/updates"] : ["/user/queue/updates","/event/queue/updates"]
+//		ws.initialize(config.socketUrl, subs);
+//	}
 
-			["/topic/admin", "/user/queue/updates"] : ["/user/queue/updates"]
-		ws.initialize(config.socketUrl, subs);
-	}
-
-	document.getElementById("listEvents").addEventListener("click",function() {
-		document.getElementById("listEvents").classList.add("bgblue");
-		document.getElementById("listUsers").classList.remove("bgblue");
-		go(config.rootUrl + "admin/eventlist","POST",null).then(e => listUsers(e,"updateEvents"));
-	});
-	document.getElementById("listUsers").addEventListener("click",function() {
-		document.getElementById("listEvents").classList.remove("bgblue");
-		document.getElementById("listUsers").classList.add("bgblue");
-		go(config.rootUrl + "admin/userlist","POST",null).then(e => listUsers(e,"updateUsers"));
-	});
-
-	go(config.rootUrl + "admin/userlist","POST",null).then(e => listUsers(e,"updateUsers"));
 
 	//response.forEach(e => );
 
 	// add your after-page-loaded JS code here; or even better, call 
 	// 	 document.addEventListener("DOMContentLoaded", () => { /* your-code-here */ });
 	//   (assuming you do not care about order-of-execution, all such handlers will be called correctly)
-});
-
-
-
-function listUsers(jsonArray, type){
-	const node = document.getElementById("contUsers");
-	switch(type){
-		case "updateUsers":
-			if(document.getElementById("listUsers").classList.contains("bgblue")){
-				while (node.firstChild) {
-					node.removeChild(node.lastChild);
-				}
-				jsonArray.forEach(e => appendChild(e,type));
-			}
-			break;
-		case "updateEvents":
-			if(document.getElementById("listEvents").classList.contains("bgblue")){
-				while (node.firstChild) {
-					node.removeChild(node.lastChild);
-				}
-				jsonArray.forEach(e => appendChild(e,type));
-			}
-			break;
-	}
-}
-
-
-function appendChild(element, type){
-
-	let html;
-	switch(type){
-		case "updateUsers":
-			html = ["<div class='eventCard bgwhite'>" + 
-				"<div class='cardUpperContainer'>" +
-				"<h2 id='nombre'><span>"+ element.username +" - "+element.firstName+" "+ element.lastName+"</span></h2>" + 
-				"</div>" +
-				"<div class='cardLowerContainer'>" +
-				"<p id='edad'><span>"+ element.birthDate +"</span></p>" +
-				"<p id='sexo'><span>"+ element.gender +"</span></p>" +
-				"<form method='post' action='/admin/deleteUser'>" +
-				"<input type='hidden' name='_csrf' value='"+config.csrf.value+"' />" +
-				"<input hidden type='number' name='id' value="+ element.id +">" +
-				"<input type='submit' class='declineButton' value='Eliminar' />" +
-				"</form>" +
-				"<form method='post' action='/admin/blockUser?id="+ element.id +"'>" +
-				"<input type='hidden' name='_csrf' value='"+config.csrf.value+"' />" +
-				"<input hidden type='number' name='id' value="+ element.id +">" +
-				"<input type='submit' class='declineButton' value='Bloquear' />" +
-				"</form>" +
-				"</div>" +
-				"</div>"];
-			break;
-		case "updateEvents":
-			 html = ["<div class='eventCard bgwhite'>"+
-				"<div class='cardUpperContainer'>"+
-				"<img src='/img/"+element.id+".png' alt='Imagen de "+element.name+"' class='placeImage'>"+
-				"<h2>"+element.name+"</h2> - <span>"+element.description+"</span>"+
-				"</div>"+
-				"<div class='cardLowerContainer'>"+
-				" Para: <span>"+element.date+"</span> Publicada: <span>"+element.publicationDate+"</span>"+
-				"<div class='tagBox'>" +
-				"</div>"+
-				"<form method='post' action='/admin/deleteEvent'>" +
-				"<input type='hidden' name='_csrf' value='"+config.csrf.value+"' />" +
-				"<input hidden type='number' name='id' value="+ element.id +">" +
-				"<input type='submit' class='declineButton' value='Eliminar' />" +
-				"</form>" +
-				"<form method='post' action='/admin/blockEvent?id="+ element.id +"'>" +
-				"<input type='hidden' name='_csrf' value='"+config.csrf.value+"' />" +
-				"<input hidden type='number' name='id' value="+ element.id +">" +
-				"<input type='submit' class='declineButton' value='Bloquear' />" +
-				"</form>" +
-				"</div>"+
-				"</div>"];
-			break;
-	}
-	document.getElementById("contUsers").insertAdjacentHTML('beforeend',html);
-}
+//});

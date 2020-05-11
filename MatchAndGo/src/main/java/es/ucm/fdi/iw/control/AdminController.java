@@ -71,8 +71,21 @@ public class AdminController {
 	@ResponseBody
 	public List<User.Transfer> retrieveUsers(final HttpSession session) {
 		log.info("Generating User List");
-		List<User> users = entityManager.createNamedQuery("User.all",User.class).getResultList();
+		List<User> users = new ArrayList();
+		for(User u : entityManager.createNamedQuery("User.all",User.class).getResultList()){
+			if(!u.hasRole(User.Role.SYS)){
+				users.add(u);
+			}
+		}
 		return User.asTransferObjects(users);
+	}
+	@PostMapping(path = "/taglist", produces = "application/json")
+	@Transactional
+	@ResponseBody
+	public List<Tags.Transfer> retrieveTags(final HttpSession session) {
+		log.info("Generating Tag List");
+		List<Tags> tags = entityManager.createNamedQuery("Tags.all",Tags.class).getResultList();
+		return Tags.asTransferObjects(tags);
 	}
 	@PostMapping("/blockEvent")
 	@Transactional
@@ -90,7 +103,7 @@ public class AdminController {
 			.executeUpdate();
 
 		List<Event> eventsU = entityManager.createNamedQuery("Event.all",Event.class).getResultList();
-		sendMessageWS(eventsU,"updateEvents");
+		sendMessageWS(eventsU,"updateEvents","/topic/admin");
 		return "redirect:/admin/";
 	}	
 
@@ -107,16 +120,55 @@ public class AdminController {
 		entityManager.createNamedQuery("User.blockUser").setParameter("idUser", id).setParameter("state", newState)
 			.executeUpdate();
 
-		final List<User> usersU = entityManager.createNamedQuery("User.all",User.class).getResultList();
-		sendMessageWS(usersU,"updateUsers");
+		List<User> users = new ArrayList();
+		for(User u : entityManager.createNamedQuery("User.all",User.class).getResultList()){
+			if(!u.hasRole(User.Role.SYS)){
+				users.add(u);
+			}
+		}
+		sendMessageWS(users,"updateUsers","/topic/admin");
 		return "redirect:/admin/";
 	}
 
+	@PostMapping("/deleteTag")
+	@Transactional
+	public String deleteTag(final Model model, @RequestParam final long id) {
+		final Tags t = (Tags) entityManager.createNamedQuery("Tags.getTag", Tags.class).setParameter("idTag", id)
+			.getSingleResult();
+	
+		log.info("I will Remove tag from users");
+		final List<User> users = new ArrayList<>(t.getSubscribers());
+		log.info("I will Remove all subcriptors");
+		for (final User u : users) {
+			t.getSubscribers().remove(u);
+			log.info("Remove uer from tag " + t.getId());
+		}
+
+		final List<Event> events = new ArrayList<>(t.getEvents());
+		log.info("I will Remove from all Events");
+		for (final Event e : events) {
+			t.getEvents().remove(e);
+			log.info("Remove event " + e.getId() + " from tag "+ t.getId());
+		}
+		log.info("update Tag");
+		entityManager.flush();
+		log.info("deleting tag");
+		entityManager.createNamedQuery("Tags.deleteTag").setParameter("idTag",id).executeUpdate();
+		log.info("update clients with new info");
+	//	final List<Event> eventsU = entityManager.createNamedQuery("Event.all",Event.class).getResultList();
+	//	sendMessageWS(eventsU,"updateEvents","/topic/admin");
+		return "redirect:/admin/";
+	}
 	@PostMapping("/deleteEvent")
 	@Transactional
 	public String deleteEvent(final Model model, @RequestParam final long id) {
 		final Event e = (Event) entityManager.createNamedQuery("Event.getEvent", Event.class).setParameter("idUser", id)
 			.getSingleResult();
+	
+		log.info("I will Remove all Messages ");
+		entityManager.createNamedQuery("Message.deleteEventMessages").setParameter("idUser", e.getId()).executeUpdate();
+		log.info("removed all messages");
+
 
 		final List<Tags> tags = new ArrayList<>(e.getTags());
 		log.info("I will Remove all subcribed tags ");
@@ -141,14 +193,16 @@ public class AdminController {
 
 		entityManager.flush();
 		final List<Event> eventsU = entityManager.createNamedQuery("Event.all",Event.class).getResultList();
-		sendMessageWS(eventsU,"updateEvents");
+		sendMessageWS(eventsU,"updateEvents","/topic/admin");
+		log.info("all visitors redirect to other page this page is deleted");
+		sendMessageWS(eventsU,"pleaseExit","/topic/event/"+id);
 		return "redirect:/admin/";
 	}
 
 	@PostMapping("/deleteUser")
 	@Transactional
 	public String deleteUser(final Model model, @RequestParam final long id) {
-		final User u = (User) entityManager.createNamedQuery("User.getUser", User.class).setParameter("idUser", id)
+		User u = (User) entityManager.createNamedQuery("User.getUser", User.class).setParameter("idUser", id)
 			.getSingleResult();
 
 		List<Tags> tags = u.getTags();
@@ -162,7 +216,10 @@ public class AdminController {
 		log.info("I will Remove from all Events Joined");
 		for (final Event event : events) {
 			event.getParticipants().remove(u);
-			log.info("Remove user from event " + event.getId());
+			long idE = event.getId();
+			log.info("Remove user from event " + idE);
+			log.info("Sending new userlist to topic event");
+			sendMessageWS(event.getParticipants(),"updateUsersEvent","/topic/event/"+idE);
 		}
 
 		events = new ArrayList<>(u.getCreatedEvents());
@@ -205,7 +262,7 @@ public class AdminController {
 			}
 		}
 
-		final User noUser = (User) entityManager.createNamedQuery("User.getUser", User.class).setParameter("idUser", (long)4).getSingleResult();
+		final User noUser = (User) entityManager.createNamedQuery("User.getUser", User.class).setParameter("idUser", (long)3).getSingleResult();
 		evaluations = new ArrayList<>(u.getSenderEvaluation());
 		if (evaluations.size() != 0){
 			log.info("I will Remove all writedd evaluations");
@@ -218,7 +275,6 @@ public class AdminController {
 			}
 		}
 
-	//	@NamedQuery(name="Message.deleteMessagesUser", query= "DELETE FROM Message u WHERE sender_id = :idUser OR receiver_id = :idUser")
 		entityManager.createNamedQuery("Message.deleteMessagesUser").setParameter("idUser",(long)u.getId()).executeUpdate();
 
 		entityManager.flush();
@@ -226,27 +282,38 @@ public class AdminController {
 			.setParameter("idUser",id)
 			.executeUpdate();
 
-		final List<User> usersU = entityManager.createNamedQuery("User.all",User.class).getResultList();
-		sendMessageWS(usersU,"updateUsers");
+		List<User> users = new ArrayList();
+		for(User u2 : entityManager.createNamedQuery("User.all",User.class).getResultList()){
+			if(!u2.hasRole(User.Role.SYS)){
+				users.add(u2);
+			}
+		}
+		log.info("If user connected ");
+		sendMessageWS(users,"sayGoodBye","/user/"+u.getUsername()+"/queue/updates");
+		log.info("broadcast admin");
+		sendMessageWS(users,"updateUsers","/topic/admin");
 		if (flag){
 			final List<Event> eventsU = entityManager.createNamedQuery("Event.all",Event.class).getResultList();
-			sendMessageWS(eventsU,"updateEvents");
+			sendMessageWS(eventsU,"updateEvents","/topic/admin");
 		}
 		return "redirect:/admin/";
 	}
 
-	public void sendMessageWS(final List content, final String type) {
+	public void sendMessageWS(final List content, final String type, final String topic) {
 		log.info("Sending updated " + type + " via websocket");
 		final List response = new ArrayList();
 		response.add(type);
 		switch(type){
+			case "updateUsersEvent":
 			case "updateUsers":
 				response.add(User.asTransferObjects(content));
 				break;
 			case "updateEvents":
 				response.add(Event.asTransferObjects(content));
 				break;
+			default:
+				response.add("sorry");
 		}
-		messagingTemplate.convertAndSend("/topic/admin",response);
+		messagingTemplate.convertAndSend(topic,response);
 	}	
 }

@@ -1,14 +1,27 @@
 <div th:fragment="infoEvent" class="flex50">
 	<h2>Info</h2>
+	<div th:replace="event.html :: infoVEvent"></div>
 </div>
 <div th:fragment="messages" class="flex50">
 	<h2>Mensajes</h2>
+	<div class="mensajes" th:classappend="${session.u.hasRole('GUEST')}?blur" id="M">asasas</div>
+	<!--@{/event/nm/{id}(id=${event.id})}-->
+	<form th:if="!${session.u.hasRole('GUEST')}" id="contentMess" onsubmit="return validateStrings(this)" class="escribirMensaje">
+		<textarea name='textoMensaje' id='texto' class='mensaje' required></textarea>
+		<input id='sendMessage' type='button' class='botonMensaje' name='boton' value='enviar'>
+	</form>
 </div>
 <div th:fragment="users" class="flex50">
 	<h2>Usuarios</h2>
 	<div id="contUsers"></div>
-
 </div>
 <div th:fragment="valorations" class="flex50">
 	<h2>Valorations</h2>
+	<div id="contEvaluations"  th:classappend="${session.u.hasRole('GUEST')}?blur"></div>
+	<form  th:if="!${session.u.hasRole('GUEST')} and ${event?.getDate()} < ${timestamp}" id="contentVal" onsubmit="return validateStrings(this)" class='escribirMensaje'>
+		<input hidden readonly id='idUs' name='idU' type="number" required />
+		<input id='score' name='score' type="number" required />
+		<input name='textoMensaje' id='textoV' type="text" class='mensaje' required />
+		<input id='sendValuation' type='button' class='botonMensaje' name='boton' value='enviar'>
+	</form>
 </div>
