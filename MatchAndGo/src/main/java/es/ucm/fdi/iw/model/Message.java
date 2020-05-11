@@ -96,7 +96,9 @@ public class Message {
 	 */
 	public static class Transfer {
 		private String sender;
+		private String senderId;
 		private String receiver;
+		private String receiverId;
 		private String sendDate;
 		private String readMessage;
 		private String textMessage;
@@ -106,6 +108,10 @@ public class Message {
 			this.sender = m.getSender().getUsername();
 			if(m.getReceiver() != null){
 				this.receiver = m.getReceiver().getUsername();
+			}
+			this.senderId = Long.toString(m.getSender().getId());
+			if(m.getReceiver() != null){
+				this.receiverId = Long.toString(m.getReceiver().getId());
 			}
 			this.sendDate = DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(m.getSendDate());
 			this.readMessage = String.valueOf(m.getReadMessage());
@@ -118,11 +124,23 @@ public class Message {
 		public void setSender(String sender) {
 			this.sender = sender;
 		}
+		public String getSenderId() {
+			return senderId;
+		}
+		public void setSenderId(String senderId) {
+			this.senderId = senderId;
+		}
 		public String getReceiver() {
 			return receiver;
 		}
 		public void setReceiver(String receiver) {
 			this.receiver = receiver;
+		}
+		public String getReceiverId() {
+			return receiverId;
+		}
+		public void setReceiverId(String receiverId) {
+			this.receiverId = receiverId;
 		}
 		public String getSendDate() {
 			return sendDate;

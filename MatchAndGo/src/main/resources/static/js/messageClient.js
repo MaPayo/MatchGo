@@ -1,3 +1,31 @@
+/**
+ * Sends an ajax request using fetch
+ */
+//envía json, espera json de vuelta; lanza error si status != 200
+function go(url, method, data = {}) {
+    let params = {
+      method: method, // POST, GET, POST, PUT, DELETE, etc.
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+      },
+      body: JSON.stringify(data)
+    };
+    if (method === "GET") {
+        delete params.body;
+    } else {
+        params.headers["X-CSRF-TOKEN"] = config.csrf.value; 
+    }  
+    console.log("sending", url, params)
+    return fetch(url, params)
+        .then(response => {
+          if (response.ok) {
+              return response.json(); // esto lo recibes con then(d => ...)
+          } else {
+              throw response.text();  // esto lo recibes con catch(d => ...)
+          }
+        })
+  }
+
 document.addEventListener("DOMContentLoaded", () => {
     
     let elements = document.getElementsByClassName("bContacto");
@@ -6,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
         elements[i].addEventListener("click", function () {
             
             requestMessages(elements[i].getAttribute('data-id'));
-        });   
+        });
     }
 });
 
@@ -23,16 +51,22 @@ function updateMessages(json) {
         div.removeChild(div.lastChild);
     }
 
+    let idUsuario;
+    let idContacto;
     //Introducimos los nuevos mensajes
     json.forEach(m => {
         let html = [];
         html +="<div class='mensaje'>";
         
         if (m.sender == config.usuario) {
+            idUsuario = m.senderId;
+            idContacto = m.receiverId;
             html+="<div class='mensajeMio'>";
             html+="<pre> "+ m.textMessage +"</pre>";
             html+="</div>";
         } else {
+            idUsuario = m.receiverId;
+            idContacto = m.senderId;
             html+="<div class='mensajeContacto'>";
             html+="<pre> "+ m.textMessage +"</pre>";
             html+="</div>";
@@ -42,6 +76,38 @@ function updateMessages(json) {
 
         div.insertAdjacentHTML('beforeend',html);
     });
+
+    // Insertamos un atributo en el formulario
+    let elemContacto = document.getElementById("contactId");
+    if (elemContacto != null) {
+        elemContacto.remove();
+    }
+    let form = document.getElementById("FormMessage");
+    let htmlForm = "<input type='hidden' id='contactId' value ='" + idContacto + "' required>";
+    form.insertAdjacentHTML('beforeend', htmlForm);
+
+    // Actualizamos el botón de enviar mensaje
+    updateFormMessageButton(idUsuario, idContacto);
+}
+
+function updateFormMessageButton(idUsuario, idContacto) {
+    let textMessage = document.getElementById("texto").getAttribute("value");
+    let button = document.getElementById("botonFormMessage");
+
+    button.addEventListener("click", function () {
+        button.preventDefault();
+
+        let message = {
+            sender: "",
+            senderId: idUsuario,
+            receiver: "",
+            receiverId: idContacto,
+            sendDate: "",
+            readMessage: "",
+            textMessage: textMessage
+        };
+        go(config.rootUrl + "messages/addMessage", "POST", message);
+    });   
 }
 
 /*

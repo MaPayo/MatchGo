@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -32,6 +33,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -54,12 +56,32 @@ public class MessageController {
 	@Autowired
     private EntityManager entityManager;
 
-    @PostMapping("/addMessage")
+    /*
+     * Sends a message to another user.
+     * 
+     * Normally, a Message.Transfer.sender is the "username" of the user, in this case we use it
+     * to save the "Id" so we can save it in the Database.
+     */
+    @PostMapping(value = "/messages/addMessage")
     @Transactional
-    public String sendMessage(Model model, HttpSession session) {
+    public String sendMessage(@RequestBody final Message.Transfer message, Model model, HttpSession session) {
+        
+        log.info("El server tiene un mensaje:");
+        log.info("  - Contenido: " + message.getTextMessage());
+        log.info("  - Sender_id: " + message.getSender());
+        log.info("  - Receiver_id: " + message.getReceiver());
 
+        User sender = entityManager.find(User.class, message.getSender());
+        User receiver = entityManager.find(User.class, message.getReceiver());
 
+        Message newMessage = new Message(message.getTextMessage(), sender, receiver, LocalDateTime.now());
 
+        log.info("Guardando el mensaje en la BBDD.");
+
+        entityManager.merge(newMessage);
+        entityManager.flush();
+
+        log.info("Volviendo a la página de mensajes.");
         return "mensajes";
     }
 
@@ -103,10 +125,11 @@ public class MessageController {
     public List<Message.Transfer> getMessagesUser(@PathVariable long id, Model model, HttpSession session) {
 
         log.info("Preparando los mensajes del usuario con su contacto " + id + ".");
-
+        
         try {
             User contact = entityManager.find(User.class, id);
-            model.addAttribute("contacto", contact);
+            session.setAttribute("contact", contact);
+            //model.addAttribute("contacto", contact);
         } catch (Exception e) {
             log.info("Error al buscar el contacto del usuario:");
             log.info("  - idContacto: {}", id);

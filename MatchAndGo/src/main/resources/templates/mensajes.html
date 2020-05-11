@@ -18,9 +18,9 @@
                 </div>
             </div>
             <div class="contenedorMensajes">
-                <form class="escribirMensaje" action="" method="POST">
+                <form class="escribirMensaje" id="FormMessage" action="addMessage" method="POST">
                     <textarea name="textoMensaje" id="texto" class="mensaje" required></textarea>
-                    <input type="submit" class="botonMensaje" name="boton" value="enviar">
+                    <input type="submit" id="botonFormMessage" class="botonMensaje" name="boton" value="enviar">
                 </form>
                 <div class="mensajes" id="M">
                     
@@ -45,7 +45,7 @@
 				},
 			};
         </script>
-        <script type="text/javascript" th:src="@{/js/iwclient.js}"></script>
+        <script type="text/javascript" th:src="@{/js/stomp.js}"></script>
         <script type="text/javascript" th:src="@{/js/messageClient.js}"></script>
         <footer th:replace="fragments/footer.html :: footer"> El Footer de la página </footer>
     </body>
