@@ -15,9 +15,9 @@ document.addEventListener("DOMContentLoaded", () => {
 		if(event.target.matches("li")){
 			const childrens =  document.getElementById("menuDisplayE").children;
 			for (i = 0; i < childrens.length; i++) {
-				childrens[i].classList.remove("bgblue");
+				childrens[i].classList.remove("bglightgrey");
 			}
-			event.target.classList.add("bgblue");
+			event.target.classList.add("bglightgrey");
 			const id = event.target.dataset.id;
 			const command = event.target.dataset.action;
 			document.getElementById("textS").dataset.id = id;//update finder

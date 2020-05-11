@@ -6,7 +6,7 @@
 .bggreen {
 	background-color: #afeea0;
 }
-.bgblue {
+.bgdarkgrey {
 	background-color: #74808a;
 }
 
@@ -183,7 +183,15 @@ header h1 {
 	border-radius: 0.5em;
 	display: inline-block;
 }
-
+.height10{
+	height:10%;
+}
+.height80{
+	height:80%;
+}
+.bglightgrey{
+	background-color:#bbc1c6;
+}
 .button{
 	height:3em;
 	width:8em;
