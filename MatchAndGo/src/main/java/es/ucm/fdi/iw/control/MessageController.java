@@ -54,54 +54,11 @@ public class MessageController {
 	@Autowired
     private EntityManager entityManager;
 
-    /*
-     * This method gets all the contacts from the user in the session.
-     */
-    private List<User> getContactsFromUser (HttpSession session) {
-        User usuario = (User) session.getAttribute("u");
-        usuario =  entityManager.find(User.class, usuario.getId());
-        
-//Como he a;adido mensajes a eventos esta funcion no rula simplemente porque puedes haber escrito un mensaje a un evento los cuales el receiver es null simplemente voy a generar la misma funcion pero preguntando que dicho campo sea distinto a null
-//Tambien se podria hacer creando la consulta SQL en el modelo
+    @PostMapping("/addMessage")
+    @Transactional
+    public String sendMessage(Model model, HttpSession session) {
 
-
-        // The contacts of the user
-//        List<User> contacts = new ArrayList<User>();
-//        for (int i = 0; i < usuario.getSentMessages().size(); ++i) {
-//          User user = usuario.getSentMessages().get(i).getReceiver();
-//            if (!contacts.contains(user)) {
-//                contacts.add(user);
-//            }
-//        }
-
-	   List<User> contacts = new ArrayList<User>();
-	   List<Message> messages = new ArrayList(usuario.getSentMessages());
-	   for (final Message ms : messages){
-		   User u = ms.getReceiver();
-		if (u != null && !contacts.contains(u))
-			contacts.add(u);
-	   }
-
-      /*
-        User usuario = (User) session.getAttribute("user");
-
-        // People we have sent messages to
-        Set<User> contacts = new HashSet<User>();
-        for (Message m : usuario.getSentMessages()) {
-            contacts.add(m.getSender());
-        }   
-      */
-
-        // People we have received messages from
-        // TODO: this has O(n²) runtime due to linear checks for "contains"
-        //       see above for a more efficient (O(n)) implementation
-        for (int i = 0; i < usuario.getReceivedMessages().size(); ++i) {
-            User user = usuario.getReceivedMessages().get(i).getSender();
-            if (!contacts.contains(user)) {
-                contacts.add(user);
-            }
-        }
-        return new ArrayList(contacts);
+        return "mensajes";
     }
 
     /*
@@ -110,7 +67,26 @@ public class MessageController {
     @GetMapping("/messages")
     @Transactional
     public String startMessagesUser(Model model, HttpSession session) {
-        List<User> contacts = getContactsFromUser(session);
+        // Get the user from the session
+        User usuario = (User) session.getAttribute("u");
+        usuario =  entityManager.find(User.class, usuario.getId());
+
+        // Get all the contacts the user-session sended a message
+        List<User> contacts = new ArrayList (entityManager.createNamedQuery("Message.getSendedUsers")
+            .setParameter("sender", usuario.getId()).getResultList());
+        
+        // Get all the contacts who sended a message to user-session
+        List<User> contactsR = new ArrayList (entityManager.createNamedQuery("Message.getReceivedUsers")
+            .setParameter("receiver", usuario.getId()).getResultList());
+        
+        // Join both list
+        for (User c : contactsR) {
+            if (!contacts.contains(c)) {
+                contacts.add(c);
+            }
+        }
+
+        log.info("Tenemos los contactos del usuario.");
         model.addAttribute("contactos", contacts);
         model.addAttribute("mensajes", new ArrayList<Message> ());
         return "mensajes";
@@ -125,9 +101,10 @@ public class MessageController {
     public List<Message.Transfer> getMessagesUser(@PathVariable long id, Model model, HttpSession session) {
 
         log.info("Preparando los mensajes del usuario con su contacto " + id + ".");
-        User contact = null;
+
         try {
-            contact = entityManager.find(User.class, id);
+            User contact = entityManager.find(User.class, id);
+            model.addAttribute("contacto", contact);
         } catch (Exception e) {
             log.info("Error al buscar el contacto del usuario:");
             log.info("  - idContacto: {}", id);
@@ -153,33 +130,4 @@ public class MessageController {
         return messagesT;
     }
     // Para Post: @RequestParam long id
-
-    /*
-     * Shows the chat between the user and his contact
-     */
-    /*
-    @GetMapping("/messages/{id}")
-    @Transactional
-    public String getMessagesUser(@PathVariable long id, Model model, HttpSession session) {
-
-        User contact = null;
-        try {
-            contact = entityManager.find(User.class, id);
-        } catch (Exception e) {
-            log.info("Error al buscar el contacto del usuario:");
-            log.info("  - idContacto: {}", id);
-            log.info("  - error: {}", e.getMessage());
-        }
-
-        // The messages between the contact and the user
-        List<Message> messages = getMessagesFromContact(session, contact);
-        List<User> contacts = getContactsFromUser(session);
-        model.addAttribute("contactos", contacts);
-        model.addAttribute("mensajes", messages);
-        model.addAttribute("contacto", contact);
-
-        return "mensajes";
-    }
-    // Para Post: @RequestParam long id
-    */
 }

@@ -17,6 +17,13 @@ function requestMessages(id) {
 
 function updateMessages(json) {
     let div = document.getElementById("M");
+
+    //Borramos los mensajes
+    while (div.firstChild) {
+        div.removeChild(div.lastChild);
+    }
+
+    //Introducimos los nuevos mensajes
     json.forEach(m => {
         let html = [];
         html +="<div class='mensaje'>";
@@ -32,7 +39,8 @@ function updateMessages(json) {
         }
         
         html+="</div>";
-        document.getElementById("M").insertAdjacentHTML('beforeend',html);
+
+        div.insertAdjacentHTML('beforeend',html);
     });
 }
 
