@@ -54,48 +54,53 @@ function updateMessages(json) {
     let idUsuario;
     let idContacto;
     //Introducimos los nuevos mensajes
+    let html = [];
     json.forEach(m => {
-        let html = [];
-        html +="<div class='mensaje'>";
+        let msg = "";
         
         if (m.sender == config.usuario) {
             idUsuario = m.senderId;
             idContacto = m.receiverId;
-            html+="<div class='mensajeMio'>";
-            html+="<pre> "+ m.textMessage +"</pre>";
-            html+="</div>";
+            msg = "<div class='mensajeMio'>"
+                + "<pre> "+ m.textMessage +"</pre>"
+                + "</div>";
         } else {
             idUsuario = m.receiverId;
             idContacto = m.senderId;
-            html+="<div class='mensajeContacto'>";
-            html+="<pre> "+ m.textMessage +"</pre>";
-            html+="</div>";
+            msg ="<div class='mensajeContacto'>"
+                + "<pre> "+ m.textMessage +"</pre>"
+                + "</div>";
         }
         
-        html+="</div>";
+        html.push("<div class='mensaje'>" + msg + "</div>");
 
-        div.insertAdjacentHTML('beforeend',html);
     });
+    div.insertAdjacentHTML('beforeend', html.reverse().join("\n"));
 
     // Insertamos un atributo en el formulario
     let elemContacto = document.getElementById("contactId");
     if (elemContacto != null) {
         elemContacto.remove();
     }
+    /*  Ejemplo para insertar un atributo hidden
     let form = document.getElementById("FormMessage");
-    let htmlForm = "<input type='hidden' id='contactId' value ='" + idContacto + "' required>";
+    let htmlForm = "<input type='hidden' id='contactId' value ='" + idContacto + "'>";
     form.insertAdjacentHTML('beforeend', htmlForm);
+    */
 
     // Actualizamos el botón de enviar mensaje
     updateFormMessageButton(idUsuario, idContacto);
 }
 
 function updateFormMessageButton(idUsuario, idContacto) {
-    let textMessage = document.getElementById("texto").getAttribute("value");
     let button = document.getElementById("botonFormMessage");
+    console.log("añadiendo manejador a ", button);
 
-    button.addEventListener("click", function () {
-        button.preventDefault();
+    button.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        let textMessage = document.getElementById("textMessageForm").getAttribute("value");
+        console.log("Enviando el texto: ", textMessage);
 
         let message = {
             sender: "",
@@ -106,6 +111,7 @@ function updateFormMessageButton(idUsuario, idContacto) {
             readMessage: "",
             textMessage: textMessage
         };
+        console.log("hola mundo  - enviando ", message);
         go(config.rootUrl + "messages/addMessage", "POST", message);
     });   
 }

@@ -145,8 +145,8 @@ INSERT INTO USER_TAGS VALUES(6, 2);
 INSERT INTO MESSAGE (ID, text_message, sender_id, receiver_id, send_date, read_message) VALUES (
 	1,
 	'Hola que tal',
-	5,
-	6,
+	1,
+	2,
 	NOW(),
 	1
 );
@@ -154,8 +154,8 @@ INSERT INTO MESSAGE (ID, text_message, sender_id, receiver_id, send_date, read_m
 INSERT INTO MESSAGE (ID, text_message, sender_id, receiver_id, send_date, read_message) VALUES (
 	2,
 	'Bien y tu',
-	6,
-	5,
+	2,
+	1,
 	NOW(),
 	1
 );
@@ -163,8 +163,8 @@ INSERT INTO MESSAGE (ID, text_message, sender_id, receiver_id, send_date, read_m
 INSERT INTO MESSAGE (ID, text_message, sender_id, receiver_id, send_date, read_message) VALUES (
 	3,
 	'Yo tambien bien',
-	5,
-	6,
+	1,
+	2,
 	NOW(),
 	1
 );
@@ -172,8 +172,8 @@ INSERT INTO MESSAGE (ID, text_message, sender_id, receiver_id, send_date, read_m
 INSERT INTO MESSAGE (ID, text_message, sender_id, receiver_id, send_date, read_message) VALUES (
 	4,
 	'Eyyyyyy',
-	4,
-	5,
+	1,
+	3,
 	NOW(),
 	1
 );
@@ -181,8 +181,8 @@ INSERT INTO MESSAGE (ID, text_message, sender_id, receiver_id, send_date, read_m
 INSERT INTO MESSAGE (ID, text_message, sender_id, receiver_id, send_date, read_message) VALUES (
 	5,
 	'Quien eres',
-	5,
-	4,
+	3,
+	1,
 	NOW(),
 	1
 );

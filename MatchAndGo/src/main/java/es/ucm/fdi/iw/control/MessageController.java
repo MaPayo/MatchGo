@@ -49,6 +49,7 @@ import es.ucm.fdi.iw.model.User.Role;
  * @author EnriqueTorrijos
  */
 @Controller
+@RequestMapping("/messages")
 public class MessageController {
 
     private static final Logger log = LogManager.getLogger(MessageController.class);
@@ -61,34 +62,38 @@ public class MessageController {
      * 
      * Normally, a Message.Transfer.sender is the "username" of the user, in this case we use it
      * to save the "Id" so we can save it in the Database.
+     * 
      */
-    @PostMapping(value = "/messages/addMessage")
+    @PostMapping("/addMessage")
     @Transactional
-    public String sendMessage(@RequestBody final Message.Transfer message, Model model, HttpSession session) {
+    @ResponseBody
+    public String sendMessage(@RequestBody Message.Transfer message, HttpSession session) {
         
-        log.info("El server tiene un mensaje:");
-        log.info("  - Contenido: " + message.getTextMessage());
-        log.info("  - Sender_id: " + message.getSender());
-        log.info("  - Receiver_id: " + message.getReceiver());
+        User sender = entityManager.find(User.class, ((User)session.getAttribute("u")).getId());
+        User receiver = entityManager.find(User.class, Long.parseLong(message.getReceiverId()));
 
-        User sender = entityManager.find(User.class, message.getSender());
-        User receiver = entityManager.find(User.class, message.getReceiver());
+        
+        log.info("\n\n\nEl server tiene un mensaje:");
+        log.info("  - Contenido: " + message.getTextMessage());
+        log.info("  - Sender_id: " + sender.getId());
+        log.info("  - Receiver_id: " + receiver.getId());
 
         Message newMessage = new Message(message.getTextMessage(), sender, receiver, LocalDateTime.now());
 
         log.info("Guardando el mensaje en la BBDD.");
 
-        entityManager.merge(newMessage);
+        entityManager.persist(newMessage);
         entityManager.flush();
 
-        log.info("Volviendo a la página de mensajes.");
-        return "mensajes";
+// y ahora aviso por websockets a emisor y receptor, para que lo mentan en sus conversaciones, si las tienen abiertas; o muestren una notificación, si no lo estań
+
+        return "ok";
     }
 
     /*
      * Shows all the contacts of the user but doesn't start a chat
      */
-    @GetMapping("/messages")
+    @GetMapping("/")
     @Transactional
     public String startMessagesUser(Model model, HttpSession session) {
         // Get the user from the session
@@ -96,22 +101,37 @@ public class MessageController {
         usuario =  entityManager.find(User.class, usuario.getId());
 
         // Get all the contacts the user-session sended a message
-        List<User> contacts = new ArrayList (entityManager.createNamedQuery("Message.getSendedUsers")
-            .setParameter("sender", usuario.getId()).getResultList());
+        List<User> sentTo = entityManager.createNamedQuery(
+            "Message.getSendedUsers", User.class)
+                .setParameter("sender", usuario.getId())
+                .getResultList();
         
         // Get all the contacts who sended a message to user-session
-        List<User> contactsR = new ArrayList (entityManager.createNamedQuery("Message.getReceivedUsers")
-            .setParameter("receiver", usuario.getId()).getResultList());
+        List<User> receivedFrom = entityManager.createNamedQuery(
+            "Message.getReceivedUsers", User.class)
+                .setParameter("receiver", usuario.getId())
+                .getResultList();
         
         // Join both list
-        for (User c : contactsR) {
-            if (!contacts.contains(c)) {
-                contacts.add(c);
-            }
+        Set<User> all = new HashSet<>();
+        all.addAll(sentTo);
+        all.addAll(receivedFrom);
+        
+        StringBuilder listaBonita = new StringBuilder();
+        for (User u : all) {
+            listaBonita.append(u.getUsername());
         }
+        
+        log.info("\n\n\nUsuario: {} \nContactos: {} \nEjemplos: \n\t{} \n\t{} \n\t{} \n\t{}", 
+            usuario.getUsername(), 
+            listaBonita,
+            entityManager.find(Message.class, 1L),
+            entityManager.find(Message.class, 2L),
+            entityManager.find(Message.class, 3L),
+            entityManager.find(Message.class, 4L));
 
         log.info("Tenemos los contactos del usuario.");
-        model.addAttribute("contactos", contacts);
+        model.addAttribute("contactos", all);
         model.addAttribute("mensajes", new ArrayList<Message> ());
         return "mensajes";
     }
@@ -119,7 +139,7 @@ public class MessageController {
     /*
      * Shows the chat between the user and his contact
      */
-    @GetMapping("/messages/{id}")
+    @GetMapping("/{id}")
     @Transactional
     @ResponseBody
     public List<Message.Transfer> getMessagesUser(@PathVariable long id, Model model, HttpSession session) {

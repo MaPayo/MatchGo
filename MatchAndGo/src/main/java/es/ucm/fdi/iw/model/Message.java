@@ -17,11 +17,11 @@ import javax.persistence.NamedQuery;
 @Entity
 
 @NamedQueries({
-	@NamedQuery(name="Message.getEventMessages", query= "SELECT m FROM Message m WHERE id_event_id = :idUser ORDER BY send_date"),
-	@NamedQuery(name="Message.deleteEventMessages", query= "DELETE FROM Message u WHERE id_event_id = :idUser"),
+	@NamedQuery(name="Message.getEventMessages", query= "SELECT m FROM Message m WHERE event_id = :idUser ORDER BY send_date"),
+	@NamedQuery(name="Message.deleteEventMessages", query= "DELETE FROM Message u WHERE event_id = :idUser"),
 	@NamedQuery(name="Message.deleteMessagesUser", query= "DELETE FROM Message u WHERE sender_id = :idUser OR receiver_id = :idUser"),
-	@NamedQuery(name="Message.getListMessages", query= "SELECT m from Message m WHERE "
-		+ "(sender_id = :sender AND receiver_id = :receiver AND id_event_id = null) OR (sender_id = :receiver AND receiver_id = :sender AND id_event_id = null) "
+	@NamedQuery(name="Message.getListMessages", query= "SELECT m from Message m WHERE event_id = null AND "
+		+ "((sender_id = :sender AND receiver_id = :receiver) OR (sender_id = :receiver AND receiver_id = :sender))"
 		+ "ORDER BY send_date ASC"),
 	@NamedQuery(name="Message.getSendedUsers", query= "SELECT DISTINCT m.receiver from Message m WHERE "
 		+ "sender_id = :sender"),
@@ -40,39 +40,23 @@ public class Message {
 	private User receiver;		// La persona que lo recibe
 	private LocalDateTime sendDate;		// Hay que tener en cuenta el tipo java.sql.Date para las query SQL
 	@ManyToOne(targetEntity = Event.class)
-	private Event idEvent;
+	private Event event;
 	private boolean readMessage;
 
 	public Message() {
-		super();
 	}
 
 	public Message(String c, User s, User r,LocalDateTime f, boolean e, Event ev) {
-		super();
 		this.textMessage = c;
 		this.sender = s;
 		this.receiver = r;
 		this.sendDate = f;
 		this.readMessage = e;
-		this.idEvent = ev;
-	}
-	public Message(long id, String c, User s, User r,LocalDateTime f, boolean e) {
-		super();
-		this.id = id;
-		this.textMessage = c;
-		this.sender = s;
-		this.receiver = r;
-		this.sendDate = f;
-		this.readMessage = e;
+		this.event = ev;
 	}
 
 	public Message(String c, User s, User r, LocalDateTime f) {
-		super();
-		this.textMessage = c;
-		this.sender = s;
-		this.receiver = r;
-		this.sendDate = f;
-		this.readMessage = false;
+		this(c, s, r, f, false, null);
 	}
 
 	/**
@@ -89,6 +73,10 @@ public class Message {
 		return all;
 	}
 
+	public String toString() {
+		return new Transfer(this).toString();
+	}
+
 	/**
 	 * Objeto para persistir a/de JSON
 	 * @author mfreire
@@ -102,7 +90,9 @@ public class Message {
 		private String sendDate;
 		private String readMessage;
 		private String textMessage;
-		long id;
+		private String id;
+
+		public Transfer(){}
 
 		public Transfer(Message m) {
 			this.sender = m.getSender().getUsername();
@@ -116,7 +106,7 @@ public class Message {
 			this.sendDate = DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(m.getSendDate());
 			this.readMessage = String.valueOf(m.getReadMessage());
 			this.textMessage = m.getTextMessage();
-			this.id = m.getId();
+			this.id = Long.toString(m.getId());
 		}
 		public String getSender() {
 			return sender;
@@ -160,12 +150,17 @@ public class Message {
 		public void setTextMessage(String text) {
 			this.textMessage = text;
 		}
-		public long getId() {
+		public String getId() {
 			return id;
 		}
-		public void setId(long id) {
+		public void setId(String id) {
 			this.id = id;
-		}		
+		}
+
+		@Override
+		public String toString() {
+			return "id " + id + " from " + senderId +  " to " + receiverId + " saying '" + textMessage + "'";
+		}
 	}
 
 
