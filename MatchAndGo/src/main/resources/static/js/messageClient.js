@@ -1,3 +1,31 @@
+/**
+ * Sends an ajax request using fetch
+ */
+//envía json, espera json de vuelta; lanza error si status != 200
+function go(url, method, data = {}) {
+    let params = {
+      method: method, // POST, GET, POST, PUT, DELETE, etc.
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+      },
+      body: JSON.stringify(data)
+    };
+    if (method === "GET") {
+        delete params.body;
+    } else {
+        params.headers["X-CSRF-TOKEN"] = config.csrf.value; 
+    }  
+    console.log("sending", url, params)
+    return fetch(url, params)
+        .then(response => {
+          if (response.ok) {
+              return response.json(); // esto lo recibes con then(d => ...)
+          } else {
+              throw response.text();  // esto lo recibes con catch(d => ...)
+          }
+        })
+  }
+
 document.addEventListener("DOMContentLoaded", () => {
     
     let elements = document.getElementsByClassName("bContacto");
@@ -6,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
         elements[i].addEventListener("click", function () {
             
             requestMessages(elements[i].getAttribute('data-id'));
-        });   
+        });
     }
 });
 
@@ -23,24 +51,77 @@ function updateMessages(json) {
         div.removeChild(div.lastChild);
     }
 
+    let idUsuario;
+    let idContacto;
     //Introducimos los nuevos mensajes
+    let html = [];
     json.forEach(m => {
-        let html = [];
-        html +="<div class='mensaje'>";
+        let msg = "";
         
         if (m.sender == config.usuario) {
-            html+="<div class='mensajeMio'>";
-            html+="<pre> "+ m.textMessage +"</pre>";
-            html+="</div>";
+            idUsuario = m.senderId;
+            idContacto = m.receiverId;
+            msg = "<div class='mensajeMio'>"
+                + "<pre> "+ m.textMessage +"</pre>"
+                + "</div>";
         } else {
-            html+="<div class='mensajeContacto'>";
-            html+="<pre> "+ m.textMessage +"</pre>";
-            html+="</div>";
+            idUsuario = m.receiverId;
+            idContacto = m.senderId;
+            msg ="<div class='mensajeContacto'>"
+                + "<pre> "+ m.textMessage +"</pre>"
+                + "</div>";
         }
         
-        html+="</div>";
+        html.push("<div class='mensaje'>" + msg + "</div>");
 
-        div.insertAdjacentHTML('beforeend',html);
+    });
+    div.insertAdjacentHTML('beforeend', html.reverse().join("\n"));
+
+    /*  Ejemplo para insertar un atributo hidden
+    // Insertamos un atributo en el formulario
+    let elemContacto = document.getElementById("contactId");
+    if (elemContacto != null) {
+        elemContacto.remove();
+    }
+    
+    let form = document.getElementById("FormMessage");
+    let htmlForm = "<input type='hidden' id='contactId' value ='" + idContacto + "'>";
+    form.insertAdjacentHTML('beforeend', htmlForm);
+    */
+
+    // Actualizamos el botón de enviar mensaje
+    updateFormMessageButton(idUsuario, idContacto);
+}
+
+function updateFormMessageButton(idUsuario, idContacto) {
+    // Cada vez que accedemos a este método añadimos un eventListener, esto hace que el mensaje se
+    // envíe a todos los chats por los que ha pasado el usuario, y la función es anónima, por lo tanto
+    // no la podemos eliminar, así que eliminamos el botón y lo volvemos a crear.
+    document.getElementById("botonFormMessage").remove();
+    document.getElementById("FormMessage").insertAdjacentHTML('beforeend', 
+        "<input type='submit' id='botonFormMessage' class='botonMensaje' name='boton' value='enviar'>");
+    
+    let button = document.getElementById("botonFormMessage");
+
+    console.log("añadiendo manejador a ", button);
+    button.addEventListener("click", (e)  => {
+        e.preventDefault();
+        
+        let textMessage = document.getElementById("textMessageForm").value;
+        document.getElementById("textMessageForm").value = "";
+
+        let message = {
+            sender: null,
+            senderId: idUsuario,
+            receiver: null,
+            receiverId: idContacto,
+            sendDate: null,
+            readMessage: false,
+            textMessage: textMessage
+        };
+        console.log("Enviando ", message);
+        go(config.rootUrl + "messages/addMessage", "POST", message);
+        e.stopImmediatePropagation();
     });
 }
 
