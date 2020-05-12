@@ -77,12 +77,13 @@ function updateMessages(json) {
     });
     div.insertAdjacentHTML('beforeend', html.reverse().join("\n"));
 
+    /*  Ejemplo para insertar un atributo hidden
     // Insertamos un atributo en el formulario
     let elemContacto = document.getElementById("contactId");
     if (elemContacto != null) {
         elemContacto.remove();
     }
-    /*  Ejemplo para insertar un atributo hidden
+    
     let form = document.getElementById("FormMessage");
     let htmlForm = "<input type='hidden' id='contactId' value ='" + idContacto + "'>";
     form.insertAdjacentHTML('beforeend', htmlForm);
@@ -93,27 +94,35 @@ function updateMessages(json) {
 }
 
 function updateFormMessageButton(idUsuario, idContacto) {
+    // Cada vez que accedemos a este método añadimos un eventListener, esto hace que el mensaje se
+    // envíe a todos los chats por los que ha pasado el usuario, y la función es anónima, por lo tanto
+    // no la podemos eliminar, así que eliminamos el botón y lo volvemos a crear.
+    document.getElementById("botonFormMessage").remove();
+    document.getElementById("FormMessage").insertAdjacentHTML('beforeend', 
+        "<input type='submit' id='botonFormMessage' class='botonMensaje' name='boton' value='enviar'>");
+    
     let button = document.getElementById("botonFormMessage");
+
     console.log("añadiendo manejador a ", button);
-
-    button.addEventListener("click", (e) => {
+    button.addEventListener("click", (e)  => {
         e.preventDefault();
-
-        let textMessage = document.getElementById("textMessageForm").getAttribute("value");
-        console.log("Enviando el texto: ", textMessage);
+        
+        let textMessage = document.getElementById("textMessageForm").value;
+        document.getElementById("textMessageForm").value = "";
 
         let message = {
-            sender: "",
+            sender: null,
             senderId: idUsuario,
-            receiver: "",
+            receiver: null,
             receiverId: idContacto,
-            sendDate: "",
-            readMessage: "",
+            sendDate: null,
+            readMessage: false,
             textMessage: textMessage
         };
-        console.log("hola mundo  - enviando ", message);
+        console.log("Enviando ", message);
         go(config.rootUrl + "messages/addMessage", "POST", message);
-    });   
+        e.stopImmediatePropagation();
+    });
 }
 
 /*

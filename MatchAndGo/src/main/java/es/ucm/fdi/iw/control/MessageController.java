@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
+import javax.validation.constraints.Null;
 
 import org.apache.commons.logging.Log;
 import org.apache.logging.log4j.LogManager;
@@ -66,7 +67,6 @@ public class MessageController {
      */
     @PostMapping("/addMessage")
     @Transactional
-    @ResponseBody
     public String sendMessage(@RequestBody Message.Transfer message, HttpSession session) {
         
         User sender = entityManager.find(User.class, ((User)session.getAttribute("u")).getId());
@@ -80,14 +80,15 @@ public class MessageController {
 
         Message newMessage = new Message(message.getTextMessage(), sender, receiver, LocalDateTime.now());
 
-        log.info("Guardando el mensaje en la BBDD.");
+        log.info("Guardando el mensaje {} en la BBDD.", newMessage.toString());
 
         entityManager.persist(newMessage);
         entityManager.flush();
 
+        log.info("\n\nId del nuevo mensaje: {}", newMessage.getId());
 // y ahora aviso por websockets a emisor y receptor, para que lo mentan en sus conversaciones, si las tienen abiertas; o muestren una notificación, si no lo estań
 
-        return "ok";
+        return "mensajes";
     }
 
     /*
