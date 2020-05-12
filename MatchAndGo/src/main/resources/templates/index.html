@@ -16,6 +16,7 @@
     <header>
         <ul id="menu" class="shadow">
             <li>
+		    <a th:href="@{/leeme}" href="/leeme" class='no-scroll'>Leeme</a>
 		    <a th:if="${session.u}" th:href="@{event/}" href="/event/" class='no-scroll'>Eventos</a>
 		    <a th:unless="${session.u}" th:href="@{/user/guest}" href="/user/guest" class='no-scroll'>Eventos</a>
             </li>
