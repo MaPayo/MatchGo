@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
@@ -57,7 +58,7 @@ import es.ucm.fdi.iw.model.Event.Access;
 import es.ucm.fdi.iw.model.Tags;
 import es.ucm.fdi.iw.model.User.Role;
 
-import es.ucm.fdi.iw.control.PrivateUtilities;
+import es.ucm.fdi.iw.control.Utilities;
 /**
  * User-administration controller
  * @author Carlos Olano
@@ -150,9 +151,8 @@ public class EventController {
 			@RequestParam String location, @RequestParam Long category,
 			@RequestParam String tagsAll, HttpSession session) {
 
-			PrivateUtilities privateUtilities = new PrivateUtilities();
-			List<String> wordsToCheck = new ArrayList(List.of(name,description,date,agePreference,genderPreference,location,tagsAll));
-			if (!privateUtilities.checkStrings(wordsToCheck)){
+			List<String> wordsToCheck = Arrays.asList(name,description,date,agePreference,genderPreference,location,tagsAll);
+			if (!Utilities.checkStrings(wordsToCheck)){
 				User requester = (User)session.getAttribute("u");
 				requester = entityManager.find(User.class, requester.getId());
 				model.addAttribute("user", requester);
@@ -166,7 +166,7 @@ public class EventController {
 				newEvent.setAgePreference(agePreference);
 				newEvent.setGenderPreference(genderPreference);
 				newEvent.setCreator(requester);
-				List<Tags> tags = new ArrayList();
+				List<Tags> tags = new ArrayList<>();
 
 				String[] tagNames = tagsAll.split("\n");
 				for(String tagName : tagNames) {
@@ -330,7 +330,8 @@ public class EventController {
 			tags.append(e.getTags().get(j).getTag() + "\n");
 		}
 
-		ArrayList<Tags> categories = (ArrayList<Tags>) entityManager.createQuery("SELECT t FROM Tags t WHERE t.isCategory IS TRUE")
+		List<Tags> categories = entityManager.createQuery(
+			"SELECT t FROM Tags t WHERE t.isCategory IS TRUE", Tags.class)
 			.getResultList();
 
 		model.addAttribute("user", requester);
@@ -348,7 +349,7 @@ public class EventController {
 
 	public void sendMessageWS(final List content, final String type,long id) {
 		log.info("Sending updated " + type + " via websocket");
-		List response = new ArrayList();
+		List<Object> response = new ArrayList<>();
 		response.add(type);
 		switch(type){
 			case "updateMessages":
@@ -363,6 +364,8 @@ public class EventController {
 		}
 		messagingTemplate.convertAndSend("/topic/event/"+id,response);
 	}	
+
+	
 	@PostMapping(path = "/nm/{id}")
 	@Transactional
 	@ResponseBody
@@ -371,9 +374,8 @@ public class EventController {
 		User u = entityManager.find(User.class, Long.parseLong(nodej.get("idU").asText()));
 		LocalDateTime lt = LocalDateTime.now();
 		String text = nodej.get("textMessage").asText();
-		PrivateUtilities privateUtilities = new PrivateUtilities();
-		List<String> wordsToCheck = new ArrayList(List.of(text));
-		if (!privateUtilities.checkStrings(wordsToCheck)){
+		List<String> wordsToCheck = Arrays.asList(text);
+		if (!Utilities.checkStrings(wordsToCheck)){
 			Message ms = new Message(text,u, null, lt, false, e);
 			entityManager.persist(ms);
 			entityManager.flush();
