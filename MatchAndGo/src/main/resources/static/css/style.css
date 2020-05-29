@@ -238,11 +238,18 @@ header h1 {
 .formEvento {
 	margin: 10% 18%;
 	border: 1px solid black;
+	padding: 3em;
+}
+
+.formEventoModificar{
+	margin: 10% 2% !important;
+	border: 1px solid black;
 	padding: 2em;
 }
 
 .eventImg {
 	width: 7em;
+	height: 7em;
 }
 
 .block>textarea {
@@ -253,7 +260,7 @@ header h1 {
 }
 
 .block>input {
-	width: 20em;
+	width: 95%;
 	height: 1.5em;
 }
 .widthauto{
@@ -264,7 +271,7 @@ header h1 {
 }
 
 .block {
-	margin: 0em 2em;
+	margin: 0em 2%;
 }
 
 .cardLowerContainer select {
@@ -432,7 +439,6 @@ header h1 {
 	margin-right: auto;
 }
 .newTags p, select{
-	margin-top: 1em;
 	margin-right: 1em;
 }
 

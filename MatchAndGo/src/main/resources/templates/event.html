@@ -12,7 +12,7 @@
 	<body>
 		<nav th:replace="fragments/nav.html :: nav">Nav goes here</nav> 
 		<div th:fragment="infoVEvent">
-			<form class="eventContainer formEvento" method="POST" onsubmit="return validateStrings(this)" th:action="@{/event/newEvent}">
+			<form th:class="${formStyle}" method="POST" onsubmit="return validateStrings(this)" th:action="${action}">
 				<div class="cardUpperContainer">
 					<img th:src="@{/img/noImage.png}" alt="" class="eventImg">
 					<div class="block">
@@ -51,7 +51,7 @@
 							<option value="Masculino" th:selected="${#strings.equals(event?.getGenderPreference(), 'Masculino')}">Masculino</option>
 						</select>
 					</div>
-					<div th:if="${newEvent}" class="marginAuto"><button type="submit" class="acceptButton">Crear</button></div>
+					<div th:if="${newEvent}" class="marginAuto"><button type="submit" class="acceptButton"><span th:text="${buttonName}"></span></button></div>
 				</div>
 			</form>
 		</div>
