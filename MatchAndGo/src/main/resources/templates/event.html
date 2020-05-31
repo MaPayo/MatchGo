@@ -31,11 +31,11 @@
 				<div class="cardLowerContainer">
 					<div>
 						<p>Seleccione los campos que desea mantener en privado hasta que el usuario se une al evento</p>
-						<div class="margin">
-							<input type="checkbox" th:hidden="${viewEvent}">Fecha: <input type="date" name="date" id="date" required th:readonly="${viewEvent}" th:value="${date}"/> </input>
+						<div class="margin" th:if="${access} OR !${event?.getPrivateDate()}">
+							<input type="checkbox" th:hidden="${viewEvent}" name="isHiddenDate" id="isHiddenDate" th:checked="${event?.getPrivateDate()}">Fecha: <input type="date" name="date" id="date" required th:readonly="${viewEvent}" th:value="${date}"/> </input>
 						</div>
-						<div class="margin">
-							<input type="checkbox" th:hidden="${viewEvent}">Dirección: <input type="text" name="location" id="location" required th:readonly="${viewEvent}" th:value="${event?.getLocation()}"/></input>
+						<div class="margin" th:if="!${event?.getPrivateLocation()} OR ${access}">
+							<input type="checkbox" th:hidden="${viewEvent}" name="isHiddenDirection" id="isHiddenDirection" th:checked="${event?.getPrivateLocation()}">Dirección: <input type="text" name="location" id="location" required th:readonly="${viewEvent}" th:value="${event?.getLocation()}"/></input>
 						</div>
 					</div>
 					<div>

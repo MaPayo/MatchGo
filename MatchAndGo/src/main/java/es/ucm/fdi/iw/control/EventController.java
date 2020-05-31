@@ -140,6 +140,7 @@ public class EventController {
 		model.addAttribute("viewEvent", false);
 		model.addAttribute("action", "newEvent");
 		model.addAttribute("buttonName", "Crear");
+		model.addAttribute("access", true);
 		model.addAttribute("formStyle", "eventContainer formEvento");
 		model.addAttribute("categories", categories);
 		return "event";
@@ -151,6 +152,8 @@ public class EventController {
 			@RequestParam String description, @RequestParam String date, 
 			@RequestParam String agePreference, @RequestParam String genderPreference,
 			@RequestParam String location, @RequestParam Long category,
+			@RequestParam(value = "isHiddenDate", required = false) String isHiddenDate, 
+			@RequestParam(value = "isHiddenDirection", required = false) String isHiddenDirection,
 			@RequestParam String tagsAll, HttpSession session) {
 
 			PrivateUtilities privateUtilities = new PrivateUtilities();
@@ -168,6 +171,8 @@ public class EventController {
 				newEvent.setLocation(location);
 				newEvent.setAgePreference(agePreference);
 				newEvent.setGenderPreference(genderPreference);
+				newEvent.setPrivateDate(isHiddenDate != null);
+				newEvent.setPrivateLocation(isHiddenDirection != null);
 				newEvent.setCreator(requester);
 				List<Tags> tags = new ArrayList();
 
@@ -330,8 +335,10 @@ public class EventController {
 		if(e.checkAccess(requester) == Access.CREATOR) {
 			model.addAttribute("newEvent", true);
 			model.addAttribute("viewEvent", false);
+			model.addAttribute("access", true);
 		}
 		else {
+			model.addAttribute("access", e.checkAccess(requester) == Access.PARTICIPANT);
 			model.addAttribute("newEvent", false);
 			model.addAttribute("viewEvent", true);
 		}
@@ -417,6 +424,8 @@ public class EventController {
 			@RequestParam String description, @RequestParam String date, 
 			@RequestParam String agePreference, @RequestParam String genderPreference,
 			@RequestParam String location, @RequestParam Long category,
+			@RequestParam(value = "isHiddenDate", required = false) String isHiddenDate, 
+			@RequestParam(value = "isHiddenDirection", required = false) String isHiddenDirection,
 			@RequestParam String tagsAll, Model model, HttpSession session) throws IOException {
 		Event target = entityManager.find(Event.class, id);
 
@@ -427,6 +436,8 @@ public class EventController {
 		target.setPublicationDate(LocalDateTime.now());
 		target.setLocation(location);
 		target.setAgePreference(agePreference);
+		target.setPrivateDate(isHiddenDate != null);
+		target.setPrivateLocation(isHiddenDirection != null);
 		target.setGenderPreference(genderPreference);
 		List<Tags> tags = new ArrayList();
 
