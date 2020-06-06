@@ -27,7 +27,7 @@ function go(url, method, data = {}) {
   }
 
 document.addEventListener("DOMContentLoaded", () => {
-    
+    // https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes
     let elements = document.getElementsByClassName("bContacto");
     
     for (let i = 0; i < elements.length; i++) {
@@ -125,17 +125,9 @@ function updateFormMessageButton(idUsuario, idContacto) {
     });
 }
 
-/*
 
 // Asocia los botones de los contactos con recarga de chats
 document.addEventListener("DOMContentLoaded", () => {
-    document.getElementsByClassName("bContacto").forEach(b => {
-        // https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes
-        b.onclick = e => {
-            idContactoActual = b.dataset.id;
-            requestMessages(b.dataset.id);
-        }
-    })
 
     ws.receive = (o) => {
         // asume que añades un senderId en los mensajes emitidos desde el controlador...
@@ -144,4 +136,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 })
-*/
+
+// Recibe la llamada del WebSocket y recarga el chat
+document.addEventListener("DOMContentLoaded",  () => {
+    if (config.socketUrl) {
+        let url = ["/messages/wsSender", "/messages/wsUpdate"];
+        ws.initialize(config.socketUrl, url);
+    }
+})
