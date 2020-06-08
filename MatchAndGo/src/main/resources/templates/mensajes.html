@@ -17,10 +17,10 @@
                     <button class="bContacto" th:id="${contacto.id}" th:attr="data-id=${contacto.id}" th:text="${ contacto.username }">Pepe</button>
                 </div>
             </div>
-            <div class="contenedorMensajes">
+            <div id="chatDiv" class="contenedorMensajes">
                 <form class="escribirMensaje" id="FormMessage" th:action="@{/messages/addMessage}" method="POST">
                     <textarea id="textMessageForm" class="mensaje" required></textarea>
-                    <input type="submit" id="botonFormMessage" class="botonMensaje"name="boton" value="enviar">
+                    <input type="button" id="botonFormMessage" class="botonMensaje"name="boton" value="enviar">
                 </form>
                 <div class="mensajes" id="M">
                     
@@ -28,14 +28,15 @@
 
 
                 </div>
-                <div class="contactoMensaje" th:if="${contacto}">
-                    <p th:text="${contacto.getUsername()}"></p>
+                <div id="contactInChat" class="contactoMensaje">
+                    <p>Chat</p>
                 </div>
             </div>
         </div>
 
         <script type="text/javascript">
 			const config = {
+                id: "[[${session.u.id}]]",
                 usuario: "[[${session.u.username}]]",
 				socketUrl: "[[${session.ws}?:'']]",	// vacío indica falso
 				rootUrl: "[[${session.ws}?@{/}:'']]",
@@ -47,7 +48,7 @@
         </script>
         <script type="text/javascript" th:src="@{/js/stomp.js}"></script>
         <script type="text/javascript" th:src="@{/js/iwclient.js}"></script>
-        <script type="text/javascript" th:src="@{/js/messageClient.js}"></script>
+        <script type="application/javascript" th:src="@{/js/messageClient.js}"></script>
         <footer th:replace="fragments/footer.html :: footer"> El Footer de la página </footer>
     </body>
 </html>
