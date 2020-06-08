@@ -80,18 +80,6 @@ function updateMessages(json) {
     });
     div.insertAdjacentHTML('beforeend', html.reverse().join("\n"));
 
-    /*  Ejemplo para insertar un atributo hidden
-    // Insertamos un atributo en el formulario
-    let elemContacto = document.getElementById("contactId");
-    if (elemContacto != null) {
-        elemContacto.remove();
-    }
-    
-    let form = document.getElementById("FormMessage");
-    let htmlForm = "<input type='hidden' id='contactId' value ='" + idContacto + "'>";
-    form.insertAdjacentHTML('beforeend', htmlForm);
-    */
-
     // Actualizamos el botón de enviar mensaje
     updateFormMessageButton(idUsuario, idContacto, contacto);
 }
@@ -116,6 +104,7 @@ function updateFormMessageButton(idUsuario, idContacto, contacto) {
     console.log("añadiendo manejador a ", button);
     button.addEventListener("click", (e)  => {
         e.preventDefault();
+        e.stopImmediatePropagation();
         
         let textMessage = document.getElementById("textMessageForm").value;
         textMessage = textMessage.trim();
@@ -132,8 +121,16 @@ function updateFormMessageButton(idUsuario, idContacto, contacto) {
                 textMessage: textMessage
             };
             console.log("Enviando ", message);
-            go(config.rootUrl + "messages/addMessage", "POST", message);
-            e.stopImmediatePropagation();
+            go(config.rootUrl + "messages/addMessage", "POST", message)
+                .then(d => {                        // Si todo sale bien, 200 OK
+                    console.log("enviado ok", d);
+                    let div = document.getElementById("M");
+                    msg = "<div class='mensajeMio'>"
+                        + "<pre> "+ d.textMessage +"</pre>"
+                        + "</div>";
+                    div.insertAdjacentHTML('afterbegin', msg);
+            })
+                .catch( e => { /* se llama si NO es un 200 OK (= cualquier error) */});
         }
     });
 }
@@ -143,9 +140,8 @@ function updateFormMessageButton(idUsuario, idContacto, contacto) {
 document.addEventListener("DOMContentLoaded", () => {
 
     ws.receive = (o) => {
-        // asume que añades un senderId en los mensajes emitidos desde el controlador...
-        if (o.senderId == idContactoActual) {
-            requestMessages(idContactoActual);
+        if (config.id == o.receiverId) {
+            requestMessages(o.senderId);
         }
     }
 })
@@ -153,7 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // Recibe la llamada del WebSocket y recarga el chat
 document.addEventListener("DOMContentLoaded",  () => {
     if (config.socketUrl) {
-        let url = ["/messages/wsSender", "/messages/wsUpdate"];
+        let url = ["/user/queue/updates"];
         ws.initialize(config.socketUrl, url);
     }
 })

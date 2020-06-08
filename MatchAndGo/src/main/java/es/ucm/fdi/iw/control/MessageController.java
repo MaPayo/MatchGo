@@ -69,24 +69,6 @@ public class MessageController {
         all.addAll(sentTo);
         all.addAll(receivedFrom);
 
-        // Para revisar los mensajes que hemos recibido y si tenemos alguno en la BBDD
-        /*
-        
-        StringBuilder listaBonita = new StringBuilder();
-        for (User u : all) {
-            listaBonita.append(u.getUsername());
-        }
-        
-        log.info("\n\n\nUsuario: {} \nContactos: {} \nEjemplos: \n\t{} \n\t{} \n\t{} \n\t{}", 
-            usuario.getUsername(), 
-            listaBonita,
-            entityManager.find(Message.class, 1L),
-            entityManager.find(Message.class, 2L),
-            entityManager.find(Message.class, 3L),
-            entityManager.find(Message.class, 4L));
-
-        */
-
         log.info("Tenemos los contactos del usuario.");
         model.addAttribute("contactos", all);
         model.addAttribute("mensajes", new ArrayList<Message> ());
@@ -143,38 +125,30 @@ public class MessageController {
 
     /*
      * Sends a message to another user.
-     * 
-     * Normally, a Message.Transfer.sender is the "username" of the user, in this case we use it
-     * to save the "Id" so we can save it in the Database.
-     * 
      */
     @PostMapping("/addMessage")
     @Transactional
-    public String sendMessage(@RequestBody Message.Transfer message, HttpSession session) {
+    @ResponseBody
+    public Message.Transfer sendMessage(@RequestBody Message.Transfer message, HttpSession session) {
         
         User sender = entityManager.find(User.class, ((User)session.getAttribute("u")).getId());
         User receiver = entityManager.find(User.class, Long.parseLong(message.getReceiverId()));
 
         // Save the message in the system
         Message newMessage = this.saveMessageInDatabase(message, sender, receiver);
-
+        Message.Transfer msg = new Message.Transfer(newMessage);
+        
         // We prepare the messages and send them to the user and his contact by WebSocket
         log.info("\nEmpezamos a preparar los mensajes a los usuarios por el WebSocket.");
-        List<Message.Transfer> newMessageToUsers = getMessagesFromDatabase(sender.getId(), receiver.getId());
-        newMessageToUsers.add(new Message.Transfer(newMessage));
 
-        //messagingTemplate.convertAndSend("/messages/" + sender.getId(), newMessageToUsers);
-        //messagingTemplate.convertAndSend("/messages/" + receiver.getId(), newMessageToUsers);
-
-        messagingTemplate.convertAndSend("/messages/wsSender", newMessageToUsers);
-        messagingTemplate.convertAndSend("/messages/wsUpdate", newMessageToUsers);
+        messagingTemplate.convertAndSend("/user/"+receiver.getUsername()+"/queue/updates", msg);
 
         log.info("\nMensajes enviados por el WebSocket.\n");
-        return "redirect:/messages/";
+        return msg;
     }
 
     /*
-     * This method is used when a User sends a Message to another User who isn't one of his contacts
+     * A User sends a Message to another User who isn't one of his contacts
      */
     @PostMapping("/sendMessageNewUser")
     @Transactional

@@ -36,6 +36,7 @@
 
         <script type="text/javascript">
 			const config = {
+                id: "[[${session.u.id}]]",
                 usuario: "[[${session.u.username}]]",
 				socketUrl: "[[${session.ws}?:'']]",	// vacío indica falso
 				rootUrl: "[[${session.ws}?@{/}:'']]",
