@@ -138,6 +138,10 @@ public class EventController {
 		model.addAttribute("user", requester);
 		model.addAttribute("newEvent", true);
 		model.addAttribute("viewEvent", false);
+		model.addAttribute("action", "newEvent");
+		model.addAttribute("buttonName", "Crear");
+		model.addAttribute("access", true);
+		model.addAttribute("formStyle", "eventContainer formEvento");
 		model.addAttribute("categories", categories);
 		return "event";
 	}
@@ -148,6 +152,8 @@ public class EventController {
 			@RequestParam String description, @RequestParam String date, 
 			@RequestParam String agePreference, @RequestParam String genderPreference,
 			@RequestParam String location, @RequestParam Long category,
+			@RequestParam(value = "isHiddenDate", required = false) String isHiddenDate, 
+			@RequestParam(value = "isHiddenDirection", required = false) String isHiddenDirection,
 			@RequestParam String tagsAll, HttpSession session) {
 
 			PrivateUtilities privateUtilities = new PrivateUtilities();
@@ -165,6 +171,8 @@ public class EventController {
 				newEvent.setLocation(location);
 				newEvent.setAgePreference(agePreference);
 				newEvent.setGenderPreference(genderPreference);
+				newEvent.setPrivateDate(isHiddenDate != null);
+				newEvent.setPrivateLocation(isHiddenDirection != null);
 				newEvent.setCreator(requester);
 				List<Tags> tags = new ArrayList();
 
@@ -181,15 +189,6 @@ public class EventController {
 				newEvent.setTags(tags);
 
 				entityManager.persist(newEvent);
-
-				/*Evaluation.getreviews
-				  User requester = (User)session.getAttribute("u");
-				  if (requester.getId() != target.getCreator().getId() &&
-				  ! requester.hasRole(Role.ADMIN)) {			
-				  response.sendError(HttpServletResponse.SC_FORBIDDEN, 
-				  "No eres administrador, y éste no es tu evento");
-				  }
-				  */
 				return "redirect:/user/" + requester.getId();
 			}
 			return "redirect:/event/newEvent?erno=1";
@@ -332,15 +331,26 @@ public class EventController {
 
 		ArrayList<Tags> categories = (ArrayList<Tags>) entityManager.createQuery("SELECT t FROM Tags t WHERE t.isCategory IS TRUE")
 			.getResultList();
+		
+		if(e.checkAccess(requester) == Access.CREATOR) {
+			model.addAttribute("newEvent", true);
+			model.addAttribute("viewEvent", false);
+			model.addAttribute("access", true);
+		}
+		else {
+			model.addAttribute("access", e.checkAccess(requester) == Access.PARTICIPANT);
+			model.addAttribute("newEvent", false);
+			model.addAttribute("viewEvent", true);
+		}
 
 		model.addAttribute("user", requester);
-		model.addAttribute("newEvent", false);
-		model.addAttribute("viewEvent", true);
-
 		model.addAttribute("event", e);
 		model.addAttribute("categoryId", categoryId);
 		model.addAttribute("tags", tags.toString());
 		model.addAttribute("categories", categories);
+		model.addAttribute("action", id);
+		model.addAttribute("buttonName", "Modificar");
+		model.addAttribute("formStyle", "eventContainer formEventoModificar");
 		model.addAttribute("date", e.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 		return "event_view";
 	}
@@ -410,25 +420,43 @@ public class EventController {
 	@Transactional
 	public String postEvent(
 			HttpServletResponse response,
-			@PathVariable long id, 
-			@ModelAttribute Event edited, 
-			Model model, HttpSession session) throws IOException {
+			@PathVariable long id, @RequestParam String name,
+			@RequestParam String description, @RequestParam String date, 
+			@RequestParam String agePreference, @RequestParam String genderPreference,
+			@RequestParam String location, @RequestParam Long category,
+			@RequestParam(value = "isHiddenDate", required = false) String isHiddenDate, 
+			@RequestParam(value = "isHiddenDirection", required = false) String isHiddenDirection,
+			@RequestParam String tagsAll, Model model, HttpSession session) throws IOException {
 		Event target = entityManager.find(Event.class, id);
-		model.addAttribute("event", target);
 
-		User requester = (User)session.getAttribute("u");
-		if (requester.getId() != target.getCreator().getId() &&
-				! requester.hasRole(Role.ADMIN)) {			
-			response.sendError(HttpServletResponse.SC_FORBIDDEN, 
-					"No eres administrador, y éste no es tu evento");
-				}
+		target.setName(name);
+		target.setDescription(description);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		target.setDate(LocalDate.parse(date, formatter).atStartOfDay());
+		target.setPublicationDate(LocalDateTime.now());
+		target.setLocation(location);
+		target.setAgePreference(agePreference);
+		target.setPrivateDate(isHiddenDate != null);
+		target.setPrivateLocation(isHiddenDirection != null);
+		target.setGenderPreference(genderPreference);
+		List<Tags> tags = new ArrayList();
 
+		String[] tagNames = tagsAll.split("\n");
+		for(String tagName : tagNames) {
+			Tags t = new Tags();
+			t.setisCategory(false);
+			t.setTag(tagName);
+			tags.add(t);
+			entityManager.persist(t);
+		}
 
+		tags.add(entityManager.find(Tags.class, category));
+		target.setTags(tags);
 
-		// copiar todos los campos cambiados de edited a target
+		entityManager.persist(target);
 
-		return "event";
-			}	
+		return "redirect:/event/";
+	}	
 
 	@GetMapping(value="/{id}/photo")
 	public StreamingResponseBody getPhoto(@PathVariable long id, Model model) throws IOException {		

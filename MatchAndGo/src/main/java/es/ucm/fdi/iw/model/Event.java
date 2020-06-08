@@ -21,6 +21,9 @@ import javax.persistence.NamedQuery;
 import es.ucm.fdi.iw.model.User.Role;
 
 import es.ucm.fdi.iw.model.User.Transfer;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import es.ucm.fdi.iw.model.User.Role;
@@ -81,7 +84,8 @@ public class Event {
 
 	private List<Tags> tags;
 	
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
+	@Fetch(FetchMode.SELECT)
 	private List<User> participants;
 	
 
@@ -307,7 +311,14 @@ public class Event {
 		return Access.MINIMAL;
 		
 	}
-
+	
+	private boolean isParticipant(User u) {
+		for(User p : this.participants) {
+			if(p.getId() == u.getId())
+				return true;
+		}
+		return false;
+	}
 	
 	public long getId() {
 	return id;
