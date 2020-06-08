@@ -64,14 +64,14 @@ function updateMessages(json) {
             idContacto = m.receiverId;
             contacto = m.receiver;
             msg = "<div class='mensajeMio'>"
-                + "<pre> "+ m.textMessage +"</pre>"
+                + "<p> "+ m.textMessage +"</p>"
                 + "</div>";
         } else {
             idUsuario = m.receiverId;
             idContacto = m.senderId;
             contacto = m.sender;
             msg ="<div class='mensajeContacto'>"
-                + "<pre> "+ m.textMessage +"</pre>"
+                + "<p> "+ m.textMessage +"</p>"
                 + "</div>";
         }
         
@@ -88,7 +88,7 @@ function updateFormMessageButton(idUsuario, idContacto, contacto) {
     // Actualizamos el nombre del contacto en el chat
     document.getElementById("contactInChat").remove();
     document.getElementById("chatDiv").insertAdjacentHTML('beforeend',
-        "<div id='contactInChat' class='contactoMensaje'>" +
+        "<div id='contactInChat' class='contactoMensaje' name='" + contacto + "'>" +
         "<p>"+ contacto +"</p>" +
         "</div>");
     
@@ -125,9 +125,9 @@ function updateFormMessageButton(idUsuario, idContacto, contacto) {
                 .then(d => {                        // Si todo sale bien, 200 OK
                     console.log("enviado ok", d);
                     let div = document.getElementById("M");
-                    msg = "<div class='mensajeMio'>"
-                        + "<pre> "+ d.textMessage +"</pre>"
-                        + "</div>";
+                    msg = "<div class='mensaje'><div class='mensajeMio'>"
+                        + "<p> "+ d.textMessage +"</p>"
+                        + "</div> </div>";
                     div.insertAdjacentHTML('afterbegin', msg);
             })
                 .catch( e => { /* se llama si NO es un 200 OK (= cualquier error) */});
@@ -140,7 +140,10 @@ function updateFormMessageButton(idUsuario, idContacto, contacto) {
 document.addEventListener("DOMContentLoaded", () => {
 
     ws.receive = (o) => {
-        if (config.id == o.receiverId) {
+        let nombreContacto = document.getElementById("contactInChat");
+        
+        if (config.id == o.receiverId && nombreContacto != null &&
+                nombreContacto.getAttribute("name") == o.sender) {
             requestMessages(o.senderId);
         }
     }
