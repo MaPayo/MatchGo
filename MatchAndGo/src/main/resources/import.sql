@@ -3,7 +3,7 @@
 -- 		application-default ó application-externaldb en modo 'create'
 --
 
-INSERT INTO USER(ID, USERNAME, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, BIRTH_DATE, GENDER, USER_ROLE, ENABLED) VALUES (
+INSERT INTO USER(ID, USERNAME, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, BIRTH_DATE, GENDER, USER_ROLE, ENABLED,LAST_LOGIN) VALUES (
 	1,
 	'n',
 	'Profesor',
@@ -12,10 +12,10 @@ INSERT INTO USER(ID, USERNAME, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, BIRTH_DAT
 	'{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u',
 	'20/03/1993',
 	'Hombre',
-	'ADMIN', true
+	'ADMIN', true,NOW()
 );
 
-INSERT INTO USER(ID, USERNAME, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, BIRTH_DATE, GENDER, USER_ROLE, ENABLED) VALUES (
+INSERT INTO USER(ID, USERNAME, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, BIRTH_DATE, GENDER, USER_ROLE, ENABLED,LAST_LOGIN) VALUES (
 	2, 
 	'guest',
 	'guest',
@@ -24,9 +24,9 @@ INSERT INTO USER(ID, USERNAME, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, BIRTH_DAT
 	'{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u',
 	'fecha_nac 3',
 	'Otro', 
-	'SYS,GUEST',true
+	'SYS,GUEST',true,NOW()
 );
-INSERT INTO USER(ID, USERNAME, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, BIRTH_DATE, GENDER, USER_ROLE, ENABLED) VALUES (
+INSERT INTO USER(ID, USERNAME, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, BIRTH_DATE, GENDER, USER_ROLE, ENABLED,LAST_LOGIN) VALUES (
 	3, 
 	'Deleted User',
 	'Deleted User',
@@ -35,9 +35,9 @@ INSERT INTO USER(ID, USERNAME, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, BIRTH_DAT
 	'{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u',
 	'fecha_nac 4',
 	'Mujer', 
-	'SYS',true
+	'SYS',true,NOW()
 );
-INSERT INTO USER(ID, USERNAME, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, BIRTH_DATE, GENDER, USER_ROLE, ENABLED) VALUES (
+INSERT INTO USER(ID, USERNAME, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, BIRTH_DATE, GENDER, USER_ROLE, ENABLED,LAST_LOGIN) VALUES (
 	4, 
 	'n2',
 	'Ash',
@@ -46,9 +46,9 @@ INSERT INTO USER(ID, USERNAME, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, BIRTH_DAT
 	'{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u',
 	'fecha_nac 2',
 	'Hombre', 
-	'USER',true
+	'USER',true,NOW()
 );
-INSERT INTO USER(ID, USERNAME, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, BIRTH_DATE, GENDER, USER_ROLE, ENABLED) VALUES (
+INSERT INTO USER(ID, USERNAME, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, BIRTH_DATE, GENDER, USER_ROLE, ENABLED,LAST_LOGIN) VALUES (
 	5, 
 	'SS',
 	'Sara',
@@ -57,9 +57,9 @@ INSERT INTO USER(ID, USERNAME, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, BIRTH_DAT
 	'{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u',
 	'fecha_nac 4',
 	'Mujer', 
-	'MOD',true
+	'MOD',true,NOW()
 );
-INSERT INTO USER(ID, USERNAME, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, BIRTH_DATE, GENDER, USER_ROLE, ENABLED) VALUES (
+INSERT INTO USER(ID, USERNAME, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, BIRTH_DATE, GENDER, USER_ROLE, ENABLED, LAST_LOGIN) VALUES (
 	6, 
 	'Bn',
 	'Baron',
@@ -68,7 +68,7 @@ INSERT INTO USER(ID, USERNAME, FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, BIRTH_DAT
 	'{bcrypt}$2a$10$xLFtBIXGtYvAbRqM95JhcOaG23fHRpDoZIJrsF2cCff9xEHTTdK1u',
 	'fecha_nac 4',
 	'Mujer', 
-	'MOD',true
+	'MOD',true,NOW()
 );
 INSERT INTO EVENT(ID, NAME, DESCRIPTION, LOCATION, DATE, PUBLICATION_DATE, IS_APPROPRIATE,CREATOR_ID) VALUES (
 	1,
@@ -139,14 +139,14 @@ INSERT INTO EVENT_PARTICIPANTS VALUES(1,6);
 INSERT INTO USER_TAGS VALUES(4, 1);
 INSERT INTO USER_TAGS VALUES(4, 2);
 INSERT INTO USER_TAGS VALUES(5, 1);
-INSERT INTO USER_TAGS VALUES(5, 1);
+INSERT INTO USER_TAGS VALUES(5, 3);
 INSERT INTO USER_TAGS VALUES(6, 2);
 
 INSERT INTO MESSAGE (ID, text_message, sender_id, receiver_id, send_date, read_message) VALUES (
 	1,
 	'Hola que tal',
-	5,
-	6,
+	1,
+	2,
 	NOW(),
 	1
 );
@@ -154,8 +154,8 @@ INSERT INTO MESSAGE (ID, text_message, sender_id, receiver_id, send_date, read_m
 INSERT INTO MESSAGE (ID, text_message, sender_id, receiver_id, send_date, read_message) VALUES (
 	2,
 	'Bien y tu',
-	6,
-	5,
+	2,
+	1,
 	NOW(),
 	1
 );
@@ -163,8 +163,8 @@ INSERT INTO MESSAGE (ID, text_message, sender_id, receiver_id, send_date, read_m
 INSERT INTO MESSAGE (ID, text_message, sender_id, receiver_id, send_date, read_message) VALUES (
 	3,
 	'Yo tambien bien',
-	5,
-	6,
+	1,
+	2,
 	NOW(),
 	1
 );
@@ -172,8 +172,8 @@ INSERT INTO MESSAGE (ID, text_message, sender_id, receiver_id, send_date, read_m
 INSERT INTO MESSAGE (ID, text_message, sender_id, receiver_id, send_date, read_message) VALUES (
 	4,
 	'Eyyyyyy',
-	4,
-	5,
+	1,
+	3,
 	NOW(),
 	1
 );
@@ -181,12 +181,12 @@ INSERT INTO MESSAGE (ID, text_message, sender_id, receiver_id, send_date, read_m
 INSERT INTO MESSAGE (ID, text_message, sender_id, receiver_id, send_date, read_message) VALUES (
 	5,
 	'Quien eres',
-	5,
-	4,
+	3,
+	1,
 	NOW(),
 	1
 );
 
 
-INSERT INTO MESSAGE (ID, text_message, sender_id, receiver_id, send_date, read_message, ID_EVENT_ID) VALUES (6,'Hola que tal',4,null,NOW(),0,1);
-INSERT INTO MESSAGE (ID, text_message, sender_id, receiver_id, send_date, read_message, ID_EVENT_ID) VALUES (7,'que tal',5,null,NOW(),0,1);
+INSERT INTO MESSAGE (ID, text_message, sender_id, receiver_id, send_date, read_message, event_id) VALUES (6,'Hola que tal',4,null,NOW(),0,1);
+INSERT INTO MESSAGE (ID, text_message, sender_id, receiver_id, send_date, read_message, event_id) VALUES (7,'que tal',5,null,NOW(),0,1);

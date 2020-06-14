@@ -13,10 +13,10 @@
 					name: "[[${_csrf.parameterName}]]",
 					value: "[[${_csrf.token}]]"
 				},
-				admin: [[${session.u != null && session.u.hasRole('ADMIN')}?true:false]],
-				userId: [[${session.u != null}?${session.u.id}:-1]],
-				guest: [[${session.u != null && session.u.hasRole('GUEST')}?true:false]],
-				canEvaluate: [[${timestamp != null && event.getDate() < timestamp}?true:false]],
+				admin: "[[${session.u != null && session.u.hasRole('ADMIN')}?true:false]]",
+				userId: "[[${session.u != null}?${session.u.id}:-1]]",
+				guest: "[[${session.u != null && session.u.hasRole('GUEST')}?true:false]]",
+				canEvaluate: "[[${timestamp != null && event.getDate() < timestamp}?true:false]]",
 				username: "[[${session.u != null}?${session.u.username}:'nop']]"
 			};
 		</script>
@@ -37,6 +37,7 @@
 				<div th:replace="fragments/event_info.html :: valorations"></div>
 			</div>
 		</main>
-		<footer th:replace="fragments/footer.html :: footer"> Footer goes here </footer>
+		
+		<!-- <footer th:replace="fragments/footer.html :: footer"> Footer goes here </footer>  -->
 	</body>
 </html>

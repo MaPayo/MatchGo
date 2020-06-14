@@ -34,7 +34,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 	    http
 	        .authorizeRequests()
-	            .antMatchers("/css/**", "/js/**", "/img/**", "/", "/error", "/user/signup","/event/**","/user/guest","/user/userName").permitAll()
+	        .antMatchers("/css/**", "/js/**", "/img/**", "/", "/error", "/user/signup","/event/**","/user/guest","/admin/eventlist","/leeme").permitAll()
+
 	            // .antMatchers("/clase/enter").permitAll() 		 <-- only when logging in to vote 
 	            .antMatchers("/admin/**").hasRole("ADMIN")		// <-- administration
 	            .antMatchers("/moderator/**").hasAnyRole("MOD", "ADMIN") // <-- moderator functionality

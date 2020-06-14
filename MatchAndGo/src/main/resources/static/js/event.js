@@ -10,8 +10,8 @@ document.addEventListener("DOMContentLoaded", () => {
 			["/topic/admin", "/user/queue/updates","/topic/event/"+lastURLSegment] : ["/topic/event/"+lastURLSegment]
 		ws.initialize(config.socketUrl, subs);
 	}
-	if (!config.guest){
-		if(config.canEvaluate){
+	if (config.guest == "false"){
+		if(config.canEvaluate == "true"){
 			document.getElementById("sendValuation").addEventListener("click",function() {
 				const id = document.getElementById("idUs").value;
 				const score = document.getElementById("score").value;
@@ -31,17 +31,6 @@ document.addEventListener("DOMContentLoaded", () => {
 	go(config.rootUrl + "event/m/"+lastURLSegment,"POST",null).then(e => listUsers(e,"updateMessages"));
 	go(config.rootUrl + "user/event/"+lastURLSegment,"POST",null).then(e => listUsers(e,"updateUsersEvent"));
 });
-function listUsers(jsonArray, type, page){
-	var pageURL = window.location.href;
-	var lastURLSegment = pageURL.substr(pageURL.lastIndexOf('/') + 1);
-	if (page == lastURLSegment){
-		var node = document.getElementById("M");
-		while (node.firstChild) {
-			node.removeChild(node.lastChild);
-		}
-		jsonArray.forEach(e => appendChild(node,e,type));
-	}
-}
 function listUsers(jsonArray, type){
 	switch(type){
 		case "updateMessages":
@@ -60,7 +49,7 @@ function listUsers(jsonArray, type){
 			var elements = document.getElementsByClassName("anUser");
 			for (i = 0; i < elements.length;i++){
 				elements[i].addEventListener("click",function() {
-					if (!config.guest)
+					if (config.guest == "false" && config.canEvaluate == "true")
 						document.getElementById("idUs").value = this.dataset.id;
 					go(config.rootUrl + "reviews/user/"+this.dataset.id,"POST",null).then(e => listUsers(e,"updateListValuations"));
 				});
@@ -94,7 +83,10 @@ function appendChild(where,element, type){
 			break;
 		case "updateUsersEvent":
 			html = ["<div class='anUser' data-id='"+element.id+"'>" +
-				"<span>"+ element.username +" - "+element.firstName+"</span>" + 
+				"<span >"+ element.username +" - "+element.firstName+"</span> </div>" + 
+				"<div class='messageNewContact'> <form class='formSendNewMessage' action='/messages/sendMessageNewUser' method='POST'> "+
+				"<textarea id='textMessage"+element.id+"' class='textNewMessage' name='textMessage' required></textarea>" + 
+				"<input type='button' onclick=\"enviarMensaje(" + element.id + ", 'textMessage"+element.id+"');\" id='botonFormMessage"+element.id+"' contact='"+element.id+"' class='botonNewMessage' name='botonNewMessage' value='Enviar'> </form>" +
 				"</div>"];
 			break;
 		case "updateMessages":
@@ -117,3 +109,19 @@ function appendChild(where,element, type){
 	where.insertAdjacentHTML('beforeend',html);
 }
 
+function enviarMensaje(id, idTextbox) {
+	let message = {
+		sender: null,
+		senderId: config.userId,
+		receiver: null,
+		receiverId: id,
+		sendDate: null,
+		readMessage: false,
+		textMessage: document.getElementById(idTextbox).value
+	};
+	console.log(message);
+	console.log(config.rootUrl+"messages/sendMessageNewUser");
+	go(config.rootUrl+"messages/sendMessageNewUser","POST", message).then(
+		document.getElementById(idTextbox).value = ""
+	);
+}

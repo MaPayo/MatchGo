@@ -3,19 +3,22 @@
  * Actions to perform once the page is fully loaded
  */
 document.addEventListener("DOMContentLoaded", () => {
+	//subscriptions to ws
 	if (config.socketUrl) {
 		let subs = config.admin ? 
-
 			["/topic/admin", "/user/queue/updates"] : ["/user/queue/updates"]
 		ws.initialize(config.socketUrl, subs);
 	}
 
+	//listener search enter key ovr title
 	document.getElementById("textS").addEventListener("keypress",function(keyPress) {
 		if (keyPress.keyCode == 13){
 			event.preventDefault();
 			go(config.rootUrl + "admin/eventlist","POST",null).then(e => sendSearch(e));
 		}
 	});
+
+	//listener search
 	document.getElementById("search").addEventListener("click",function() {
 		var flag = false;
 		if (document.getElementById("dateFS").value != "" && document.getElementById("dateTS").value != ""){
@@ -28,17 +31,12 @@ document.addEventListener("DOMContentLoaded", () => {
 		}
 	});
 
+	//date search from date less than to date
 	document.getElementById("dateTS").addEventListener("focus",function(){
 		document.getElementById("dateTS").min = document.getElementById("dateFS").value; 
 	});
 
-	//response.forEach(e => );
-
-	// add your after-page-loaded JS code here; or even better, call 
-	// 	 document.addEventListener("DOMContentLoaded", () => { /* your-code-here */ });
-	//   (assuming you do not care about order-of-execution, all such handlers will be called correctly)
 });
-
 function sendSearch(jsonArray){
 	/**
 	 * take all events and compare them with conditions, if all pased append to events
@@ -55,10 +53,10 @@ function sendSearch(jsonArray){
 	jsonArray.forEach(function(ev){
 		var flag_add = false;
 		if (!text == ""){
-			flag_add = (ev.name.includes(text) || ev.description.includes(text)) ? false:true;
+			flag_add = (ev.name.toLowerCase().includes(text) || ev.description.toLowerCase().includes(text)) ? false:true;
 		}
 		if (!flag_add && !loc == ""){
-			flag_add = (ev.location.includes(loc)) ? false:true;
+			flag_add = (ev.location.toLowerCase().includes(loc)) ? false:true;
 		}
 		if (!flag_add && !gender == ""){
 			flag_add = (ev.genderPreference.includes(gender)) ? false:true;
@@ -83,7 +81,6 @@ function sendSearch(jsonArray){
 			arrayEvents.push(ev);
 		}
 	});
-	console.log(arrayEvents);
 	listUsers(arrayEvents, "updateEvents");
 }
 

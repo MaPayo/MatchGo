@@ -16,7 +16,7 @@
 	<div id="contUsers"></div>
 </div>
 <div th:fragment="valorations" class="flex50">
-	<h2>Valorations</h2>
+	<h2>Valoraciones</h2>
 	<div id="contEvaluations"  th:classappend="${session.u.hasRole('GUEST')}?blur"></div>
 	<form  th:if="!${session.u.hasRole('GUEST')} and ${event?.getDate()} < ${timestamp}" id="contentVal" onsubmit="return validateStrings(this)" class='escribirMensaje'>
 		<input hidden readonly id='idUs' name='idU' type="number" required />

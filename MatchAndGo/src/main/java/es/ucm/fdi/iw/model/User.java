@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -280,24 +281,25 @@ public class User {
 		public enum Role{
 			USER,ADMIN, MOD
 		}	
+
+		private static DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;	
 		private long id;
 		private String username;
 		private String firstName;
 		private String lastName;
 		private String email;
-		private String password;
 		private String birthDate;
 		private String gender;
 		private String userRole;
-		private String photo;
-		private boolean enabled;
-		private List<Evaluation> receivedEvaluation;
-		private List<Evaluation> senderEvaluation;
-		private List<Message> sentMessages;
-		private List<Message> receivedMessages;
-		private List<Tags> tags;
-		private List<Event> joinedEvents;
-		private List<Event> createdEvents;
+		private String lastLogin;
+		private List<String> tags;
+	//	private boolean enabled;
+	//	private List<Evaluation> receivedEvaluation;
+	//	private List<Evaluation> senderEvaluation;
+	//	private List<Message> sentMessages;
+	//	private List<Message> receivedMessages;
+	//	private List<Event> joinedEvents;
+	//	private List<Event> createdEvents;
 
 
 		public Transfer(User m) {
@@ -306,12 +308,17 @@ public class User {
 			this.firstName = m.getFirstName();
 			this.lastName = m.getLastName();
 			this.userRole = m.getUserRole();
-			this.password = m.getPassword();
 			this.email = m.getEmail();
 			this.birthDate = m.getBirthDate();
 			this.gender = m.getGender();
+			this.tags= new ArrayList();
+			if(m.getTags() != null){
+				for (Tags t : m.getTags()){
+					this.tags.add(t.getTag());
+				}
+			}
+			this.lastLogin = m.getLastLogin().format(formatter);
 		}
-
 
 		public long getId() {
 			return id;
@@ -337,6 +344,13 @@ public class User {
 			this.firstName = firstName;
 		}
 
+		public String getLastLogin() {
+			return lastLogin;
+		}
+
+		public List<String> getTags(){
+			return tags;
+		}
 
 		public String getLastName() {
 			return lastName;
@@ -354,20 +368,6 @@ public class User {
 			this.email = mail;
 		}
 
-		public String getPassword() {
-			return password;
-		}
-
-
-		/**
-		 * Sets the password to an encoded value. 
-		 * You can generate encoded passwords using {@link #encodePassword}.
-		 * call only with encoded passwords - NEVER STORE PLAINTEXT PASSWORDS
-		 * @param encodedPassword to set as user's password
-		 */
-		public void setPassword(String encodedPassword) {
-			this.password = encodedPassword;
-		}
 
 
 		public String getBirthDate() {
