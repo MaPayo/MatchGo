@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -42,7 +43,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import es.ucm.fdi.iw.LocalData;
-import es.ucm.fdi.iw.control.PrivateUtilities;
 import es.ucm.fdi.iw.model.Evaluation;
 import es.ucm.fdi.iw.model.Event;
 import es.ucm.fdi.iw.model.Tags;
@@ -238,9 +238,8 @@ public class UserController {
 			/**
 			 * First we test all params are clean
 			 **/
-			PrivateUtilities privateUtilities = new PrivateUtilities();
-			List<String> wordsToCheck = new ArrayList(List.of(username,password,password2,email,firstname,lastname,gender,birthdate));
-			if (!privateUtilities.checkStrings(wordsToCheck)){
+			List<String> wordsToCheck = Arrays.asList(username,password,password2,email,firstname,lastname,gender,birthdate);
+			if (!Utilities.checkStrings(wordsToCheck)){
 
 				log.warn("ENTRA AL METODO DE REGISTRAR EL USER");
 				//redirigimos al registro si el usrname ya existe o las contraseñas no coinciden
@@ -334,12 +333,11 @@ public class UserController {
 
 
 	private boolean usernameAlreadyInUse(String userName) {
-		Long usernameAlreadyInUse = entityManager.createNamedQuery("User.hasUsername", Long.class)
-			.setParameter("username", userName).getSingleResult();
-		if(usernameAlreadyInUse != 0) {
-			return true;
-		}
-		return false;
+		return entityManager
+				.createNamedQuery("User.hasUsername", Long.class)
+				.setParameter("username", userName)
+				.getSingleResult() 
+			!= 0;	// 0 = no user; >0 = number of user with that username
 	}
 
 
