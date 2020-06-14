@@ -33,6 +33,13 @@ document.addEventListener("DOMContentLoaded", () => {
     for (let i = 0; i < elements.length; i++) {
         elements[i].addEventListener("click", function () {
             
+            // Si tienen una notificación lo quitamos
+            imgNotification = elements[i].firstChild;
+            if (elements[i].childElementCount == 1) {
+                elements[i].removeChild(elements[i].lastChild);
+            }
+
+            // Obtiene los mensajes con el contacto del botón
             requestMessages(elements[i].getAttribute('data-id'));
         });
     }
@@ -58,7 +65,6 @@ function updateMessages(json) {
     let html = [];
     json.forEach(m => {
         let msg = "";
-        
         if (m.sender == config.usuario) {
             idUsuario = m.senderId;
             idContacto = m.receiverId;
@@ -142,9 +148,18 @@ document.addEventListener("DOMContentLoaded", () => {
     ws.receive = (o) => {
         let nombreContacto = document.getElementById("contactInChat");
         
+        // Es un mensaje para mí y tengo su chat abierto
         if (config.id == o.receiverId && nombreContacto != null &&
                 nombreContacto.getAttribute("name") == o.sender) {
             requestMessages(o.senderId);
+        // Es un mensaje para mí y no tengo su chat abierto
+        } else if (config.id == o.receiverId) {
+            let contacto = document.getElementById(o.senderId);
+            if (contacto != null && document.getElementById("notificationMsg") == null) {
+                let html = "<img id='notificationMsg' src = '/img/notificationContact.png'" +
+                    "height = '16px' width = '16px' >";
+                contacto.insertAdjacentHTML('beforeend',html);
+            }
         }
     }
 })
