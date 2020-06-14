@@ -646,6 +646,9 @@ form.escribirMensaje .botonMensaje:hover {
 #contEvaluations{
 	height:78%;
 }
+#contEvaluations .anUser span {
+	width: 100%;
+}
 .blur{
 	filter: blur(8px);
 	-webkit-filter: blur(8px);

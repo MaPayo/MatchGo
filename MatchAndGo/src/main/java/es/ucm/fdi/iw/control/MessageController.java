@@ -153,14 +153,12 @@ public class MessageController {
      */
     @PostMapping("/sendMessageNewUser")
     @Transactional
-    public String sendMessageNewUser(@RequestBody Message.Transfer message, HttpSession session) {
+    public void sendMessageNewUser(@RequestBody Message.Transfer message, HttpSession session) {
 
         User sender = entityManager.find(User.class, ((User)session.getAttribute("u")).getId());
         User receiver = entityManager.find(User.class, Long.parseLong(message.getReceiverId()));
 
         this.saveMessageInDatabase(message, sender, receiver);
-
-        return "redirect:messages/";
     }
 
     /*

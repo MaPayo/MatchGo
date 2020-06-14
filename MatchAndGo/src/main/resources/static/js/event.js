@@ -110,5 +110,18 @@ function appendChild(where,element, type){
 }
 
 function enviarMensaje(id, idTextbox) {
-    console.log("function: " + id + " - " + idTextbox);
+	let message = {
+		sender: null,
+		senderId: config.userId,
+		receiver: null,
+		receiverId: id,
+		sendDate: null,
+		readMessage: false,
+		textMessage: document.getElementById(idTextbox).value
+	};
+	console.log(message);
+	console.log(config.rootUrl+"messages/sendMessageNewUser");
+	go(config.rootUrl+"messages/sendMessageNewUser","POST", message).then(
+		document.getElementById(idTextbox).value = ""
+	);
 }
