@@ -10,8 +10,8 @@ document.addEventListener("DOMContentLoaded", () => {
 			["/topic/admin", "/user/queue/updates","/topic/event/"+lastURLSegment] : ["/topic/event/"+lastURLSegment]
 		ws.initialize(config.socketUrl, subs);
 	}
-	if (!config.guest){
-		if(config.canEvaluate){
+	if (config.guest == "false"){
+		if(config.canEvaluate == "true"){
 			document.getElementById("sendValuation").addEventListener("click",function() {
 				const id = document.getElementById("idUs").value;
 				const score = document.getElementById("score").value;
@@ -49,7 +49,7 @@ function listUsers(jsonArray, type){
 			var elements = document.getElementsByClassName("anUser");
 			for (i = 0; i < elements.length;i++){
 				elements[i].addEventListener("click",function() {
-					if (!config.guest && config.canEvaluate)
+					if (config.guest == "false" && config.canEvaluate == "true")
 						document.getElementById("idUs").value = this.dataset.id;
 					go(config.rootUrl + "reviews/user/"+this.dataset.id,"POST",null).then(e => listUsers(e,"updateListValuations"));
 				});
