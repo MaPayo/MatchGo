@@ -1,24 +1,12 @@
 package es.ucm.fdi.iw.control;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
 import org.springframework.web.bind.annotation.ResponseBody;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
@@ -26,10 +14,8 @@ import javax.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,21 +23,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 
-import es.ucm.fdi.iw.LocalData;
 import es.ucm.fdi.iw.model.User;
 import es.ucm.fdi.iw.model.Evaluation;
-import es.ucm.fdi.iw.model.Event;
-import es.ucm.fdi.iw.model.Event.Access;
-import es.ucm.fdi.iw.model.Tags;
-import es.ucm.fdi.iw.model.User.Role;
 
-import es.ucm.fdi.iw.control.PrivateUtilities;
 /**
  * User-administration controller
  *@author Carlos Olano 
@@ -117,9 +94,8 @@ public class EvaluationController {
 		final User v = (User)session.getAttribute("u");
 		final User eva = (User) entityManager.createNamedQuery("User.getUser", User.class)
 			.setParameter("idUser", idU).getSingleResult();
-		PrivateUtilities privateUtilities = new PrivateUtilities();
-		List<String> wordsToCheck = new ArrayList(List.of(text));
-		if (!privateUtilities.checkStrings(wordsToCheck)){
+		List<String> wordsToCheck = Arrays.asList(text);
+		if (!Utilities.checkStrings(wordsToCheck)){
 			Evaluation e = new Evaluation(v, eva,(long)score,text);
 			entityManager.persist(e);
 			entityManager.flush();
@@ -133,8 +109,7 @@ public class EvaluationController {
 		final User ev = entityManager.createNamedQuery("User.getUser", User.class)
 			.setParameter("idUser", id)
 			.getSingleResult();
-		final List<Evaluation> valors = new ArrayList (ev.getReceivedEvaluation());
-		return Evaluation.asTransferObjects(valors);
+		return Evaluation.asTransferObjects(ev.getReceivedEvaluation());
 	}
 	/**
 	 * END
