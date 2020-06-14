@@ -12,6 +12,7 @@
 
 .brtop {
 	border-radius: 35px 35px 0 0;
+	cursor: pointer;
 }
 
 .bgwhite {
@@ -71,7 +72,6 @@ nav a {
 	margin-top: auto;
 	border-radius: 4px;
 	padding:2px;
-	border: 1px solid #afeea0;
 }
 
 menu a:hover{
@@ -116,6 +116,7 @@ header h1 {
 }
 .eventCard {
 	margin: auto;
+	margin-top: 2%;
 	width:30%;
 	border: 1px solid black;
 	box-shadow: 3px 3px 10px grey;
