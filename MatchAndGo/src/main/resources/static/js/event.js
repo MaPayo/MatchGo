@@ -83,7 +83,10 @@ function appendChild(where,element, type){
 			break;
 		case "updateUsersEvent":
 			html = ["<div class='anUser' data-id='"+element.id+"'>" +
-				"<span>"+ element.username +" - "+element.firstName+"</span>" + 
+				"<span >"+ element.username +" - "+element.firstName+"</span> </div>" + 
+				"<div class='messageNewContact'> <form class='formSendNewMessage' action='/messages/sendMessageNewUser' method='POST'> "+
+				"<textarea id='textMessage"+element.id+"' class='textNewMessage' name='textMessage' required></textarea>" + 
+				"<input type='button' onclick=\"enviarMensaje(" + element.id + ", 'textMessage"+element.id+"');\" id='botonFormMessage"+element.id+"' contact='"+element.id+"' class='botonNewMessage' name='botonNewMessage' value='Enviar'> </form>" +
 				"</div>"];
 			break;
 		case "updateMessages":
@@ -106,3 +109,6 @@ function appendChild(where,element, type){
 	where.insertAdjacentHTML('beforeend',html);
 }
 
+function enviarMensaje(id, idTextbox) {
+    console.log("function: " + id + " - " + idTextbox);
+}

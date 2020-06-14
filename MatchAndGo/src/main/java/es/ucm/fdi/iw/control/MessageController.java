@@ -142,6 +142,7 @@ public class MessageController {
         log.info("\nEmpezamos a preparar los mensajes a los usuarios por el WebSocket.");
 
         messagingTemplate.convertAndSend("/user/"+receiver.getUsername()+"/queue/updates", msg);
+        messagingTemplate.convertAndSend("/notification/" + receiver.getId(), msg);
 
         log.info("\nMensajes enviados por el WebSocket.\n");
         return msg;
@@ -159,7 +160,7 @@ public class MessageController {
 
         this.saveMessageInDatabase(message, sender, receiver);
 
-        return "redirect:/messages/";
+        return "redirect:messages/";
     }
 
     /*
