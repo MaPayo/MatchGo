@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -84,6 +85,53 @@ public class TagController {
 		return alltagsUser;
 	}
 
+	@PostMapping(path = "/addTagUser/{id}")
+	@Transactional
+	public void addUserTag (final HttpSession session, @PathVariable long id) {
 
-	
+		log.warn("Entra en listagUser");
+		User u = (User) session.getAttribute("u");
+		 
+		Tags nuevaTag = entityManager.createNamedQuery("Tags.getTag", Tags.class)
+				.setParameter("idTag", id).getSingleResult();
+		u.getTags().add(nuevaTag);
+		
+		entityManager.flush();
+		log.info("Añade la tag al usuario");
+	}
+
+	@PostMapping("/newTag/{tag}")
+	@Transactional
+	public String register(Model model, HttpServletRequest request, @PathVariable String tag, HttpSession session) {
+			/**
+			 * First we test all params are clean
+			 **/
+
+				User u = (User) session.getAttribute("u"); 
+				u = entityManager.find(User.class, u.getId()); 
+				log.warn("ENTRA en crear nueva tag");
+				//redirigimos al registro si el usrname ya existe o las contraseñas no coinciden
+				//aunq esto lo quiero hacer desde el html y que salga un aviso en la pagina
+				if (tagExist(tag)) {
+					//aqui habria que mostrar un alert o algo
+					return "redirect:/user/"+u.getId();
+				}
+				// Creación de un usuario
+				Tags t = new Tags();
+				t.setTag(tag);
+				entityManager.persist(t);
+				u.getTags().add(t);
+				entityManager.flush(); //guardar bbdd
+				
+				return "redirect:/user/" + u.getId();
+	}
+
+	private boolean tagExist(String tag) {
+		return entityManager
+				.createNamedQuery("Tags.getEventTagsByName", Long.class)
+				.setParameter("tagname", tag)
+				.getSingleResult() 
+			!= 0;	// 0 = no user; >0 = number of user with that username
+
+	}
 }

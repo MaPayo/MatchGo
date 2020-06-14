@@ -15,7 +15,22 @@
 
 	  
 	  });
-	
+	  document.getElementById("botonAnadirTag").addEventListener("click",function() {
+			
+		  	let idTag = document.getElementById("tagSeleccionada").value;
+			go(config.rootUrl + "tag/addTagUser/"+idTag,"POST",null);
+
+	  
+	  });
+	  
+	  document.getElementById("tagInput").addEventListener("keypress",function(key) {
+			if (key.keyCode == 13){ //pulsa enter
+				let tag = document.getElementById("tagInput").value;
+				go(config.rootUrl + "tag/newTag/"+tag,"POST",null);
+
+			}
+		});
+	  
 
 	//response.forEach(e => );
 

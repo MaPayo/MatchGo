@@ -336,6 +336,8 @@ public class UserController {
 	}
 
 
+	
+
 	private boolean usernameAlreadyInUse(String userName) {
 		return entityManager
 				.createNamedQuery("User.hasUsername", Long.class)

@@ -74,12 +74,13 @@
           		</ul>
           		<div class= "newTags" th:if="(${session.u.id} eq ${user.getId()})">
           			<p> Añadir nuevas etiquetas:</p>
-          			<select name="category">
-                		<option value="">Seleccionar</option>
-                		<option th:each="t: ${allTags}"><span th:text="${t.getTag()}"></span></option>
+          			<select name="category" id="tagSeleccionada">
+                		<option value="-1">Seleccionar</option>
+                		<option th:each="t: ${allTags}" th:value="${t.getId()}"><span th:text="${t.getTag()}"></span></option>
 					</select>
+						<input type="button" id="botonAnadirTag" value="Añadir">
 					<div class="anadir_tarea">
-              			<input type="text" name="tarea" id="txt_tarea" placeholder="Introduce una nueva tarea">     
+              			<input type="text" name="tarea" id="tagInput" placeholder="Pulsa enter para introducir una nueva tag">     
             		</div>
 						
 					
