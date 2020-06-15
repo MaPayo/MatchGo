@@ -146,7 +146,7 @@ INSERT INTO MESSAGE (ID, text_message, sender_id, receiver_id, send_date, read_m
 	1,
 	'Hola que tal',
 	1,
-	2,
+	4,
 	NOW(),
 	1
 );
@@ -154,7 +154,7 @@ INSERT INTO MESSAGE (ID, text_message, sender_id, receiver_id, send_date, read_m
 INSERT INTO MESSAGE (ID, text_message, sender_id, receiver_id, send_date, read_message) VALUES (
 	2,
 	'Bien y tu',
-	2,
+	4,
 	1,
 	NOW(),
 	1
@@ -164,7 +164,7 @@ INSERT INTO MESSAGE (ID, text_message, sender_id, receiver_id, send_date, read_m
 	3,
 	'Yo tambien bien',
 	1,
-	2,
+	4,
 	NOW(),
 	1
 );
@@ -173,7 +173,7 @@ INSERT INTO MESSAGE (ID, text_message, sender_id, receiver_id, send_date, read_m
 	4,
 	'Eyyyyyy',
 	1,
-	3,
+	5,
 	NOW(),
 	1
 );
@@ -181,7 +181,7 @@ INSERT INTO MESSAGE (ID, text_message, sender_id, receiver_id, send_date, read_m
 INSERT INTO MESSAGE (ID, text_message, sender_id, receiver_id, send_date, read_message) VALUES (
 	5,
 	'Quien eres',
-	3,
+	5,
 	1,
 	NOW(),
 	1

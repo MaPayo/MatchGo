@@ -17,6 +17,8 @@ document.addEventListener("DOMContentLoaded", () => {
 				const score = document.getElementById("score").value;
 				const text = document.getElementById("textoV").value;
 				if (validateStrings(document.getElementById("contentVal"))){
+					document.getElementById("score").value = "";
+					document.getElementById("textoV").value = "";
 					go(config.rootUrl + "reviews/add","POST",{textN:text,idU:id,score:score}).then(e => listUsers(e,"updateListValuations"));
 				}
 			});
@@ -82,11 +84,11 @@ function appendChild(where,element, type){
 				"</div>"];
 			break;
 		case "updateUsersEvent":
-			html = ["<div class='anUser' data-id='"+element.id+"'>" +
+			html = ["<div class='anUser interactive' data-id='"+element.id+"'>" +
 				"<span >"+ element.username +" - "+element.firstName+"</span> </div>" + 
 				"<div class='messageNewContact'> <form class='formSendNewMessage' action='/messages/sendMessageNewUser' method='POST'> "+
 				"<textarea id='textMessage"+element.id+"' class='textNewMessage' name='textMessage' required></textarea>" + 
-				"<input type='button' onclick=\"enviarMensaje(" + element.id + ", 'textMessage"+element.id+"');\" id='botonFormMessage"+element.id+"' contact='"+element.id+"' class='botonNewMessage' name='botonNewMessage' value='Enviar'> </form>" +
+				"<input type='button' onclick=\"enviarMensaje(" + element.id + ", 'textMessage"+element.id+"');\" id='botonFormMessage"+element.id+"' contact='"+element.id+"' class='botonNewMessage' name='botonNewMessage' value='Enviar mensaje'> </form>" +
 				"</div>"];
 			break;
 		case "updateMessages":
@@ -99,7 +101,7 @@ function appendChild(where,element, type){
 			} else {
 				html = ["<div class='mensaje'>"+
 					"<div class='mensajeContacto'>"+
-					"<p> "+ element.textMessage +"</p>"+
+					"<p> "+element.sender+":  "+ element.textMessage +"</p>"+
 					"</div>"+
 					"</div>"];
 			}
@@ -120,7 +122,7 @@ function enviarMensaje(id, idTextbox) {
 		textMessage: document.getElementById(idTextbox).value
 	};
 	console.log(message);
-	console.log(config.rootUrl+"messages/sendMessageNewUser");
+	console.log("Enviando mensaje a "+config.rootUrl+"messages/sendMessageNewUser");
 	go(config.rootUrl+"messages/sendMessageNewUser","POST", message).then(
 		document.getElementById(idTextbox).value = ""
 	);

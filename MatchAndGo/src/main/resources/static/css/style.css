@@ -151,7 +151,7 @@ header h1 {
 	padding: 2%;
 }
 
-.flex50 .anUser :hover {
+.flex50 .interactive :hover {
 	cursor: pointer;
 }
 
@@ -179,13 +179,15 @@ header h1 {
 }
 
 .flex50 .messageNewContact .formSendNewMessage .botonNewMessage {
-	padding: 2%;
-	width: 15%;
+	padding-top: 1%;
+	padding-bottom: 1%;
+
+	width: 18%;
 }
 
 .flex50 .mensajes {
 	display: flex;
-	flex-direction: column-reverse;
+	flex-direction: column;
 	border-top: 0px;
 	padding-top: 3%;
 	padding: 3%;
