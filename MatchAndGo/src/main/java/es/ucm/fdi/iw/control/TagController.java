@@ -95,9 +95,10 @@ public class TagController {
 		Tags nuevaTag = entityManager.createNamedQuery("Tags.getTag", Tags.class)
 				.setParameter("idTag", id).getSingleResult();
 		u.getTags().add(nuevaTag);
-		
+		entityManager.persist(u);
 		entityManager.flush();
 		log.info("Añade la tag al usuario");
+		
 	}
 
 	@PostMapping("/newTag/{tag}")
