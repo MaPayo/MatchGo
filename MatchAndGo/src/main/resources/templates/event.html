@@ -51,7 +51,14 @@
 							<option value="Masculino" th:selected="${#strings.equals(event?.getGenderPreference(), 'Masculino')}">Masculino</option>
 						</select>
 					</div>
-					<div th:if="${newEvent}" class="marginAuto"><button type="submit" class="acceptButton"><span th:text="${buttonName}"></span></button></div>
+					<div class="blockButtons">
+						<div th:if="${newEvent}" class="marginAuto">
+						<button type="submit" class="acceptButton" name="action" value="change"><span th:text="${buttonName}"></span></button>
+						</div>
+						<div class="marginAuto">
+						<button type="submit" class="acceptButton" name="action" value="join">Join</button>
+						</div>
+					</div>
 				</div>
 			</form>
 		</div>
