@@ -1,5 +1,6 @@
 package es.ucm.fdi.iw.control;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.io.File;
@@ -301,7 +302,7 @@ public class AdminController {
 
 	public void sendMessageWS(final List content, final String type, final String topic) {
 		log.info("Sending updated " + type + " via websocket");
-		final List response = new ArrayList();
+		final List response =  new ArrayList<>();
 		response.add(type);
 		switch(type){
 			case "updateUsersEvent":

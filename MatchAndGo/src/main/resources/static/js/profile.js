@@ -2,20 +2,45 @@
 /**
  * Actions to perform once the page is fully loaded
  */
-  let id="{'id':3}";
   
   document.addEventListener("DOMContentLoaded", () => {
+	  
+	  if (config.socketUrl) {
+			let subs = config.admin ? 
+
+				["/topic/admin", "/user/queue/updates"] : ["/user/queue/updates"]
+			ws.initialize(config.socketUrl, subs);
+		}
+	  
+	  
 	  document.getElementById("listaTags").addEventListener("click",function() {
 			document.getElementById("listaTags").classList.add("bgblue");
 			document.getElementById("listaEventosCreados").classList.remove("bgblue");
 			document.getElementById("listaEventosInscritos").classList.remove("bgblue");
 			document.getElementById("listaComentarios").classList.remove("bgblue");
-			
-			go(config.rootUrl + "tag/listTags/1","POST",null).then(e => console.log("holaaaaaaaaaa"));
+			var pageURL = window.location.href;
+			var lastURLSegment = pageURL.substr(pageURL.lastIndexOf('/') + 1);
+			go(config.rootUrl + "tag/listTags/"+ lastURLSegment,"POST",null).then(e => console.log("holaaaaaaaaaa"));
 
 	  
 	  });
-	
+	  document.getElementById("botonAnadirTag").addEventListener("click",function() {
+			
+		  	let idTag = document.getElementById("tagSeleccionada").value;
+
+			go(config.rootUrl + "tag/addTagUser/"+idTag,"POST",null);
+
+	  
+	  });
+	  
+	  document.getElementById("tagInput").addEventListener("keypress",function(key) {
+			if (key.keyCode == 13){ //pulsa enter
+				let tag = document.getElementById("tagInput").value;
+				go(config.rootUrl + "tag/newTag","POST",{tagName:tag}).then();
+
+			}
+		});
+	  
 
 	//response.forEach(e => );
 
@@ -27,17 +52,31 @@
 
 
 function listUsers(jsonArray, type){
-	const node = document.getElementById("contUsers");
-	while (node.firstChild) {
-		node.removeChild(node.lastChild);
-	}
+	const node = document.getElementById("listaTags");
+	const select = document.getElementById("tagSeleccionada");
 	switch(type){
-		case "updateUsers":
+		case "updateTagUser":
+
+			while (node.firstChild ) {
+				node.removeChild(node.lastChild);
+			}
+
 			jsonArray.forEach(e => appendChild(e,type));
 			break;
-		case "updateEvents":
+		case "updateSelectTag":
+			while (select.firstChild ) {
+				select.removeChild(select.lastChild);
+			}
+			
 			jsonArray.forEach(e => appendChild(e,type));
 			break;
+		case "selectTag":
+			alert("Please select one tag.");
+			break;
+		case "tagExists":
+			alert("the tag you are trying to insert already exists.")
+			break;
+			
 	}
 }
 
@@ -45,27 +84,15 @@ function listUsers(jsonArray, type){
 function appendChild(element, type){
 
 	let html;
+	let modificarId;
 	switch(type){
-		case "updateUsers":
-			html = ["<div class='eventCard bgwhite'>" + 
-				"<div class='cardUpperContainer'>" +
-				"<h2 id='nombre'><span>"+ element.username +" - "+element.firstName+" "+ element.lastName+"</span></h2>" + 
-				"</div>" +
-				"<div class='cardLowerContainer'>" +
-				"<p id='edad'><span>"+ element.birthDate +"</span></p>" +
-				"<p id='sexo'><span>"+ element.gender +"</span></p>" +
-				"<form method='post' action='/admin/deleteUser'>" +
-				"<input type='hidden' name='_csrf' value='"+config.csrf.value+"' />" +
-				"<input hidden type='number' name='id' value="+ element.id +">" +
-				"<input type='submit' class='declineButton' value='Eliminar' />" +
-				"</form>" +
-				"<form method='post' action='/admin/blockUser?id="+ element.id +"'>" +
-				"<input type='hidden' name='_csrf' value='"+config.csrf.value+"' />" +
-				"<input hidden type='number' name='id' value="+ element.id +">" +
-				"<input type='submit' class='declineButton' value='Bloquear' />" +
-				"</form>" +
-				"</div>" +
-				"</div>"];
+		case "updateTagUser":
+			modificarId= "listaTags";
+			html = ["<li>"+element.tag+ "</li>"];
+			break;
+		case "updateSelectTag":
+			modificarId = "tagSeleccionada";
+			html =["<option value="+element.id +">"+element.tag + "</option>"];
 			break;
 		case "updateEvents":
 			 html = ["<div class='eventCard bgwhite'>"+
@@ -93,6 +120,6 @@ function appendChild(element, type){
 				"</div>"];
 			break;
 	}
-	document.getElementById("contUsers").insertAdjacentHTML('beforeend',html);
+	document.getElementById(modificarId).insertAdjacentHTML('beforeend',html);
 }
 

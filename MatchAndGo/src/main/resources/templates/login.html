@@ -7,7 +7,22 @@
 		<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet">
 		<link rel="stylesheet" href="libs/font-awesome/css/font-awesome.min.css">
 		<link rel="stylesheet" type="text/css" th:href="@{/css/stylesindex.css}">
+		
+		<script type="text/javascript">
+			const config = {
+				socketUrl: "[[${session.ws}?:'']]",	// vacÃ­o indica falso
+				rootUrl: "[[${session.ws}?@{/}:'']]",
+				csrf: {
+					name: "[[${_csrf.parameterName}]]",
+					value: "[[${_csrf.token}]]"
+				},
+			};
+		</script>
+		
 		<script th:src="@{/js/utils.js}" src="js/utils.js" type="text/javascript"></script>
+		<script th:src="@{/js/login.js}" src="js/login.js" type="text/javascript"></script>
+		<script th:src="@{/js/iwclientAdmin.js}" src="js/iwclientAdmin.js" type="text/javascript"></script>
+		
 	</head>
 	<body>
 		<div id="lead-login">
@@ -22,15 +37,15 @@
 					<form th:action="@{/user/signup}" method="POST" enctype="multipart/form-data">
 						<div class="form_texto">
 							<label for="txt_username">Nombre de usuario:</label>
-							<input type="text" name="username" id="txt_email" required>
+							<input type="text" name="username" id="txt_username" required>
 						</div>
 						<div class="form_texto">
 							<label for="txt_password">Contraseña:</label>
 							<input type="password" minlength="6" maxlength="15" name="password" id="txt_password" required>
 						</div>
 						<div class="form_texto">
-							<label for="txt_password">Confirmación contraseña:</label>
-							<input type="password" minlength="6" maxlength="15" name="password2" id="txt_password" required>
+							<label for="txt_password2">Confirmación contraseña:</label>
+							<input type="password" minlength="6" maxlength="15" name="password2" id="txt_password2" required>
 						</div>
 						<div class="form_texto">
 							<label for="txt_email">Email:</label>

@@ -339,7 +339,16 @@ public class EventController {
 			model.addAttribute("access", true);
 		}
 		else {
-			model.addAttribute("access", e.checkAccess(requester) == Access.PARTICIPANT);
+			if(e.checkAccess(requester) == Access.PARTICIPANT) {
+				model.addAttribute("access", true);
+				model.addAttribute("joinAction", "leave");
+				model.addAttribute("joinButton", "Leave");
+			}
+			else {
+				model.addAttribute("access", false);
+				model.addAttribute("joinAction", "join");
+				model.addAttribute("joinButton", "Join");
+			}
 			model.addAttribute("newEvent", false);
 			model.addAttribute("viewEvent", true);
 		}
@@ -428,35 +437,47 @@ public class EventController {
 			@RequestParam String location, @RequestParam Long category,
 			@RequestParam(value = "isHiddenDate", required = false) String isHiddenDate, 
 			@RequestParam(value = "isHiddenDirection", required = false) String isHiddenDirection,
+			@RequestParam String action,
 			@RequestParam String tagsAll, Model model, HttpSession session) throws IOException {
 		Event target = entityManager.find(Event.class, id);
 
-		target.setName(name);
-		target.setDescription(description);
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		target.setDate(LocalDate.parse(date, formatter).atStartOfDay());
-		target.setPublicationDate(LocalDateTime.now());
-		target.setLocation(location);
-		target.setAgePreference(agePreference);
-		target.setPrivateDate(isHiddenDate != null);
-		target.setPrivateLocation(isHiddenDirection != null);
-		target.setGenderPreference(genderPreference);
-		List<Tags> tags = new ArrayList();
+		if(action.equals("change")) {
+			target.setName(name);
+			target.setDescription(description);
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			target.setDate(LocalDate.parse(date, formatter).atStartOfDay());
+			target.setPublicationDate(LocalDateTime.now());
+			target.setLocation(location);
+			target.setAgePreference(agePreference);
+			target.setPrivateDate(isHiddenDate != null);
+			target.setPrivateLocation(isHiddenDirection != null);
+			target.setGenderPreference(genderPreference);
+			List<Tags> tags = new ArrayList();
 
-		String[] tagNames = tagsAll.split("\n");
-		for(String tagName : tagNames) {
-			Tags t = new Tags();
-			t.setisCategory(false);
-			t.setTag(tagName);
-			tags.add(t);
-			entityManager.persist(t);
+			String[] tagNames = tagsAll.split("\n");
+			for(String tagName : tagNames) {
+				Tags t = new Tags();
+				t.setisCategory(false);
+				t.setTag(tagName);
+				tags.add(t);
+				entityManager.persist(t);
+			}
+
+			tags.add(entityManager.find(Tags.class, category));
+			target.setTags(tags);
 		}
-
-		tags.add(entityManager.find(Tags.class, category));
-		target.setTags(tags);
-
+		else {
+			User requester = (User)session.getAttribute("u");
+			requester = entityManager.find(User.class, requester.getId());
+			
+			if(action.equals("join"))
+				target.getParticipants().add(requester);
+			else
+				target.getParticipants().remove(requester);
+		}
+		
 		entityManager.persist(target);
-
+		
 		return "redirect:/event/";
 	}	
 

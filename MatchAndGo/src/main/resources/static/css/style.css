@@ -763,3 +763,7 @@ li>a>img {
 	height: 100px;
 	font-size: 2em;
 }
+
+.blockButtons{
+	display: block;
+}

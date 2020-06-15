@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -36,11 +37,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 import es.ucm.fdi.iw.LocalData;
 import es.ucm.fdi.iw.model.Evaluation;
@@ -332,15 +336,29 @@ public class UserController {
 	}
 
 
+	
+
 	private boolean usernameAlreadyInUse(String userName) {
 		return entityManager
 				.createNamedQuery("User.hasUsername", Long.class)
 				.setParameter("username", userName)
 				.getSingleResult() 
 			!= 0;	// 0 = no user; >0 = number of user with that username
+
 	}
 
-
+	@PostMapping(path = "/userName", produces = "application/json")
+	@Transactional
+	@ResponseBody
+	public String checkUsername(@RequestBody JsonNode nodej, Model model) {
+		log.warn("ENTRA EN LA FUNCION PARA VER LA DISPONIBILIDAD USERNAME");
+		
+		String u = nodej.get("username").asText();
+		if(usernameAlreadyInUse(u)) {
+			return "0";//no puede usar el usurname
+		}
+		return "1";
+	}
 
 
 	/**
