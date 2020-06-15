@@ -339,7 +339,16 @@ public class EventController {
 			model.addAttribute("access", true);
 		}
 		else {
-			model.addAttribute("access", e.checkAccess(requester) == Access.PARTICIPANT);
+			if(e.checkAccess(requester) == Access.PARTICIPANT) {
+				model.addAttribute("access", true);
+				model.addAttribute("joinAction", "leave");
+				model.addAttribute("joinButton", "Leave");
+			}
+			else {
+				model.addAttribute("access", false);
+				model.addAttribute("joinAction", "join");
+				model.addAttribute("joinButton", "Join");
+			}
 			model.addAttribute("newEvent", false);
 			model.addAttribute("viewEvent", true);
 		}
@@ -460,7 +469,11 @@ public class EventController {
 		else {
 			User requester = (User)session.getAttribute("u");
 			requester = entityManager.find(User.class, requester.getId());
-			target.getParticipants().add(requester);
+			
+			if(action.equals("join"))
+				target.getParticipants().add(requester);
+			else
+				target.getParticipants().remove(requester);
 		}
 		
 		entityManager.persist(target);

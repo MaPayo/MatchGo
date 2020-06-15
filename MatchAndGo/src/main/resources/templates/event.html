@@ -55,8 +55,8 @@
 						<div th:if="${newEvent}" class="marginAuto">
 						<button type="submit" class="acceptButton" name="action" value="change"><span th:text="${buttonName}"></span></button>
 						</div>
-						<div class="marginAuto">
-						<button type="submit" class="acceptButton" name="action" value="join">Join</button>
+						<div class="marginAuto" th:if="not ${newEvent}">
+						<button type="submit" class="acceptButton" name="action" th:value="${joinAction}"><span th:text="${joinButton}"></button>
 						</div>
 					</div>
 				</div>
