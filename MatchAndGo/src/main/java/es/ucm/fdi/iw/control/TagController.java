@@ -23,6 +23,7 @@ import javax.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -67,6 +68,9 @@ public class TagController {
 	@Autowired
 	private LocalData localData;
 	
+	@Autowired
+	private SimpMessagingTemplate messagingTemplate;
+	
 	@PostMapping(path = "/listTags/{id}", produces = "application/json")
 	@Transactional
 	@ResponseBody
@@ -89,50 +93,68 @@ public class TagController {
 	@Transactional
 	public void addUserTag (final HttpSession session, @PathVariable long id) {
 
-		log.warn("Entra en listagUser");
+		log.info("Entra en listagUser");
 		User u = (User) session.getAttribute("u");
-		 
+		u = entityManager.find(User.class, u.getId()); 
 		Tags nuevaTag = entityManager.createNamedQuery("Tags.getTag", Tags.class)
 				.setParameter("idTag", id).getSingleResult();
 		u.getTags().add(nuevaTag);
 		entityManager.persist(u);
 		entityManager.flush();
 		log.info("Añade la tag al usuario");
+		sendMessageWS(u.getTags(), "updateTagUser", "/user/"+u.getId());
 		
 	}
 
 	@PostMapping("/newTag/{tag}")
 	@Transactional
-	public String register(Model model, HttpServletRequest request, @PathVariable String tag, HttpSession session) {
+	public void registerNewTag(Model model, HttpServletRequest request, @PathVariable String tag, HttpSession session) {
 			/**
 			 * First we test all params are clean
 			 **/
 
 				User u = (User) session.getAttribute("u"); 
 				u = entityManager.find(User.class, u.getId()); 
-				log.warn("ENTRA en crear nueva tag");
+				log.info("entra en crear nueva tag");
 				//redirigimos al registro si el usrname ya existe o las contraseñas no coinciden
 				//aunq esto lo quiero hacer desde el html y que salga un aviso en la pagina
 				if (tagExist(tag)) {
 					//aqui habria que mostrar un alert o algo
-					return "redirect:/user/"+u.getId();
+					List<String> listaVacia = Arrays.asList();
+					sendMessageWS(listaVacia, "tagExists", "/user/"+u.getId());
 				}
+				log.info("tag no existe");
 				// Creación de un usuario
 				Tags t = new Tags();
 				t.setTag(tag);
 				entityManager.persist(t);
 				u.getTags().add(t);
 				entityManager.flush(); //guardar bbdd
+				sendMessageWS(u.getTags(), "updateTagUser", "/user/"+u.getId());
 				
-				return "redirect:/user/" + u.getId();
 	}
 
 	private boolean tagExist(String tag) {
 		return entityManager
-				.createNamedQuery("Tags.getEventTagsByName", Long.class)
+				.createNamedQuery("Tag.getEventTagsByName", Tags.class)
 				.setParameter("tagname", tag)
-				.getSingleResult() 
-			!= 0;	// 0 = no user; >0 = number of user with that username
-
+				.getResultList()
+			== null;	
+	}
+	public void sendMessageWS(final List content, final String type, final String topic) {
+		log.info("Sending updated " + type + " via websocket");
+		final List response = Arrays.asList();
+		response.add(type);
+		switch(type){
+			case "updateTagUser":
+				response.add(Tags.asTransferObjects(content));
+				break;
+			case "tagExists":
+				response.add("La Tag ya existe");
+			
+			default:
+				response.add("sorry");
+		}
+		messagingTemplate.convertAndSend(topic,response);
 	}
 }

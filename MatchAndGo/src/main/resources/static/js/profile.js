@@ -42,17 +42,18 @@
 
 
 function listUsers(jsonArray, type){
-	const node = document.getElementById("contUsers");
+	const node = document.getElementById("listaTags");
 	while (node.firstChild) {
 		node.removeChild(node.lastChild);
 	}
 	switch(type){
-		case "updateUsers":
+		case "updateTagUser":
 			jsonArray.forEach(e => appendChild(e,type));
 			break;
 		case "updateEvents":
 			jsonArray.forEach(e => appendChild(e,type));
 			break;
+		case "":
 	}
 }
 
@@ -61,26 +62,8 @@ function appendChild(element, type){
 
 	let html;
 	switch(type){
-		case "updateUsers":
-			html = ["<div class='eventCard bgwhite'>" + 
-				"<div class='cardUpperContainer'>" +
-				"<h2 id='nombre'><span>"+ element.username +" - "+element.firstName+" "+ element.lastName+"</span></h2>" + 
-				"</div>" +
-				"<div class='cardLowerContainer'>" +
-				"<p id='edad'><span>"+ element.birthDate +"</span></p>" +
-				"<p id='sexo'><span>"+ element.gender +"</span></p>" +
-				"<form method='post' action='/admin/deleteUser'>" +
-				"<input type='hidden' name='_csrf' value='"+config.csrf.value+"' />" +
-				"<input hidden type='number' name='id' value="+ element.id +">" +
-				"<input type='submit' class='declineButton' value='Eliminar' />" +
-				"</form>" +
-				"<form method='post' action='/admin/blockUser?id="+ element.id +"'>" +
-				"<input type='hidden' name='_csrf' value='"+config.csrf.value+"' />" +
-				"<input hidden type='number' name='id' value="+ element.id +">" +
-				"<input type='submit' class='declineButton' value='Bloquear' />" +
-				"</form>" +
-				"</div>" +
-				"</div>"];
+		case "updateTagUser":
+			html = ["<li>"+element.tag+ "</li>"];
 			break;
 		case "updateEvents":
 			 html = ["<div class='eventCard bgwhite'>"+
