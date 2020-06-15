@@ -302,7 +302,7 @@ public class AdminController {
 
 	public void sendMessageWS(final List content, final String type, final String topic) {
 		log.info("Sending updated " + type + " via websocket");
-		final List response =  Arrays.asList();;
+		final List response =  new ArrayList<>();
 		response.add(type);
 		switch(type){
 			case "updateUsersEvent":

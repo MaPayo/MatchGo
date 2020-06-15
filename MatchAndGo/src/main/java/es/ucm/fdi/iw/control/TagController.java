@@ -37,11 +37,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 import es.ucm.fdi.iw.LocalData;
 import es.ucm.fdi.iw.model.Evaluation;
@@ -89,26 +92,42 @@ public class TagController {
 		return alltagsUser;
 	}
 
-	@PostMapping(path = "/addTagUser/{id}")
+	@PostMapping(path = "/addTagUser/{id}", produces = "application/json")
 	@Transactional
-	public void addUserTag (final HttpSession session, @PathVariable long id) {
+	@ResponseBody
+	public String addUserTag (final HttpSession session, @PathVariable long id) {
 
-		log.info("Entra en listagUser");
 		User u = (User) session.getAttribute("u");
-		u = entityManager.find(User.class, u.getId()); 
-		Tags nuevaTag = entityManager.createNamedQuery("Tags.getTag", Tags.class)
-				.setParameter("idTag", id).getSingleResult();
-		u.getTags().add(nuevaTag);
-		entityManager.persist(u);
-		entityManager.flush();
-		log.info("Añade la tag al usuario");
-		sendMessageWS(u.getTags(), "updateTagUser", "/user/"+u.getId());
+		u = entityManager.find(User.class, u.getId());
+		if(id== -1) {
+
+			List<String> listaVacia = Arrays.asList();
+			sendMessageWS(listaVacia, "selectTag", "/user/"+u.getUsername()+"/queue/updates");
+			
+		}else {
+			log.info("Entra en listagUser");
+			Tags nuevaTag = entityManager.createNamedQuery("Tags.getTag", Tags.class)
+					.setParameter("idTag", id).getSingleResult();
+			if(!u.getTags().contains(nuevaTag)){
+				u.getTags().add(nuevaTag);
+				entityManager.persist(u);
+				entityManager.flush();
+				log.info("Añade la tag al usuario");
+				sendMessageWS(u.getTags(), "updateTagUser", "/user/"+u.getUsername()+"/queue/updates");
+
+				return "{ok:si}"; 
+			}
+			
+		}
+		sendMessageWS(u.getTags(), "tagExists", "/user/"+u.getUsername()+"/queue/updates");
+		return "{ok:no}"; 
 		
 	}
 
-	@PostMapping("/newTag/{tag}")
+	@PostMapping(path= "/newTag", produces = "application/json")
 	@Transactional
-	public void registerNewTag(Model model, HttpServletRequest request, @PathVariable String tag, HttpSession session) {
+	@ResponseBody
+	public String registerNewTag(Model model, HttpServletRequest request, @RequestBody JsonNode nodej, HttpSession session) {
 			/**
 			 * First we test all params are clean
 			 **/
@@ -116,22 +135,29 @@ public class TagController {
 				User u = (User) session.getAttribute("u"); 
 				u = entityManager.find(User.class, u.getId()); 
 				log.info("entra en crear nueva tag");
+				String tag = nodej.get("tagName").asText();
 				//redirigimos al registro si el usrname ya existe o las contraseñas no coinciden
 				//aunq esto lo quiero hacer desde el html y que salga un aviso en la pagina
 				if (tagExist(tag)) {
 					//aqui habria que mostrar un alert o algo
 					List<String> listaVacia = Arrays.asList();
-					sendMessageWS(listaVacia, "tagExists", "/user/"+u.getId());
+					sendMessageWS(listaVacia, "tagExists", "/user/"+u.getUsername()+"/queue/updates");
 				}
 				log.info("tag no existe");
 				// Creación de un usuario
+				
 				Tags t = new Tags();
 				t.setTag(tag);
+				
 				entityManager.persist(t);
 				u.getTags().add(t);
 				entityManager.flush(); //guardar bbdd
-				sendMessageWS(u.getTags(), "updateTagUser", "/user/"+u.getId());
+				List<Tags> allTags = entityManager.createNamedQuery("Tags.all", Tags.class).getResultList();
 				
+				sendMessageWS(u.getTags(), "updateTagUser", "/user/"+u.getUsername()+"/queue/updates");
+				sendMessageWS(allTags, "updateSelectTag", "/user/"+u.getUsername()+"/queue/updates");
+
+				return "{ok:si}"; 
 	}
 
 	private boolean tagExist(String tag) {
@@ -143,15 +169,21 @@ public class TagController {
 	}
 	public void sendMessageWS(final List content, final String type, final String topic) {
 		log.info("Sending updated " + type + " via websocket");
-		final List response = Arrays.asList();
+		final List response = new ArrayList<>();
 		response.add(type);
 		switch(type){
 			case "updateTagUser":
+			case "updateSelectTag":
 				response.add(Tags.asTransferObjects(content));
+				log.info("envia el json");
 				break;
 			case "tagExists":
 				response.add("La Tag ya existe");
-			
+				break;
+
+			case "selectTag":
+				response.add("Por favor seleccione una tag");
+				break;
 			default:
 				response.add("sorry");
 		}
