@@ -24,13 +24,37 @@
 
 	  
 	  });
-	  
+	  //1 habilita modificar el perfil, 2 guarda los cambios
 	  document.getElementById("ModificarPerfil").addEventListener("click",function() {
-		 
-		  go(config.rootUrl + "user/modificarPerfil","POST",null);
-
+		  let boton =  document.getElementById("ModificarPerfil");
+		  if(boton.dataset.action == 1){
+			  boton.dataset.action = 2;
+			  let children = document.getElementById("datosBasicosPerfil").children;
+			  for (i = 0; i < children.length; i++) {
+				  children[i].removeAttribute("readonly");
+				  children[i].removeAttribute("disabled");
+			  }
+			  boton.value = "Guardar cambios";
+		  }else{
+			 boton.dataset.action = 1;
+			  let name = document.getElementById("nombre").value;
+			 	let fecha = document.getElementById("edad").value;
+			 	let gender = document.getElementById("genderUser").value;
+			  go(config.rootUrl + "user/modificarPerfil/","POST",{name:name, fecha:fecha, gender:gender});
+			  
+				document.getElementById("nombre").readOnly= true;
+			 	document.getElementById("edad").readOnly= true;
+			 	document.getElementById("genderUser").setAttribute("disabled",true);
+			 	boton.value = "Modificar perfil";
+		  }
+	  });  
+		  
+		  
 	  
-	  });
+	  
+	 
+	  
+	  
 	  document.getElementById("listaTags").addEventListener("click",function() {
 		  if(event.target.matches("img")){
 				const id = event.target.dataset.tag;

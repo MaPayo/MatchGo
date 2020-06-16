@@ -43,18 +43,22 @@
         <div class="datosPerfil">
          <img th:src="@{/img/noImage.png}">   <!-- "@{/user/{id}/photo(id=${u.id})}" -->            
             <div class="datos_texto" id="datosBasicosPerfil">
-                <h2 id="nombre"> <span th:text="${user.firstName} "></span></h2>      
-                <p id="edad"><span th:text="${user.birthDate}"></span></p>	   
-                <p id="sexo"><span th:text="${user.gender}"></span></p>	 
+                <input class="inputBonito" id="nombre" th:value="${user.firstName}" readonly></input>      
+                <input class="inputBonito" id="edad" th:value="${user.birthDate}" readonly></input>	   
+                <select class="selectBonito" name="category" id="genderUser" disabled>
+                		<option value="Hombre" th:selected="${user.gender=='Hombre'}"> Hombre </option>
+                		<option value="Mujer" th:selected="${user.gender=='Mujer'}"> Mujer </option>
+                		<option  value="Otro" th:selected="${user.gender=='Otro'}"> Otro </option>
+                		</select>	 
            <!-- <p id="valoracion">Media de valoraciones<span th:text="${valoracion}"></span></p>  --> 
             </div>
         </div>
         <!-- Este div solo si es tu perfil  -->
         <div class="modificarPerfil" th:if="(${session.u.id} eq ${user.getId()})">
-            	<input class="btn-rounded-green" type="button" id="ModificarPerfil" value="Modificar perfil">
+            	<input data-action=1 class="btn-rounded-green" type="button" id="ModificarPerfil" value="Modificar perfil">
         </div>
         
-        
+         <!-- 
          
          <div class="profileWithAjax">
 				<ul class="listasPerfil">
@@ -65,7 +69,7 @@
           		</ul>        	
         		<div id ="contenedorCosas"></div>
         	</div>
-         
+          --> 
          <div class="intereses_usuario">
        		    <h2 class="centrado">Intereses:</h2>
         	    <ul class="listaIntereses" id ="listaTags">
@@ -91,8 +95,7 @@
        		</div>
          
         <div class="yourProfile">
-        	<div class="displayflex">
-       		<div class="events_usuario" th:if="(${session.u.id} eq ${user.getId()})">
+       		<div class="events_usuario displayflex flexwrap" th:if="(${session.u.id} eq ${user.getId()})">
        		    <h2 class="centrado">Eventos inscritos:</h2>
        		    <div class="event-item" th:each="e: ${user_events}">
               		 <div class="event-icon"> <img id="imagenPequeña" th:src="@{/event/{id}/photo(id=${e.getId()})}"></div>
@@ -100,7 +103,7 @@
              		 <p class="event-description"><span th:text="${e.getDescription()} "></span></p>
              		 <a th:href="@{/event/{id}(id=${e.getId()})}" class="rounded-green">Ver evento</a>
           		</div>
-       		</div>
+          		
        		</div>
        		<div id="about" class="background-alt">
         		<h2 class="heading">Comentarios recibidos:</h2>

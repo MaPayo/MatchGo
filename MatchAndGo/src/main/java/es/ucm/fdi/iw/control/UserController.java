@@ -321,14 +321,21 @@ public class UserController {
 	@PostMapping(path = "/modificarPerfil", produces = "application/json")
 	@Transactional
 	@ResponseBody
-	public String getUpdateUser(HttpSession session){
+	public String getUpdateUser(HttpSession session,  @RequestBody JsonNode nodej){
 		User u = (User) session.getAttribute("u"); 
 		u = entityManager.find(User.class, u.getId()); 
-		List<User>user=Arrays.asList();
-		user.add(u);
-		sendMessageWS(user, "updateUserPage", "/user/"+u.getUsername()+"/queue/updates");
-
-		return "{ok:si}";
+		String name=  nodej.get("name").asText();
+		String fecha=  nodej.get("fecha").asText();
+		String gender=  nodej.get("gender").asText();
+		List<String> wordsToCheck = Arrays.asList(name,fecha,gender);
+		if (!Utilities.checkStrings(wordsToCheck)){
+			u.setBirthDate(fecha);
+			u.setFirstName(name);
+			u.setGender(gender);
+			entityManager.flush();
+			return "{ok:si}";
+		}
+		return "{ok:no}";
 	}
 	/**
 	 * with id event produce json joined users

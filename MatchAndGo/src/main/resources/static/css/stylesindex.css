@@ -577,3 +577,19 @@ footer {
 .anadir_tarea #tagInput{
 	padding: 0.5em;
 }
+
+#datosBasicosPerfil input{
+	flex-direction: column;
+}
+.selectBonito{
+	color: black;
+    border: none;
+    -webkit-appearance: none;
+    padding: 5px;
+    background-color: whitesmoke;
+    text-indent: 0.01px;
+}
+.inputBonito{
+    border: none;
+    background-color: whitesmoke;
+}
