@@ -163,6 +163,25 @@ public class TagController {
 				return "{ok:si}"; 
 	}
 
+	@PostMapping(path = "/deleteTagUser/{id}", produces = "application/json")
+	@Transactional
+	@ResponseBody
+	public String deleteTagUser (final HttpSession session, @PathVariable long id) {
+
+		User u = (User) session.getAttribute("u");
+		u = entityManager.find(User.class, u.getId());
+		Tags deleteTag = entityManager.createNamedQuery("Tags.getTag", Tags.class)
+					.setParameter("idTag", id).getSingleResult();
+		u.getTags().remove(deleteTag);
+		entityManager.persist(u);
+		entityManager.flush();
+		log.info("Borra la tag al usuario");
+		sendMessageWS(u.getTags(), "deleteTagUser", "/user/"+u.getUsername()+"/queue/updates");
+
+		return "{ok:si}"; 
+	}
+
+	
 	private boolean tagExist(String tag) {
 		return entityManager
 				.createNamedQuery("Tags.hasName", Long.class)
@@ -177,6 +196,7 @@ public class TagController {
 		switch(type){
 			case "updateTagUser":
 			case "updateSelectTag":
+			case "deleteTagUser":
 				response.add(Tags.asTransferObjects(content));
 				log.info("envia el json");
 				break;

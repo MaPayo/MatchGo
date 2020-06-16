@@ -24,6 +24,20 @@
 
 	  
 	  });
+	  
+	  document.getElementById("ModificarPerfil").addEventListener("click",function() {
+		 
+		  go(config.rootUrl + "user/modificarPerfil","POST",null);
+
+	  
+	  });
+	  document.getElementById("listaTags").addEventListener("click",function() {
+		  if(event.target.matches("img")){
+				const id = event.target.dataset.tag;
+				go(config.rootUrl + "tag/deleteTagUser/"+id,"POST",null);
+
+		  }
+	  });
 	  document.getElementById("botonAnadirTag").addEventListener("click",function() {
 			
 		  	let idTag = document.getElementById("tagSeleccionada").value;
@@ -54,9 +68,10 @@
 function listUsers(jsonArray, type){
 	const node = document.getElementById("listaTags");
 	const select = document.getElementById("tagSeleccionada");
+	const datosPerfil =document.getElementById("datosBasicosPerfil");
 	switch(type){
 		case "updateTagUser":
-
+		case "deleteTagUser":
 			while (node.firstChild ) {
 				node.removeChild(node.lastChild);
 			}
@@ -76,7 +91,13 @@ function listUsers(jsonArray, type){
 		case "tagExists":
 			alert("the tag you are trying to insert already exists.")
 			break;
-			
+		case "updateUserPage":
+			while (datosPerfil.firstChild ) {
+				datosPerfil.removeChild(datosPerfil.lastChild);
+			}
+
+			jsonArray.forEach(e => appendChild(e,type));
+			break;
 	}
 }
 
@@ -87,13 +108,23 @@ function appendChild(element, type){
 	let modificarId;
 	switch(type){
 		case "updateTagUser":
+		case "deleteTagUser":
 			modificarId= "listaTags";
-			html = ["<li> <span>"+element.tag+ "</span></li>"];
+			html = ["<li> <span>"+element.tag+"</span>" +
+				"<img class='icono' data-tag= "+element.id+" src='/img/delete.png'> </li>"];
 			break;
 		case "updateSelectTag":
 			modificarId = "tagSeleccionada";
-			html =["<option value="+element.id +">"+element.tag + "</option>"];
+			html =["<option value="+element.id+">"+element.tag+"</option>"];
 			break;
+		case "updateUserPage":
+		/*	modificarId="datosBasicosPerfil";
+			html=["<h2 id='nombre'> <span" + element.firstName + "></span></h2>" ];
+             th:text="${user.firstName} "></span></h2>      
+            <p id="edad"><span th:text="${user.birthDate}"></span></p>	   
+            <p id="sexo"><span th:text="${user.gender}"></span></p>	 
+*/
+			break
 	}
 	document.getElementById(modificarId).insertAdjacentHTML('beforeend',html);
 }

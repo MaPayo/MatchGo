@@ -23,6 +23,7 @@ import javax.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -69,6 +70,9 @@ public class UserController {
 	@Autowired
 	private LocalData localData;
 
+	@Autowired
+	private SimpMessagingTemplate messagingTemplate;
+	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
@@ -311,7 +315,21 @@ public class UserController {
 				.replaceFirst("/user.*", "/ws"));
 		return "redirect:/event/";
 	}
+	/**
+	 * with id event produce json joined users
+	 */
+	@PostMapping(path = "/modificarPerfil", produces = "application/json")
+	@Transactional
+	@ResponseBody
+	public String getUpdateUser(HttpSession session){
+		User u = (User) session.getAttribute("u"); 
+		u = entityManager.find(User.class, u.getId()); 
+		List<User>user=Arrays.asList();
+		user.add(u);
+		sendMessageWS(user, "updateUserPage", "/user/"+u.getUsername()+"/queue/updates");
 
+		return "{ok:si}";
+	}
 	/**
 	 * with id event produce json joined users
 	 */
@@ -356,6 +374,21 @@ public class UserController {
 		return "1";
 	}
 
+	public void sendMessageWS(final List content, final String type, final String topic) {
+		log.info("Sending updated " + type + " via websocket");
+		final List response = new ArrayList<>();
+		response.add(type);
+		switch(type){
+			case "updateUserPage":
+				response.add(User.asTransferObjects(content));
+				log.info("envia el json");
+				break;
+			default:
+				response.add("sorry");
+		}
+		messagingTemplate.convertAndSend(topic,response);
+	}
+	
 
 	/**
 	 * Non-interactive authentication; user and password must already exist

@@ -42,7 +42,7 @@
     <div class="principal">
         <div class="datosPerfil">
          <img th:src="@{/img/noImage.png}">   <!-- "@{/user/{id}/photo(id=${u.id})}" -->            
-            <div class="datos_texto">
+            <div class="datos_texto" id="datosBasicosPerfil">
                 <h2 id="nombre"> <span th:text="${user.firstName} "></span></h2>      
                 <p id="edad"><span th:text="${user.birthDate}"></span></p>	   
                 <p id="sexo"><span th:text="${user.gender}"></span></p>	 
@@ -69,15 +69,16 @@
          <div class="intereses_usuario">
        		    <h2 class="centrado">Intereses:</h2>
         	    <ul class="listaIntereses" id ="listaTags">
-             	   <li th:each="tag: ${user_tags}"> 
+             	   <li th:each="tag: ${user_tags}" > 
                  	    <span th:text="${tag.getTag()}">tag</span> 
+                 	    <img th:data-tag="${tag.getId()}" class="icono" th:src="@{/img/delete.png}">
               	  </li>  
           		</ul>
           		<div class= "newTags" th:if="(${session.u.id} eq ${user.getId()})">
           			<p> Añadir etiquetas al perfil:</p>
           			<select name="category" id="tagSeleccionada">
                 		<option value="-1">Seleccionar</option>
-                		<option th:each="t: ${allTags}" th:value="${t.getId()}"><span th:text="${t.getTag()}"></span></option>
+                		<option th:each="t: ${allTags}" th:value="${t.getId()}"><span th:text="${t.getTag()}"></span> </option>
 					</select>
 						<input type="button" id="botonAnadirTag" class= " btn-rounded-green" value="Añadir">
 							<p> Crear etiqueta y añadirla al perfil:</p>

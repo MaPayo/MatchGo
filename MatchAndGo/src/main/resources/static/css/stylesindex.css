@@ -178,6 +178,10 @@ footer {
 .background-alt {
     background: #74808a
 }
+.icono{
+	
+    width: 10x; height: 10px;
+}
 #imagenPequeña{
     width: 40x; height: 40px;
 }

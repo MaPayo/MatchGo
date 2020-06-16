@@ -11,17 +11,21 @@
 
 <body>
     <h1>Match&Go</h1>
+   <h2>Credencialews de acceso</h2>
+	    Admin => user:n, pass:aa
+	    <p>User => user:SS, pass:aa</p>
     <h2>Estado actual del proyecto</h2>
     <ul>
+    
 	    <li>Se han añadido usuarios propios del sistema (usuario guest y deleted) no administrables por nadie</li>
 	    <li>Añadido enlace de página de eventos en al menú principal, si pinchas sobre el o si accedes desde fuera de la red a las paginas /event y event/id si no habias iniciado sesion te auto logeas como invitado y luego accederas a la pagina que querias ver</li>
 	    <li>Añadido buscador pagina /event => solicitud al servidor la lista completa de eventos (AJAX) y via javascript se realiza el filtrado según los parametros indicados. Ahora el listado de eventos va en funcion de tus intereses o tags, (no finalizado si son pocos los eventos extraidos hay que rellenar con otros). </li>
-	    <li><strong>/event/id</strong> => se ha creado toda la estructura basica, dividido en 4 cuadrantes<ul><li>1er cuadrante informacion del evento</li><li>2do cuadrante chat del evento</li><li>3 listado de usuarios suscritos</li><li>4 cuadrante al hacer click sobre un usuario se muestra el listado de valoraciones recibidas</li></ul> los mensajes y las valoraciones aparecen difuminadas si eres invitado (se que no es seguro pero me hacia gracia) solo se puede escribir una valoracion si el evento ha sucedido ya. Se ha usado AJAX y WS queda por finalizar la inscripcion al evento para actualizar la lista de usuarios del evento (en consenso no se sabe desde donde se va uno a inscribir).</li>
-	    <li><strong>/user/id</strong> => se esta generando un menu para hacer uso de AJAX y WS para acceder a la informacion del usuario (valoraciones recibidas, eventos inscritos, tus intereses (tags), y eventos creados ) dicha informacion actualmente aparece.</li>
- <li><strong>Moderador</strong> se quiere añadir el control de los tags (ya que son los usuarios quienes pueden crear los tags tiene sentido que alguien pueda supervisarlos) actualmente uso de ajax para aceptar y rechazar el evento.</li>
+	    <li>/event/id => se ha creado toda la estructura basica, dividido en 4 cuadrantes<ul><li>1er cuadrante informacion del evento</li><li>2do cuadrante chat del evento</li><li>3 listado de usuarios suscritos a los que se les puede enviar un mensaje privado</li><li>4 cuadrante al hacer click sobre un usuario se muestra el listado de valoraciones recibidas</li></ul> los mensajes y las valoraciones aparecen difuminadas si eres invitado (se que no es seguro pero me hacia gracia) solo se puede escribir una valoracion si el evento ha sucedido ya. Se ha usado AJAX y WS queda por finalizar la inscripcion al evento para actualizar la lista de usuarios del evento (en consenso no se sabe desde donde se va uno a inscribir).</li>
+	    <li>/user/id => Muestra los datos básicos del usuario junto con sus tags seleccionadas, comentarios recibidos y eventos inscritos(esta última solo si estás en tu perfil). Se ha implementado con AJAX y WS añadir tags al perfil y crear nuevas tags si estas no existían.  </li>
+ <li>Moderador se quiere añadir el control de los tags (ya que son los usuarios quienes pueden crear los tags tiene sentido que alguien pueda supervisarlos) actualmente uso de ajax para aceptar y rechazar el evento.</li>
  <li>nuevo evento sin cambios</li>
- <li><strong>Mensajes</strong> está terminado, tiene AJAX y WebSocket para mejorar la comunicación. Hay notificaciones cuando te llegan mensajes, aparece una exclamación en el usuario que te ha enviado el mensaje. Si quieres enviar un mensaje a un usuario nuevo con el que no has hablado nunca, le puedes mandar un mensaje desde un evento en el que estéis los dos. Además, cada evento tiene un chat para que todos los miembros se pongan de acuerdo.</li>
- <li><strong>Admin</strong> => administracion de usuarios eventos y tags eliminacion de: <ul><li> usuario => si esta logeado se le expulsa, eventos creados por modifica al creador (si se puede) valoraciones hechas se modifican el creador y pasa a ser el DEleted user del sistema.</li><li> eventos y tags => se eliminan por completo(si hay alguna persona visitando el evento se le redirecciona a otra pagina)</li></ul>Creado buscador con JS</li></ul>
+ <li>Mensajes uso de ajax para la insercion de nuevo mensaje en la BD y uso de WS para la transmision de dicho mensaje a su destinatario.</li>
+ <li>Admin => administracion de usuarios eventos y tags eliminacion de: <ul><li> usuario => si esta logeado se le expulsa, eventos creados por modifica al creador (si se puede) valoraciones hechas se modifican el creador y pasa a ser el DEleted user del sistema.</li><li> eventos y tags => se eliminan por completo(si hay alguna persona visitando el evento se le redirecciona a otra pagina)</li></ul>Creado buscador con JS</li></ul>
     <h2>Cambios importantes</h2>
  <p>Dado que toda la informacion de nuestra aplicacion web se mantiene actualizada continuamente gracias a AJAX y WS queremos ser mas optimos, actualmente se mandan desde el servidor listas completas (eventos, usuarios, tags...). Tiene mas sentido mandar exclusivamente los registros afectados, y dos modificar los buscadores para que no soliciten las listas al servidor y en su lugar oculten los elementos del dom que no cumplan con los criterios de busqueda puede ser un gran paso a un gran proyecto.<p>
 
@@ -62,19 +66,23 @@
     </p>
 
     <h2>2.- Enlaces a las vistas</h2>
-    <p>DISCLAIMER: Tenemos un problema con la vista "profile" y "admin" ya que empezamos a integrar el JPA en la app. Para la siguiente entrega estará solucionado. En el caso de "admin" se muestra el contenedor general, pero está vacío.
-    <p>Nota: Peticiones Ajax en moderator(acceptar, rechazar evento) y admin, Websockets en admin.</p>
-    </p>
+ 
     <ul>
-        <li><a href="http://localhost:8080/profile"> localhost:8080/profile</a> Muestra un perfil, y un montón de tags vaciós
+      <li><a href="http://localhost:8080/index"> localhost:8080/index</a> Pagina de bienvenida.
+        </li>
+         <li><a href="http://localhost:8080/login"> localhost:8080/login</a> Pagina pare registrarse o iniciar sesion.
+        </li>
+        <li><a href="http://localhost:8080/user/"> localhost:8080/profile</a> Muestra el perfil del usuario, etiquetas y comentarios. Si es el perfil propio permite modificar el perfil, añadir y crear nuevas tags y ver los eventos en los que se está inscrito.
         </li>
         <li><a href="http://localhost:8080/moderator"> localhost:8080/moderator</a> Vista de moderador (para ver si un evento es buen o no)
         </li>
         <li><a href="http://localhost:8080/messages"> localhost:8080/messages</a> Mensajería para 1 usuario. Muestra sus contactos y los mensajes con cada uno. Tienes que ser un <strong>usuario registrado</strong> para acceder a el.
         </li>
-        <li><a href="http://localhost:8080/evento"> localhost:8080/event</a> Falta casi todo por hacer
+        <li><a href="http://localhost:8080/event/"> localhost:8080/event</a> Muestra los eventos junto con un buscador.
         </li>
-        <li><a href="http://localhost:8080/admin"> localhost:8080/admin</a> Ahora todo son Usuario (y no User)
+          <li><a href="http://localhost:8080/event/newEvent"> localhost:8080/event/newEvent</a> Página para crear eventos.
+        </li>
+        <li><a href="http://localhost:8080/admin"> localhost:8080/admin</a> Gestiona usuarios,eventos y tags. Solo accesible para usuario con rol ADMIN.
         </li>
     </ul>
     <h2>3.- Recursos Externos</h2>
