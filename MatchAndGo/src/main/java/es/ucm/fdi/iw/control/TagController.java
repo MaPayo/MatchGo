@@ -56,7 +56,7 @@ import es.ucm.fdi.iw.model.User.Role;
 
 /**
  * User-administration controller
- * 
+ * @author merchf
  * @author mfreire
  */
 @Controller()
@@ -79,7 +79,7 @@ public class TagController {
 	@ResponseBody
 	public List<Transfer> listTagUser (final HttpSession session, @PathVariable long id) {
 
-		log.warn("Entra en listagUser");
+		log.info("Entra en listagUser");
 		User u = entityManager.find(User.class, id);
 		final List<Tags> user_tags = new ArrayList<>(u.getTags()); 
 		List<Transfer> alltagsUser = Tags.asTransferObjects(user_tags);
@@ -88,7 +88,7 @@ public class TagController {
 			alltagsUser.add(t.toString());
 		}*/
 	
-		log.warn("Manda la lista de tags del user");
+		log.info("Manda la lista de tags del user");
 		return alltagsUser;
 	}
 

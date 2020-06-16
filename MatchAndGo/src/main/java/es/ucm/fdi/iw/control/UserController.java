@@ -55,7 +55,7 @@ import es.ucm.fdi.iw.model.User.Role;
 
 /**
  * User-administration controller
- * 
+ * @author merchf
  * @author mfreire
  */
 @Controller()
@@ -88,27 +88,24 @@ public class UserController {
 	public String getUser(@PathVariable long id, Model model, HttpSession session) {
 		User u = entityManager.find(User.class, id);
 		model.addAttribute("user", u);
-		log.warn("CREANDO LISTADO DE ETIQUETAS");
+		log.info("Creando listado de etiquetas");
 
 		final List<Tags> user_tags = new ArrayList<>(u.getTags()); 
-		log.warn("CREADA LISTA DE TAGS SACADA DEL USUARIO");
+		log.info("Creada lista tags del usuario");
 		model.addAttribute("user_tags", user_tags);
-		log.warn("FUNCIONAAAAAAAAAAAAAAAAAA TAAAAAGS");
-		log.warn("CREANDO LISTADO DE EVENTOS");
+		log.info("Creando listado de eventos");
 
 		List<Tags> allTags = (ArrayList<Tags>) entityManager.createQuery("SELECT t FROM Tags t").getResultList();
 
 		model.addAttribute("allTags", allTags);
 
 		final List<Event> user_events = new ArrayList<>(u.getJoinedEvents()); 
-		log.warn("CREADA LISTA DE TAGS SACADA DEL USUARIO");
+		log.info("Creado listado eventos del usuario");
 		model.addAttribute("user_events", user_events);
-		log.warn("FUNCIONAAAAAAAAAAAAAAAAAA EVENTOS");
 
 		final List<Evaluation> user_coments = new ArrayList<>(u.getReceivedEvaluation()); 
-		log.warn("CREADA LISTA DE COMENTARIOS SACADA DEL USUARIO");
+		log.info("Creado lista de comentarios del usuario");
 		model.addAttribute("user_coments", user_coments);
-		log.warn("FUNCIONAAAAAAAAAAAAAAAAAAA COMENTARIOS");
 
 		return "profile";
 	}
@@ -245,13 +242,13 @@ public class UserController {
 			List<String> wordsToCheck = Arrays.asList(username,password,password2,email,firstname,lastname,gender,birthdate);
 			if (!Utilities.checkStrings(wordsToCheck)){
 
-				log.warn("ENTRA AL METODO DE REGISTRAR EL USER");
+				log.info("entra a registrar usuario");
 				//redirigimos al registro si el usrname ya existe o las contraseñas no coinciden
 				//aunq esto lo quiero hacer desde el html y que salga un aviso en la pagina
 				if (usernameAlreadyInUse(username) || !password.equals(password2)) {
 					return "redirect:/user/login";
 				}
-				log.warn("ACEPTA LOS DATOS DE NUEVO USUARIO");
+				log.info("acepta los datos del usuario");
 				// Creación de un usuario
 				User u = new User();
 				u.setUsername(username);
@@ -351,7 +348,7 @@ public class UserController {
 	@Transactional
 	@ResponseBody
 	public String checkUsername(@RequestBody JsonNode nodej, Model model) {
-		log.warn("ENTRA EN LA FUNCION PARA VER LA DISPONIBILIDAD USERNAME");
+		log.info("checkea la disponibilidad del username");
 		
 		String u = nodej.get("username").asText();
 		if(usernameAlreadyInUse(u)) {
