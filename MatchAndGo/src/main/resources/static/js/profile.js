@@ -88,36 +88,11 @@ function appendChild(element, type){
 	switch(type){
 		case "updateTagUser":
 			modificarId= "listaTags";
-			html = ["<li>"+element.tag+ "</li>"];
+			html = ["<li> <span>"+element.tag+ "</span></li>"];
 			break;
 		case "updateSelectTag":
 			modificarId = "tagSeleccionada";
 			html =["<option value="+element.id +">"+element.tag + "</option>"];
-			break;
-		case "updateEvents":
-			 html = ["<div class='eventCard bgwhite'>"+
-				"<div class='cardUpperContainer'>"+
-				"<img src='/img/"+element.id+".png' alt='Imagen de "+element.name+"' class='placeImage'>"+
-				"<h2>"+element.name+"</h2>"+
-				"</div>"+
-				"<div class='cardLowerContainer'>"+
-				"<div>"+
-				"<div><span>"+element.description+"</span> Para: <span>"+element.date+"></span> Publicada: <span>"+element.publicationDate+"></span></div>"+
-				"<form method='post' action='/admin/deleteEvent'>" +
-				"<input type='hidden' name='_csrf' value='"+config.csrf.value+"' />" +
-				"<input hidden type='number' name='id' value="+ element.id +">" +
-				"<input type='submit' class='declineButton' value='Eliminar' />" +
-				"</form>" +
-				"<form method='post' action='/admin/blockEvent?id="+ element.id +"'>" +
-				"<input type='hidden' name='_csrf' value='"+config.csrf.value+"' />" +
-				"<input hidden type='number' name='id' value="+ element.id +">" +
-				"<input type='submit' class='declineButton' value='Bloquear' />" +
-				"</form>" +
-				"<div class='tagBox'>" +
-				"</div>"+
-				"</div>"+
-				"</div>"+
-				"</div>"];
 			break;
 	}
 	document.getElementById(modificarId).insertAdjacentHTML('beforeend',html);

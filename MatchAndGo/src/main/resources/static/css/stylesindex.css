@@ -570,3 +570,6 @@ footer {
 .event-description{
 	margin:0.25em;
 }
+.anadir_tarea #tagInput{
+	padding: 0.5em;
+}
