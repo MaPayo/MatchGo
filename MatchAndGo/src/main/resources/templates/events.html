@@ -1,76 +1,76 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" th:href="@{/css/styles.css}" />
-    <title>Busqueda</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" media="screen">
-    <script type="text/javascript">
-        const config = {
-            socketUrl: "[[${session.ws}?:'']]", // vacío indica falso
-            rootUrl: "[[${session.ws}?@{/}:'']]",
-            csrf: {
-                name: "[[${_csrf.parameterName}]]",
-                value: "[[${_csrf.token}]]"
-            },
-            admin: [[${session.u != null && session.u.hasRole('ADMIN')} ? true : false]],
-            userId: [[${session.u != null} ? $ {session.u.id} : -1]]
-        };
-    </script>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" th:href="@{/css/styles.css}" />
+        <title>Busqueda</title>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" media="screen">
+        <script type="text/javascript">
+            const config = {
+                socketUrl: "[[${session.ws}?:'']]", // vacío indica falso
+                rootUrl: "[[${session.ws}?@{/}:'']]",
+                csrf: {
+                    name: "[[${_csrf.parameterName}]]",
+                    value: "[[${_csrf.token}]]"
+                },
+                admin: [[${session.u != null && session.u.hasRole('ADMIN')}?true:false]],
+                userId: [[${session.u != null}?${session.u.id}:-1]]
+            };
+        </script>
 
-    <script th:src="@{/js/stomp.js}" src="js/stomp.js" type="text/javascript"></script>
-    <script th:src="@{/js/iwclientAdmin.js}" src="js/iwclientAdmin.js" type="text/javascript"></script>
-    <script th:src="@{/js/events.js}" src="js/admin.js" type="text/javascript"></script>
-    <nav th:replace="fragments/nav.html :: nav">
-        El navegador
-    </nav>
-</head>
+        <script th:src="@{/js/stomp.js}" src="js/stomp.js" type="text/javascript"></script>
+        <script th:src="@{/js/iwclientAdmin.js}" src="js/iwclientAdmin.js" type="text/javascript"></script>
+        <script th:src="@{/js/events.js}" src="js/admin.js" type="text/javascript"></script>
+        <nav th:replace="fragments/nav.html :: nav">
+            El navegador
+        </nav>
+    </head>
 
-<body>
-    <form id="formSearch">
-        <label>Título o descripción: </label> <input placeholder="Titulo o descripcion a buscar" id="textS" type="text" name="title" />
-        <label>Lugar: </label><input placeholder="En un lugar concreto" id="locS" type="text" name="title" />
-        <label>Desde: </label><input type="date" name="date" id="dateFS" />
-        <label>Hasta: </label><input type="date" name="date" id="dateTS" />
-        <select id="ageS" name="ageS" th:readonly="${viewEvent}">
-                		<option value="">Edad de los participantes</option>
-				<option value="18-24">18 - 24 años</option>
-				<option value="25-29">25 - 29 años</option>
-				<option value="30-39">30 - 39 años</option>
-				<option value=">40">mayores de 40 años</option>	
-			</select>
-        <select id="genderS" name="genderS" th:readonly="${viewEvent}">
-				<option value="">Genero preferido</option>
-				<option value="Femenino">Femenino</option>
-				<option value="Masculino">Masculino</option>
-			</select>
-        <label>Buscar en: </label><select id="tagS" name="category">
-				<option value="" selected >todas las categoria</option>
-				<option th:each="categories: ${category}" th:value="${categories.getTag()}"><span th:text="${categories.getTag()}"></span></option>
-			</select>
-        <!--Desplegable-->
-        <button id="search" type="button" class="advanceSearch">Buscar</button>
+    <body>
+        <form id="formSearch">
+            <label>Título o Descripción: </label><input placeholder="Titulo o descripcion a Buscar" id="textS"  type="text" name="title" />
+            <label>Lugar: </label><input placeholder="En un lugar concreto" id="locS"  type="text" name="title" />
+            <label>Desde: </label><input type="date" name="date" id="dateFS" />
+                        <label>Hasta: </label><input type="date" name="date" id="dateTS" />
+                    <select id="ageS" name="ageS" th:readonly="${viewEvent}">
+                        <option value="">Edad de los participantes</option>
+                <option value="18-24">18 - 24 años</option>
+                <option value="25-29">25 - 29 años</option>
+                <option value="30-39">30 - 39 años</option>
+                <option value=">40">mayores de 40 años</option> 
+            </select>
+            <select id="genderS" name="genderS" th:readonly="${viewEvent}">
+                <option value="">Genero preferido</option>
+                <option value="Femenino">Femenino</option>
+                <option value="Masculino">Masculino</option>
+            </select>
+            <label>Buscar en: </label><select id="tagS" name="category">
+                <option value="" selected >todas las categoria</option>
+                <option th:each="categories: ${category}" th:value="${categories.getTag()}"><span th:text="${categories.getTag()}"></span></option>
+            </select>
+            <!--Desplegable-->
+            <button id="search" type="button" class="advanceSearch">Buscar</button>
 
-    </form>
-    <main id="events">
-        <div th:each="evento: ${event}" class="eventCard">
-            <div class="cardUpperContainer">
-                <img th:src="@{/img/noImage.png}" alt="" class="placeImage">
-                <h2><a th:href="@{/event/{id}(id=${evento.getId()})}" style="color:green"><span th:text="${evento.getName()}"></span></a>
-                </h2>
-            </div>
-            <div class="cardLowerContainer">
-                <div>
-                    <div><span th:text="${evento.getDescription()}">Description</span></div>
-                    <div class="tagBox">
-                        <!-- <span class="tag category" th:text="${}"> Deportivo </span>--><span class="tag" th:each="tag: ${evento.getTags()}"><span th:text="${tag.getTag()}">Benefico</span></span>
+        </form>
+        <main id="events">
+            <div th:each="evento: ${event}" class="eventCard">
+                <div class="cardUpperContainer">
+                    <img th:src="@{/img/noImage.png}" alt="" class="placeImage">
+                    <h2><a th:href="@{/event/{id}(id=${evento.getId()})}" style="color:green"><span th:text="${evento.getName()}"></span> </a>
+                    </h2>
+                </div>
+                <div class="cardLowerContainer">
+                    <div>
+                        <div><span th:text="${evento.getDescription()}">Description</span></div>
+                        <div class="tagBox">
+                            <!-- <span class="tag category" th:text="${}"> Deportivo </span>--><span class="tag" th:each="tag: ${evento.getTags()}"><span th:text="${tag.getTag()}">Benefico</span></span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </main>
-    <footer th:replace="fragments/footer.html :: footer"> El Footer de la página </footer>
-</body>
+        </main>
+            <footer th:replace="fragments/footer.html :: footer"> El Footer de la página </footer>
+    </body>
 
 </html>
