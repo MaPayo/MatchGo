@@ -12,7 +12,7 @@
 			ws.initialize(config.socketUrl, subs);
 		}
 	  
-	  
+	  /*
 	  document.getElementById("mostrarTags").addEventListener("click",function() {
 			document.getElementById("mostrarTags").classList.add("bgdarkgrey");
 			document.getElementById("listaEventosCreados").classList.remove("bgdarkgrey");
@@ -24,6 +24,8 @@
 
 	  
 	  });
+	  
+	  */
 	  //1 habilita modificar el perfil, 2 guarda los cambios
 	  document.getElementById("ModificarPerfil").addEventListener("click",function() {
 		  let boton =  document.getElementById("ModificarPerfil");

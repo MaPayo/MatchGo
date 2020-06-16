@@ -446,6 +446,7 @@ header h1 {
 
 .datos_texto {
 	margin-left: 2em;
+	flex-direction: column;
 }
 
 .datos_texto p {
