@@ -16,6 +16,7 @@ import java.util.List;
 
 /**
  * @author Carlos Olano
+ * @author Merchf
  */
 @NamedQueries({
 @NamedQuery(name="Evaluation.getreviews", query= "SELECT r from Evaluation r WHERE r.evaluated.id = :idUser"),
@@ -23,9 +24,6 @@ import java.util.List;
 })
 
 
-/**
- * End
- */
 
 public class Evaluation {
 

@@ -16,6 +16,11 @@ import javax.persistence.NamedQuery;
 
 
 @Entity
+/**
+ * @author Carlos Olano
+ * @author Merchf
+ */
+
 
 @NamedQueries({
 @NamedQuery(name="Tags.deleteTag", query="DELETE FROM Tags  WHERE id = :idTag"),

@@ -424,6 +424,22 @@ footer {
     text-decoration: none
 }
 
+.btn-rounded-green {
+    color: white;
+    padding: 15px 25px;
+    border: 3px solid #afeea0;
+    background: #74808a;
+    border-radius: 30px;
+    transition: .5s ease all
+}
+
+.btn-rounded-green:hover {
+    color: black;
+    background: #afeea0;
+    border: 3px solid #74808a;
+    text-decoration: none
+}
+
 
 #lead-login {
     position: relative;
@@ -534,6 +550,23 @@ footer {
     height: 1.5em;
     margin-right: 0.5em;
 }
+  
+ .modificarPerfil{
+ margin-bottom:2em;
+ }
+ .rounded-green{
+ 	color: #afeea0;
+ 	padding:0.25em;
+ 	background-color: #74808a;
+ }
 
-  
-  
+.rounded-green:hover {
+    
+    text-decoration: underline;
+}
+.event-item{
+	margin:0.5em;
+}
+.event-description{
+	margin:0.25em;
+}

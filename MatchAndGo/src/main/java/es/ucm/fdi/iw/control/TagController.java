@@ -136,36 +136,39 @@ public class TagController {
 				u = entityManager.find(User.class, u.getId()); 
 				log.info("entra en crear nueva tag");
 				String tag = nodej.get("tagName").asText();
-				//redirigimos al registro si el usrname ya existe o las contraseñas no coinciden
-				//aunq esto lo quiero hacer desde el html y que salga un aviso en la pagina
-				if (tagExist(tag)) {
-					//aqui habria que mostrar un alert o algo
-					List<String> listaVacia = Arrays.asList();
-					sendMessageWS(listaVacia, "tagExists", "/user/"+u.getUsername()+"/queue/updates");
-				}
-				log.info("tag no existe");
-				// Creación de un usuario
-				
-				Tags t = new Tags();
-				t.setTag(tag);
-				
-				entityManager.persist(t);
-				u.getTags().add(t);
-				entityManager.flush(); //guardar bbdd
-				List<Tags> allTags = entityManager.createNamedQuery("Tags.all", Tags.class).getResultList();
-				
-				sendMessageWS(u.getTags(), "updateTagUser", "/user/"+u.getUsername()+"/queue/updates");
-				sendMessageWS(allTags, "updateSelectTag", "/user/"+u.getUsername()+"/queue/updates");
+				if (!tagExist(tag) && tag!= "") {
 
+					log.info("tag no existe");
+					// Creación de un usuario
+					
+					Tags t = new Tags();
+					t.setTag(tag);
+					
+					entityManager.persist(t);
+					u.getTags().add(t);
+					entityManager.flush(); //guardar bbdd
+					List<Tags> allTags = entityManager.createNamedQuery("Tags.all", Tags.class).getResultList();
+					
+					sendMessageWS(u.getTags(), "updateTagUser", "/user/"+u.getUsername()+"/queue/updates");
+					sendMessageWS(allTags, "updateSelectTag", "/user/"+u.getUsername()+"/queue/updates");
+
+				}else {
+					List<String> listaVacia = Arrays.asList();
+					if(tag == "") {
+						sendMessageWS(listaVacia, "selectTag", "/user/"+u.getUsername()+"/queue/updates");
+					}else {
+						sendMessageWS(listaVacia, "tagExists", "/user/"+u.getUsername()+"/queue/updates");
+					}
+				}
 				return "{ok:si}"; 
 	}
 
 	private boolean tagExist(String tag) {
 		return entityManager
-				.createNamedQuery("Tag.getEventTagsByName", Tags.class)
+				.createNamedQuery("Tags.hasName", Long.class)
 				.setParameter("tagname", tag)
-				.getResultList()
-			== null;	
+				.getSingleResult()
+			!= 0;	
 	}
 	public void sendMessageWS(final List content, final String type, final String topic) {
 		log.info("Sending updated " + type + " via websocket");

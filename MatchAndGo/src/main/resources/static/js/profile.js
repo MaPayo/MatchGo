@@ -13,11 +13,11 @@
 		}
 	  
 	  
-	  document.getElementById("listaTags").addEventListener("click",function() {
-			document.getElementById("listaTags").classList.add("bgblue");
-			document.getElementById("listaEventosCreados").classList.remove("bgblue");
-			document.getElementById("listaEventosInscritos").classList.remove("bgblue");
-			document.getElementById("listaComentarios").classList.remove("bgblue");
+	  document.getElementById("mostrarTags").addEventListener("click",function() {
+			document.getElementById("mostrarTags").classList.add("bgdarkgrey");
+			document.getElementById("listaEventosCreados").classList.remove("bgdarkgrey");
+			document.getElementById("listaEventosInscritos").classList.remove("bgdarkgrey");
+			document.getElementById("listaComentarios").classList.remove("bgdarkgrey");
 			var pageURL = window.location.href;
 			var lastURLSegment = pageURL.substr(pageURL.lastIndexOf('/') + 1);
 			go(config.rootUrl + "tag/listTags/"+ lastURLSegment,"POST",null).then(e => console.log("holaaaaaaaaaa"));

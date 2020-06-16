@@ -2,6 +2,7 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head>
+	<meta name="author" content="merchf">
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" media="screen">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +10,7 @@
     <link rel="stylesheet" href="libs/font-awesome/css/font-awesome.min.css"> 
     <link rel="shortcut icon" type="image/png" th:href="@{/img/icon.png}">
      <link rel="stylesheet" type="text/css" th:href="@{/css/stylesindex.css}">
-    <title>Registro</title>
+    <title>Perfil</title>
   <!--    <th:block th:replace="fragments/header ::header" />   </th:block> -->
  
  <script type="text/javascript">
@@ -48,12 +49,12 @@
            <!-- <p id="valoracion">Media de valoraciones<span th:text="${valoracion}"></span></p>  --> 
             </div>
         </div>
-        <!-- Este div solo si es tu perfil
-        <div class="divBoton" th:if="(${session.u.id} eq ${user.getId()})">
-            	<a class="boton" id="Modificar" th:href="@{/user/{id}/modificarPerfil(id=${u.id})}">Modificar perfil</a>
-        	</div>
+        <!-- Este div solo si es tu perfil  -->
+        <div class="modificarPerfil" th:if="(${session.u.id} eq ${user.getId()})">
+            	<input class="btn-rounded-green" type="button" id="ModificarPerfil" value="Modificar perfil">
+        </div>
         
-         -->
+        
          
          <div class="profileWithAjax">
 				<ul class="listasPerfil">
@@ -78,9 +79,9 @@
                 		<option value="-1">Seleccionar</option>
                 		<option th:each="t: ${allTags}" th:value="${t.getId()}"><span th:text="${t.getTag()}"></span></option>
 					</select>
-						<input type="button" id="botonAnadirTag" value="Añadir">
+						<input type="button" id="botonAnadirTag" class= " btn-rounded-green" value="Añadir">
 					<div class="anadir_tarea">
-              			<input type="text" name="tarea" id="tagInput" placeholder="Pulsa enter para introducir una nueva tag">     
+              			<input type="text" name="tag" id="tagInput" placeholder="Pulsa enter para introducir una nueva tag">     
             		</div>
 						
 					
@@ -93,8 +94,9 @@
        		    <h2 class="centrado">Eventos inscritos:</h2>
        		    <div class="event-item" th:each="e: ${user_events}">
               		 <div class="event-icon"> <img id="imagenPequeña" th:src="@{/event/{id}/photo(id=${e.getId()})}"></div>
-              		 <h4 class="event-title"><span th:text="${e.getName()} "></span></h4>
+              		 <h4  class="event-title"><span th:text="${e.getName()} "></span></h4>
              		 <p class="event-description"><span th:text="${e.getDescription()} "></span></p>
+             		 <a th:href="@{/event/{id}(id=${e.getId()})}" class="rounded-green">Ver evento</a>
           		</div>
        		</div>
        		</div>

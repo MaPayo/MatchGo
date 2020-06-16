@@ -28,6 +28,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Entity
 /**
  * @author Carlos Olano
+ * @author Merchf
  */
 @NamedQueries({
 @NamedQuery(name="User.getUser", query= "SELECT u from User u WHERE "
