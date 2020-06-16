@@ -14,12 +14,16 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -34,7 +38,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,7 +47,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 
 
@@ -52,7 +54,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import es.ucm.fdi.iw.LocalData;
 import es.ucm.fdi.iw.model.User;
 import es.ucm.fdi.iw.model.Message;
-import es.ucm.fdi.iw.model.Evaluation;
 import es.ucm.fdi.iw.model.Event;
 import es.ucm.fdi.iw.model.Event.Access;
 import es.ucm.fdi.iw.model.Tags;
@@ -174,16 +175,8 @@ public class EventController {
 				newEvent.setPrivateDate(isHiddenDate != null);
 				newEvent.setPrivateLocation(isHiddenDirection != null);
 				newEvent.setCreator(requester);
-				List<Tags> tags = new ArrayList<>();
-
 				String[] tagNames = tagsAll.split("\n");
-				for(String tagName : tagNames) {
-					Tags t = new Tags();
-					t.setisCategory(false);
-					t.setTag(tagName);
-					tags.add(t);
-					entityManager.persist(t);
-				}
+				List<Tags> tags = addTags(new HashSet<String>(Arrays.asList(tagNames)));
 
 				tags.add(entityManager.find(Tags.class, category));
 				newEvent.setTags(tags);
@@ -452,17 +445,9 @@ public class EventController {
 			target.setPrivateDate(isHiddenDate != null);
 			target.setPrivateLocation(isHiddenDirection != null);
 			target.setGenderPreference(genderPreference);
-			List<Tags> tags = new ArrayList();
-
+			
 			String[] tagNames = tagsAll.split("\n");
-			for(String tagName : tagNames) {
-				Tags t = new Tags();
-				t.setisCategory(false);
-				t.setTag(tagName);
-				tags.add(t);
-				entityManager.persist(t);
-			}
-
+			List<Tags> tags = addTags(new HashSet<String>(Arrays.asList(tagNames)));
 			tags.add(entityManager.find(Tags.class, category));
 			target.setTags(tags);
 		}
@@ -532,4 +517,23 @@ public class EventController {
 			}
 			return "event";
 			}
+	
+	private List<Tags> addTags(HashSet<String> tagNames) {
+		List<Tags> tags = new ArrayList<>();
+		for(String tagName : tagNames) {
+			System.out.println(tagName);
+			Tags t = null;
+			try {
+				t = entityManager.createNamedQuery("Tag.getEventTagsByName", Tags.class).setParameter("tagname", tagName).getSingleResult();
+			}catch(NoResultException e) {
+				t = new Tags();
+				t.setisCategory(false);
+				t.setTag(tagName.toLowerCase());
+				entityManager.persist(t);
+			}
+			
+			tags.add(t);
+		}
+		return tags;
+	}
 }

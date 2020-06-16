@@ -27,7 +27,7 @@ import javax.persistence.NamedQuery;
 @NamedQuery(name="Tags.getTag", query="SELECT t FROM Tags t WHERE id = :idTag"),
 @NamedQuery(name="Tags.all", query="SELECT t FROM Tags t"),
 @NamedQuery(name="Tag.getCategories", query="SELECT t FROM Tags t WHERE t.isCategory IS TRUE"),
-@NamedQuery(name="Tag.getEventTagsByName", query="SELECT t FROM Tags t Where lower(t.tag) = :tagname"),
+@NamedQuery(name="Tag.getEventTagsByName", query="SELECT t FROM Tags t WHERE lower(t.tag) LIKE :tagname"),
 
 @NamedQuery(name="Tags.hasName", query="SELECT COUNT(t) FROM Tags t Where lower(t.tag) = :tagname")
 })
