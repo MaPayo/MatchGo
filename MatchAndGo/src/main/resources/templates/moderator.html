@@ -1,52 +1,61 @@
 <!DOCTYPE html>
 <html>
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" th:href="@{/css/styles.css}" />
+		<title>Moderator</title>
+		<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" media="screen">
+		<script type="text/javascript" th:src="@{/js/ajax-client.js}"></script>
+		<script type="text/javascript"> 
+			const config = {
+				apiUrl: "[[${session.apiUrl}]]",
+				socketUrl: "[[${session.ws}?:'']]",	// vacío indica falso
+				rootUrl: "[[${session.ws}?@{/}:'']]",
+				csrf: {
+					name: "[[${_csrf.parameterName}]]",
+					value: "[[${_csrf.token}]]"
+				},
+				admin: [[${session.u != null && session.u.hasRole('ADMIN')}?true:false]],
+				userId: [[${session.u != null}?${session.u.id}:-1]]
+			};
+		</script>
+		<script th:src="@{/js/stomp.js}" src="js/stomp.js" type="text/javascript"></script>
+		<script th:src="@{/js/iwclientAdmin.js}" src="js/iwclientAdmin.js" type="text/javascript"></script>
+		<script th:src="@{/js/moderator.js}" src="js/moderator.js" type="text/javascript"></script>
+		<meta name="author" content="GasanNazer">
+		<nav th:replace="fragments/nav.html :: nav">
+		</nav>
+	</head>
 
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" th:href="@{/css/styles.css}" />
-    <title>Moderator</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" media="screen">
-    <script type="text/javascript" th:src="@{/js/ajax-client.js}"></script>
-    <script type="text/javascript"> 
-		    const config = {
-		    		apiUrl: "[[${session.apiUrl}]]",
-		    		csrf: {
-		    			name: "[[${_csrf.parameterName}]]",
-		    			value: "[[${_csrf.token}]]"
-		    		}
-		    	};
-    </script>
-    <meta name="author" content="GasanNazer">
-    <nav th:replace="fragments/nav.html :: nav">
-    </nav>
-</head>
+	<body>
+		<div class="bglightgrey height80">
+			<div class="container bgwhite">
+				<ul class="noliststyle displayflex" id="menuDisplayE">
+					<li id="listEvents" class="brtop  bgdarkgrey bglightgrey padding30" data-action="updateEvents" data-id="moderator/eventlist">Eventos</li>
+					<li id="listTags" class="brtop bgdarkgrey padding30" data-action="updateTags" data-id="admin/taglist">Tags</li>
+				</ul>
+			</div>
+			<div id="contUsers" class="width100 displayflex flexwrap">
+				<div th:each="element: ${listnum}" class="eventCard">
+					<div class="cardUpperContainer">
+						<img th:src="@{img/noImage.png}" alt="no image" class="placeImage">
+						<h2 th:text="${element.getName()}"></h2>
+					</div>
+					<div class="cardLowerContainer">
+						<div>
+							<div th:text="${element.getDescription()}"></div>
+							<div class="tagBox">
+								<span class="tag" th:each="tag: ${element.getTags()}"><span th:text="${tag.getTag()}"</span></span>
+							</div>
+						</div>
+						<div>
+							<button id="moderatorAceptEventBrn" type="button" class="button acceptButton" th:onclick="'javascript:aceptEvent('+${element.getId()}+');'">Aceptar</button>
+							<button id="moderatorAceptEventBrn" type="button" class="button declineButton" th:onclick="'javascript:rejectEvent('+${element.getId()}+');'">Rechazar</button>
+						</div>
+					</div>
 
-<body>
-
-    <div id="moderator-central-panel">
-        <div th:each="element: ${listnum}" class="eventCard">
-            <div class="cardUpperContainer">
-                <img th:src="@{/img/noImage.png}" alt="no image" class="placeImage">
-                <h2><span th:text="${element.getName()}"></span>
-                
-                </h2>
-            </div>
-            <div class="cardLowerContainer">
-                <div>
-                    <div><span th:text="${element.getDescription()}"></span></div>
-                    <div class="tagBox">
-                        <span class="tag" th:each="tag: ${element.getTags()}"><span th:text="${tag.getTag()}"></span></span>
-                    </div>
-                </div>
-                <div>
-                    <button id="moderatorAceptEventBtn" type="button" class="acceptButton" th:onclick="'javascript:aceptEvent(' + ${element.getId()} + ');'">Aceptar</button>
-                    <button id="moderatorRejectEventBtn" type="button" class="declineButton" th:onclick="'javascript:rejectEvent(' + ${element.getId()} + ');'">Rechazar</button>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-</body>
+				</div>
+				<footer th:replace="fragments/footer.html :: footer" class="heigth10"> El Footer de la página </footer>
+	</body>
 
 </html>

@@ -6,11 +6,6 @@
 		<title>Admin</title>
 		<!-- <th:block th:replace="fragments/header :: header" /></th:block> -->
 		<meta name="author" content="colano">
-		<script>
-		
-		</script>
-		<script th:src="@{/js/simple-datatables-2.1.10.min.js}"></script>
-		<link th:href="@{/css/simple-datatables-2.1.10.css}" rel="stylesheet">
 		<script type="text/javascript">
 			const config = {
 				socketUrl: "[[${session.ws}?:'']]",	// vacío indica falso
@@ -43,7 +38,7 @@
 				</ul>
 			</div>
 
-			<input placeholder="paa bsca plsa ene " id="textS" data-id="admin/userlist" type="text" name="title" />
+			<input placeholder="para buscar pulsa enter" id="textS" data-id="admin/userlist" type="text" name="title" />
 
 			<div id="contUsers" class="width100 displayflex flexwrap"></div>
 		</div>

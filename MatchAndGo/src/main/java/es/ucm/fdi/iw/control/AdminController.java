@@ -133,7 +133,8 @@ public class AdminController {
 
 	@PostMapping("/deleteTag")
 	@Transactional
-	public String deleteTag(final Model model, @RequestParam final long id) {
+	@ResponseBody
+	public List<Tags.Transfer> deleteTag(final Model model, @RequestParam final long id, final HttpSession session) {
 		final Tags t = (Tags) entityManager.createNamedQuery("Tags.getTag", Tags.class).setParameter("idTag", id)
 			.getSingleResult();
 	
@@ -158,7 +159,8 @@ public class AdminController {
 		log.info("update clients with new info");
 	//	final List<Event> eventsU = entityManager.createNamedQuery("Event.all",Event.class).getResultList();
 	//	sendMessageWS(eventsU,"updateEvents","/topic/admin");
-		return "redirect:/admin/";
+	//
+		return retrieveTags(session);
 	}
 	@PostMapping("/deleteEvent")
 	@Transactional
