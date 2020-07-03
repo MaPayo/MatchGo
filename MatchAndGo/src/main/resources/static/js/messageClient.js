@@ -41,6 +41,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Obtiene los mensajes con el contacto del botón
             requestMessages(elements[i].getAttribute('data-id'));
+	
+    		// Actualizamos el botón de enviar mensaje
+    		updateFormMessageButton(config.id, elements[i].getAttribute('data-id'), elements[i].textContent);
         });
     }
 });
@@ -85,9 +88,6 @@ function updateMessages(json) {
 
     });
     div.insertAdjacentHTML('beforeend', html.reverse().join("\n"));
-
-    // Actualizamos el botón de enviar mensaje
-    updateFormMessageButton(idUsuario, idContacto, contacto);
 }
 
 function updateFormMessageButton(idUsuario, idContacto, contacto) {

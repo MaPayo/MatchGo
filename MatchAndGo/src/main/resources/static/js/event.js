@@ -84,12 +84,10 @@ function appendChild(where,element, type){
 				"</div>"];
 			break;
 		case "updateUsersEvent":
-			html = ["<div class='anUser interactive' data-id='"+element.id+"'>" +
-				"<span >"+ element.username +" - "+element.firstName+"</span> </div>" + 
-				"<div class='messageNewContact'> <form class='formSendNewMessage' action='/messages/sendMessageNewUser' method='POST'> "+
-				"<textarea id='textMessage"+element.id+"' class='textNewMessage' name='textMessage' required></textarea>" + 
-				"<input type='button' onclick=\"enviarMensaje(" + element.id + ", 'textMessage"+element.id+"');\" id='botonFormMessage"+element.id+"' contact='"+element.id+"' class='botonNewMessage' name='botonNewMessage' value='Enviar mensaje'> </form>" +
-				"</div>"];
+			html = `<div class="anUser interactive" data-id="${element.id}">
+				<span>${element.username} - ${element.firstName}</span> 
+					<a href="/messages/nc/${element.id}" class="sendPrivateMessage button acceptButton"> Mensaje Privado</a>
+				</div>`;
 			break;
 		case "updateMessages":
 			if (element.sender == config.username ) {
@@ -108,22 +106,6 @@ function appendChild(where,element, type){
 			break;
 
 	}
-	where.insertAdjacentHTML('beforeend',html);
-}
+		where.insertAdjacentHTML('beforeend',html);
 
-function enviarMensaje(id, idTextbox) {
-	let message = {
-		sender: null,
-		senderId: config.userId,
-		receiver: null,
-		receiverId: id,
-		sendDate: null,
-		readMessage: false,
-		textMessage: document.getElementById(idTextbox).value
-	};
-	console.log(message);
-	console.log("Enviando mensaje a "+config.rootUrl+"messages/sendMessageNewUser");
-	go(config.rootUrl+"messages/sendMessageNewUser","POST", message).then(
-		document.getElementById(idTextbox).value = ""
-	);
 }
