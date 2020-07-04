@@ -93,7 +93,7 @@ public class AdminController {
 	public String blockEvent(Model model, @RequestParam long id) {
 		Event target = entityManager.find(Event.class, id);
 		boolean newState = false;
-		if (target.getIsAppropriate()){
+		if (target.getIsAppropriate() != null && target.getIsAppropriate()){
 			newState = false;
 		} else {
 			newState = true;

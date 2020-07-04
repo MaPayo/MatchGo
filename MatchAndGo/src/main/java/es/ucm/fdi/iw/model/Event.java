@@ -36,7 +36,7 @@ import es.ucm.fdi.iw.model.User.Role;
  */
 @NamedQueries({
 	@NamedQuery(name="Event.getModerator", query= "SELECT e FROM Event e WHERE IS_APPROPRIATE IS NULL AND (CREATOR_ID != :id OR CREATOR_ID IS NULL)"),
-	@NamedQuery(name="Event.getEventsByTags", query= "Select e from Event e inner join e.tags t where t.id = :idCat"),
+	@NamedQuery(name="Event.getEventsByTags", query= "Select e from Event e inner join e.tags t where t.id = :idCat and isAppropriate is true"),
 	@NamedQuery(name="Event.blockEvent", query= "UPDATE Event SET isAppropriate = :state " + "WHERE id = :idUser"),
 	@NamedQuery(name="Event.getEvent", query= "SELECT u from Event u WHERE u.id = :idUser"),
 	@NamedQuery(name="Event.getEventSearchWC", query= "SELECT u from Event u inner join u.tags t WHERE "+
@@ -44,6 +44,7 @@ import es.ucm.fdi.iw.model.User.Role;
 		"AND t.id = :tagToSearch"),
 	@NamedQuery(name="Event.getEventSearch", query= "SELECT u from Event u WHERE "+
        		"(lower(name) LIKE :textToSearch OR lower(description) LIKE :textToSearch OR lower(location) LIKE :textToSearch)"),
+	@NamedQuery(name="Event.allAppropriate", query= "SELECT u from Event u where isAppropriate is true"),
 	@NamedQuery(name="Event.all", query= "SELECT u from Event u"),
 	@NamedQuery(name="Event.deleteEvent", query= "DELETE FROM Event u WHERE "
 		+ "u.id = :idUser"),

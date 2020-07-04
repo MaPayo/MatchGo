@@ -101,7 +101,7 @@ public class EventController {
 		Map<Long,Event> mapEvents = new HashMap<Long,Event>();
 		log.warn("Generating Event List evnts with User Tags");
 		final List<Tags> userTags = new ArrayList<Tags>(me.getTags()); 
-		log.warn("Tags taken");
+		log.info("Tags taken");
 		if(userTags.size() != 0){
 		for (Tags t : userTags){
 			log.info("Take all events with tag {}",t.getId());
@@ -112,12 +112,12 @@ public class EventController {
 			}
 		}
 		//generate final clean list
-		log.warn("Cleaning final list events with user tags");
+		log.info("Cleaning final list events with user tags");
 		for(Entry<Long,Event> p : mapEvents.entrySet()){
 			finalList.add(p.getValue());
 		}
 		} else {
-			finalList = entityManager.createNamedQuery("Event.all", Event.class).getResultList();
+			finalList = entityManager.createNamedQuery("Event.allAppropriate", Event.class).getResultList();
 		}
 		model.addAttribute("event",finalList);
 		//model.addAttribute("event", entityManager.createQuery(
