@@ -130,8 +130,6 @@ public class MessageController {
 		// The messages between the contact and the user
 		List<Message.Transfer> messagesT = getMessagesFromDatabase(usuario.getId(), id);
 
-		log.warn(messagesT);
-
 		log.info("Enviando los transfer al cliente.");
 		return messagesT;
 	}
