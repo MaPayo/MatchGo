@@ -9,7 +9,12 @@
 .bgdarkgrey {
 	background-color: #74808a;
 }
-
+#msAddEvent{
+	margin:auto;
+}
+#msAddEvent::backdrop {
+	background-color:rgba(0,0,0,0.75);
+}
 .brtop {
 	border-radius: 35px 35px 0 0;
 	cursor: pointer;

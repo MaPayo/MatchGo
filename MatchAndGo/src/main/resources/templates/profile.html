@@ -54,7 +54,7 @@
             </div>
         </div>
         <!-- Este div solo si es tu perfil  -->
-        <div class="modificarPerfil" th:if="(${session.u.id} eq ${user.getId()})">
+        <div class="modificarPerfil" th:if="(${session.u.id} eq ${user.getId()} and !${session.u.hasRole('GUEST')})">
             	<input data-action=1 class="btn-rounded-green" type="button" id="ModificarPerfil" value="Modificar perfil">
         </div>
         
@@ -78,7 +78,7 @@
                  	    <img th:data-tag="${tag.getId()}" class="icono" th:src="@{/img/delete.png}">
               	  </li>  
           		</ul>
-          		<div class= "newTags" th:if="(${session.u.id} eq ${user.getId()})">
+			<div class= "newTags" th:if="(${session.u.id} eq ${user.getId()} and !${session.u.hasRole('GUEST')})">
           			<p> Añadir etiquetas al perfil:</p>
           			<select name="category" id="tagSeleccionada">
                 		<option value="-1">Seleccionar</option>
@@ -94,7 +94,7 @@
                	</div>
        		</div>
          
-        <div class="yourProfile">
+        <div class="yourProfile" th:if="(!${session.u.hasRole('GUEST')})">
        		<div class="events_usuario displayflex flexwrap" th:if="(${session.u.id} eq ${user.getId()})">
        		    <h2 class="centrado">Eventos inscritos:</h2>
        		    <div class="event-item" th:each="e: ${user_events}">
