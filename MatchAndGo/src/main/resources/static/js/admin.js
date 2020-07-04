@@ -170,25 +170,26 @@ function appendChild(element, type){
 				"</div>"];
 			break;
 		case "updateUsers":
-			html = ["<div class='bggreen eventCard'>" + 
-				"<div class='cardUpperContainer'>" +
-				"<h2 id='nombre'><span>"+ element.username +" - "+element.firstName+" "+ element.lastName+"</span></h2>" + 
-				"</div>" +
-				"<div class='cardLowerContainer'>" +
-				"<p id='edad'><span>"+ element.birthDate +"</span></p>" +
-				"<p id='sexo'><span>"+ element.gender +"</span></p>" +
-				"<form method='post' action='/admin/deleteUser'>" +
-				"<input hidden readonly name='_csrf' value='"+config.csrf.value+"' />" +
-				"<input hidden readonly type='number' name='id' value="+ element.id +">" +
-				"<button type='submit' class='button declineButton'><span>Eliminar</span></button>" +
-				"</form>" +
-				"<form method='post' action='/admin/blockUser?id="+ element.id +"'>" +
-				"<input hidden readonly name='_csrf' value='"+config.csrf.value+"' />" +
-				"<input hidden readonly type='number' name='id' value="+ element.id +">" +
-				"<button type='submit' class='button warnButton'><span>Bloquear</span></button>" +
-				"</form>" +
-				"</div>" +
-				"</div>"];
+			var textBlockDesblock = (element.enabled)?('Bloquear'):('Desbloquear');
+			html = `<div class="bggreen eventCard">
+				<div class="cardUpperContainer">
+				<h2 id="nombre"><span>${element.username} - ${element.firstName} ${element.lastName}</span></h2>
+				</div>
+				<div class="cardLowerContainer">
+				<p id="edad"><span>${element.birthDate}</span></p>
+				<p id="sexo"><span>${element.gender}</span></p>
+				<form method="post" action="/admin/deleteUser">
+				<input hidden readonly name="_csrf" value="${config.csrf.value}" />
+				<input hidden readonly type="number" name="id" value="${element.id}">
+				<button type="submit" class="button declineButton"><span>Eliminar</span></button>
+				</form>
+				<form method="post" action="/admin/blockUser?id=${element.id}">
+				<input hidden readonly name="_csrf" value="${config.csrf.value}" />
+				<input hidden readonly type="number" name="id" value="${element.id}">
+				<button type="submit" class="button warnButton"><span>${textBlockDesblock}</span></button>
+				</form>
+				</div>
+				</div>`;
 			break;
 		case "updateEvents":
 			var dt = new Date(element.date);

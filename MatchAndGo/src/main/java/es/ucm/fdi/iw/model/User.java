@@ -293,8 +293,9 @@ public class User {
 		private String gender;
 		private String userRole;
 		private String lastLogin;
+		private boolean enabled;
 		private List<String> tags;
-	//	private boolean enabled;
+
 	//	private List<Evaluation> receivedEvaluation;
 	//	private List<Evaluation> senderEvaluation;
 	//	private List<Message> sentMessages;
@@ -319,8 +320,12 @@ public class User {
 				}
 			}
 			this.lastLogin = m.getLastLogin().format(formatter);
+			this.enabled=m.isEnabled();
 		}
 
+		public boolean isEnabled() {
+			return enabled;
+		}
 		public long getId() {
 			return id;
 		}
