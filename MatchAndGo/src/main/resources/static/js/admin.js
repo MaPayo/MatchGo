@@ -196,31 +196,32 @@ function appendChild(element, type){
 			var when = dt.getDate()+"-"+(dt.getMonth()+1)+"-"+dt.getFullYear();
 			dt = new Date(element.publicationDate);
 			var publicationDate =  dt.getDate()+"-"+(dt.getMonth()+1)+"-"+dt.getFullYear();
-			html = ["<div class='bggreen eventCard'>"+
-				"<div class='cardUpperContainer'>"+
-				"<h2>"+element.name+"</h2><div class='width100 textalignright'> Para: <span>"+when+"</span> Publicada: <span>"+publicationDate+"</span>"+
-				"<div class='displayflex textalignright'>"+
-				"<form method='post' class='width100' action='/admin/deleteEvent'>" +
-				"<input hidden readonly name='_csrf' value='"+config.csrf.value+"' />" +
-				"<input hidden readonly type='number' name='id' value="+ element.id +">" +
-				"<button type='submit' class='button declineButton'><span>Eliminar</span></button>" +
-				"</form>" +
-				"<form method='post' action='/admin/blockEvent?id="+ element.id +"'>" +
-				"<input hidden readonly name='_csrf' value='"+config.csrf.value+"' />" +
-				"<input hidden readonly type='number' name='id' value="+ element.id +">" +
-				"<button type='submit' class='button warnButton'><span>Bloquear</span></button>" +
-				"</form>" +
-				"</div>"+
-				"</div>"+
-				"</div>"+
-				"<div class='cardLowerContainer'>"+
-				"<div>"+
-				"<div><span>"+element.description+"</span></div>"+
-				"<div class='tagBox'>" +
-				"</div>"+
-				"</div>"+
-				"</div>"+
-				"</div>"];
+			var textBlockDesblock = (!element.isAppropriate)?('Bloquear'):('Desbloquear');
+			html = `<div class="bggreen eventCard">
+				<div class="cardUpperContainer">
+				<h2>${element.name}</h2><div class="width100 textalignright"> Para: <span>${when}</span> Publicada: <span>${publicationDate}</span>
+				<div class="displayflex textalignright">
+				<form method="post" class="width100" action="/admin/deleteEvent">
+				<input hidden readonly name="_csrf" value="${config.csrf.value}"/>
+				<input hidden readonly type="number" name="id" value="${element.id}">
+				<button type="submit" class="button declineButton"><span>Eliminar</span></button>
+				</form>
+				<form method="post" action="/admin/blockEvent?id=${element.id}">
+				<input hidden readonly name='_csrf' value="${config.csrf.value}"/>
+				<input hidden readonly type="number" name="id" value="${element.id}">
+				<button type="submit" class="button warnButton"><span>${textBlockDesblock}</span></button>
+				</form>
+				</div>
+				</div>
+				</div>
+				<div class="cardLowerContainer">
+				<div>
+				<div><span>${element.description}</span></div>
+				<div class="tagBox">
+				</div>
+				</div>
+				</div>
+				</div>`;
 			break;
 	}
 	document.getElementById("contUsers").insertAdjacentHTML('beforeend',html);
