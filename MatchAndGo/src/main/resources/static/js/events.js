@@ -107,21 +107,22 @@ function appendChild(where,element, type){
 	switch(type){
 		case "updateEvents":
 
-			html="<div class='eventCard'>"+
-				"<div class='cardUpperContainer'>"+
-				"<img th:src='/img/noImage.png' alt='' class='placeImage'>"+
-				"<h2>"+element.name+"<a href='/event/"+element.id+"' class='cgreen'> Go</a></h2>"+
-				"</div>"+
-				"<div class='cardLowerContainer'>"+
-				"<div>"+
-				"<div>"+element.description+"</div>"+
-				"<div class='tagBox'>";
-			element.tagNames.forEach(e => html +=  "<span class='tag'>"+e+"</span>");
-			html +=
-				"</div>"+
-				"</div>"+
-				"</div>"+
-				"</div>";
+			html=`<div class="eventCard">
+				<a href="/event/${element.id}">
+				<div class="cardUpperContainer">
+				<img src="/img/${element.id}.png" alt="imagen evento ${element.name}" class="placeImage">
+				<h2>${element.name}</h2>
+				</div>
+				<div class="cardLowerContainer">
+				<div>
+				<div>${element.description}</div>
+				<div class="tagBox">`;
+			element.tagNames.forEach(e => html +=  `<span class="tag">${e}</span>`);
+			html += `</div>
+				</div>
+				</div>
+				</a>
+				</div>`;
 			break;
 	}
 	where.insertAdjacentHTML('beforeend',html);
