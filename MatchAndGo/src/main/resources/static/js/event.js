@@ -84,10 +84,15 @@ function appendChild(where,element, type){
 				"</div>"];
 			break;
 		case "updateUsersEvent":
-			html = `<div class="anUser interactive" data-id="${element.id}">
-				<span>${element.username} - ${element.firstName}</span> 
-					<a href="/messages/nc/${element.id}" class="sendPrivateMessage button acceptButton"> Mensaje Privado</a>
-				</div>`;
+			html = `<div class="anUser" data-id="${element.id}">
+				<span>${element.username} - ${element.firstName}</span>`;
+			if (config.guest == "false"){
+					html += `<form action="/messages/nc/${element.id}" method="POST">		
+							<input hidden readonly name="_csrf" value="${config.csrf.value}"/>
+							<button type="submit" class="button acceptButton">Men. Privado</button</form>`;
+			}
+			
+			html +=`<button class="interactive button acceptButton">Valoraciones</button></div>`;
 			break;
 		case "updateMessages":
 			if (element.sender == config.username ) {

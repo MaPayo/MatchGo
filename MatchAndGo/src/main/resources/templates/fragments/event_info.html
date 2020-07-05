@@ -8,7 +8,7 @@
 	<!--@{/event/nm/{id}(id=${event.id})}-->
 	<form th:if="!${session.u.hasRole('GUEST')}" id="contentMess" onsubmit="return validateStrings(this)" class="escribirMensaje">
 		<textarea name='textoMensaje' id='texto' class='mensaje' required></textarea>
-		<input id='sendMessage' type='button' class='botonMensaje' name='boton' value='enviar'>
+		<input  th:if="!${session.u.hasRole('GUEST')}" id='sendMessage' type='button' class='botonMensaje' name='boton' value='enviar'>
 	</form>
 </div>
 <div th:fragment="users" class="flex50">

@@ -63,7 +63,13 @@ public class AdminController {
 	@ResponseBody
 	public List<Event.TransferEvent> retrieveEvents(final HttpSession session) {
 		log.info("Generating Event List");
-		List<Event> events = entityManager.createNamedQuery("Event.all",Event.class).getResultList();
+		List<Event> events;
+		User u = (User)session.getAttribute("u");
+		if (u.hasRole(User.Role.ADMIN)){
+			events = entityManager.createNamedQuery("Event.all",Event.class).getResultList();
+		} else {
+			events = entityManager.createNamedQuery("Event.allAppropriate",Event.class).getResultList();
+		}
 		return Event.asTransferObjects(events);
 	}
 

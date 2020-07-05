@@ -16,8 +16,8 @@
             <a th:if="!${session.u.hasRole('GUEST')}" th:href="@{/messages/}">Mensajes</a>
             <a th:if="${session.u.hasRole('MOD') || session.u.hasRole('ADMIN')}" th:href="@{/moderator/}">Moderador</a>
             <a th:if="${session.u.hasRole('ADMIN')}" th:href="@{/admin/}">Admin</a>
-            <a th:if="!${session.u.hasRole('GUEST')}" th:href="@{/event/newEvent}">Nuevo Evento</a>
-            <a th:href="@{/user/logout}">Salir</a>
+            <a th:if="!${session.u.hasRole('GUEST')}" th:href="@{/user/logout}">Salir</a>
+            <a th:if="${session.u.hasRole('GUEST')}" th:href="@{/login}">Registrarse</a>
         </div>
         <div class="menu" th:unless="${session.u}">
             <a th:href="@{/login}" href="/login">Iniciar sesión/Registrarse</a>

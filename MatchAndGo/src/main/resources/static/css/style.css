@@ -2,6 +2,43 @@
 	margin: 0;
 	padding: 0;
 }
+input[id^="spoiler"]{
+ display: none;
+}
+input[id^="spoiler"] + label {
+  display: block;
+  width: 200px;
+  margin: 0 auto;
+  padding: 5px 20px;
+  background: #afeea0;
+  color: #74808a;
+  text-align: center;
+  font-size: 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all .6s;
+}
+input[id^="spoiler"]:checked + label {
+  color: #333;
+  background: #ccc;
+}
+input[id^="spoiler"] ~ .spoiler {
+  width: 90%;
+  height: 0;
+  overflow: hidden;
+  opacity: 0;
+  margin: 10px auto 0; 
+  padding: 10px; 
+  background: #eee;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  transition: all .6s;
+}
+input[id^="spoiler"]:checked + label + .spoiler{
+  height: auto;
+  opacity: 1;
+  padding: 10px;
+}
 
 .bggreen {
 	background-color: #afeea0;
@@ -11,6 +48,8 @@
 }
 #msAddEvent{
 	margin:auto;
+	width:100%;
+	position:fixed;
 }
 #msAddEvent::backdrop {
 	background-color:rgba(0,0,0,0.75);

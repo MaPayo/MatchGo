@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		ws.initialize(config.socketUrl, subs);
 	}
 
+	go(config.rootUrl + "admin/eventlist","POST",null).then(e => sendSearch(e));
 	//listener search enter key ovr title
 	document.getElementById("textS").addEventListener("keypress",function(keyPress) {
 		if (keyPress.keyCode == 13){
@@ -106,8 +107,39 @@ function appendChild(where,element, type){
 	let html;
 	switch(type){
 		case "updateEvents":
-
-			html=`<div class="eventCard">
+			if (config.admin){
+				var dt = new Date(element.date);
+				var when = dt.getDate()+"-"+(dt.getMonth()+1)+"-"+dt.getFullYear();
+				dt = new Date(element.publicationDate);
+				var publicationDate =  dt.getDate()+"-"+(dt.getMonth()+1)+"-"+dt.getFullYear();
+				var textBlockDesblock = (!element.isAppropriate)?('Bloquear'):('Desbloquear');
+				html = `<div class="bggreen eventCard">
+				<div class="cardUpperContainer">
+				<h2>${element.name}</h2><div class="width100 textalignright"> Para: <span>${when}</span> Publicada: <span>${publicationDate}</span>
+				<div class="displayflex textalignright">
+				<form method="post" class="width100" action="/admin/deleteEvent">
+				<input hidden readonly name="_csrf" value="${config.csrf.value}"/>
+				<input hidden readonly type="number" name="id" value="${element.id}">
+				<button type="submit" class="button declineButton"><span>Eliminar</span></button>
+				</form>
+				<form method="post" action="/admin/blockEvent?id=${element.id}">
+				<input hidden readonly name='_csrf' value="${config.csrf.value}"/>
+				<input hidden readonly type="number" name="id" value="${element.id}">
+				<button type="submit" class="button warnButton"><span>${textBlockDesblock}</span></button>
+				</form>
+				</div>
+				</div>
+				</div>
+				<div class="cardLowerContainer">
+				<div>
+				<div><span>${element.description}</span></div>
+				<div class="tagBox">
+				</div>
+				</div>
+				</div>
+				</div>`;
+			} else {
+				html=`<div class="eventCard">
 				<a href="/event/${element.id}">
 				<div class="cardUpperContainer">
 				<img src="/img/${element.id}.png" alt="imagen evento ${element.name}" class="placeImage">
@@ -117,12 +149,13 @@ function appendChild(where,element, type){
 				<div>
 				<div>${element.description}</div>
 				<div class="tagBox">`;
-			element.tagNames.forEach(e => html +=  `<span class="tag">${e}</span>`);
-			html += `</div>
+				element.tagNames.forEach(e => html +=  `<span class="tag">${e}</span>`);
+				html += `</div>
 				</div>
 				</div>
 				</a>
 				</div>`;
+			}
 			break;
 	}
 	where.insertAdjacentHTML('beforeend',html);

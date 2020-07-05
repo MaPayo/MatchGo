@@ -56,7 +56,7 @@
 						<button type="submit" class="acceptButton" name="action" value="change"><span th:text="${buttonName}"></span></button>
 						</div>
 						<div class="marginAuto" th:if="not ${newEvent}">
-						<button type="submit" class="acceptButton" name="action" th:value="${joinAction}"><span th:text="${joinButton}"></button>
+							<button th:if="!${session.u.hasRole('GUEST')}" type="submit" class="acceptButton" name="action" th:value="${joinAction}"><span th:text="${joinButton}"></button>
 						</div>
 					</div>
 				</div>

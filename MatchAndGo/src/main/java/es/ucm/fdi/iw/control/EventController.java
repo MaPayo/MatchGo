@@ -102,20 +102,22 @@ public class EventController {
 		log.warn("Generating Event List evnts with User Tags");
 		final List<Tags> userTags = new ArrayList<Tags>(me.getTags()); 
 		log.info("Tags taken");
-		if(userTags.size() != 0){
-		for (Tags t : userTags){
-			log.info("Take all events with tag {}",t.getId());
-			List<Event> listAux = entityManager.createNamedQuery("Event.getEventsByTags", Event.class).setParameter("idCat", t.getId()).getResultList();
-			for (Event e : listAux){
-				log.info("Adding Event to Map");
-				mapEvents.put(e.getId(),e);
+		if(me.hasRole(Role.ADMIN)){
+			finalList = entityManager.createNamedQuery("Event.all", Event.class).getResultList();
+		} else if(userTags.size() != 0){
+			for (Tags t : userTags){
+				log.info("Take all events with tag {}",t.getId());
+				List<Event> listAux = entityManager.createNamedQuery("Event.getEventsByTags", Event.class).setParameter("idCat", t.getId()).getResultList();
+				for (Event e : listAux){
+					log.info("Adding Event to Map");
+					mapEvents.put(e.getId(),e);
+				}
 			}
-		}
-		//generate final clean list
-		log.info("Cleaning final list events with user tags");
-		for(Entry<Long,Event> p : mapEvents.entrySet()){
-			finalList.add(p.getValue());
-		}
+			//generate final clean list
+			log.info("Cleaning final list events with user tags");
+			for(Entry<Long,Event> p : mapEvents.entrySet()){
+				finalList.add(p.getValue());
+			}
 		} else {
 			finalList = entityManager.createNamedQuery("Event.allAppropriate", Event.class).getResultList();
 		}
@@ -323,9 +325,9 @@ public class EventController {
 		}
 
 		List<Tags> categories = entityManager.createQuery(
-			"SELECT t FROM Tags t WHERE t.isCategory IS TRUE", Tags.class)
+				"SELECT t FROM Tags t WHERE t.isCategory IS TRUE", Tags.class)
 			.getResultList();
-		
+
 		if(e.checkAccess(requester) == Access.CREATOR) {
 			model.addAttribute("newEvent", true);
 			model.addAttribute("viewEvent", false);
@@ -377,7 +379,7 @@ public class EventController {
 		messagingTemplate.convertAndSend("/topic/event/"+id,response);
 	}	
 
-	
+
 	@PostMapping(path = "/nm/{id}")
 	@Transactional
 	@ResponseBody
@@ -432,39 +434,39 @@ public class EventController {
 			@RequestParam(value = "isHiddenDirection", required = false) String isHiddenDirection,
 			@RequestParam String action,
 			@RequestParam String tagsAll, Model model, HttpSession session) throws IOException {
-		Event target = entityManager.find(Event.class, id);
+			Event target = entityManager.find(Event.class, id);
 
-		if(action.equals("change")) {
-			target.setName(name);
-			target.setDescription(description);
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-			target.setDate(LocalDate.parse(date, formatter).atStartOfDay());
-			target.setPublicationDate(LocalDateTime.now());
-			target.setLocation(location);
-			target.setAgePreference(agePreference);
-			target.setPrivateDate(isHiddenDate != null);
-			target.setPrivateLocation(isHiddenDirection != null);
-			target.setGenderPreference(genderPreference);
-			
-			String[] tagNames = tagsAll.split("\n");
-			List<Tags> tags = addTags(new HashSet<String>(Arrays.asList(tagNames)));
-			tags.add(entityManager.find(Tags.class, category));
-			target.setTags(tags);
-		}
-		else {
-			User requester = (User)session.getAttribute("u");
-			requester = entityManager.find(User.class, requester.getId());
-			
-			if(action.equals("join"))
-				target.getParticipants().add(requester);
-			else
-				target.getParticipants().remove(requester);
-		}
-		
-		entityManager.persist(target);
-		
-		return "redirect:/event/";
-	}	
+			if(action.equals("change")) {
+				target.setName(name);
+				target.setDescription(description);
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+				target.setDate(LocalDate.parse(date, formatter).atStartOfDay());
+				target.setPublicationDate(LocalDateTime.now());
+				target.setLocation(location);
+				target.setAgePreference(agePreference);
+				target.setPrivateDate(isHiddenDate != null);
+				target.setPrivateLocation(isHiddenDirection != null);
+				target.setGenderPreference(genderPreference);
+
+				String[] tagNames = tagsAll.split("\n");
+				List<Tags> tags = addTags(new HashSet<String>(Arrays.asList(tagNames)));
+				tags.add(entityManager.find(Tags.class, category));
+				target.setTags(tags);
+			}
+			else {
+				User requester = (User)session.getAttribute("u");
+				requester = entityManager.find(User.class, requester.getId());
+
+				if(action.equals("join"))
+					target.getParticipants().add(requester);
+				else
+					target.getParticipants().remove(requester);
+			}
+
+			entityManager.persist(target);
+
+			return "redirect:/event/";
+			}	
 
 	@GetMapping(value="/{id}/photo")
 	public StreamingResponseBody getPhoto(@PathVariable long id, Model model) throws IOException {		
@@ -517,7 +519,7 @@ public class EventController {
 			}
 			return "event";
 			}
-	
+
 	private List<Tags> addTags(HashSet<String> tagNames) {
 		List<Tags> tags = new ArrayList<>();
 		for(String tagName : tagNames) {
@@ -531,7 +533,7 @@ public class EventController {
 				t.setTag(tagName.toLowerCase());
 				entityManager.persist(t);
 			}
-			
+
 			tags.add(t);
 		}
 		return tags;

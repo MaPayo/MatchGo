@@ -28,56 +28,59 @@
 	</head>
 
 	<body>
-		<dialog id="msAddEvent">
+		<div th:if="(!${session.u.hasRole('GUEST')})">
+			<input type="checkbox" id="spoiler"></input>
+			<label for="spoiler" >Nuevo evento</label>
+			<div id="msAddEvent" class="spoiler">
 
-			<form class="eventContainer formEvento" th:method="POST" onsubmit="return validateStrings(this)" th:action="newEvent">
-				<div class="cardUpperContainer">
-					<img th:src="@{/img/noImage.png}" alt="" class="eventImg">
-					<div class="block">
-						<input type="text" name="name" id="name" required placeholder="Nombre del evento">
-						<textarea name="description" id="description" required placeholder="Descripción"></textarea>
+				<form class="eventContainer formEvento" th:method="POST" onsubmit="return validateStrings(this)" th:action="newEvent">
+					<div class="cardUpperContainer">
+						<img th:src="@{/img/noImage.png}" alt="" class="eventImg">
+						<div class="block">
+							<input type="text" name="name" id="name" required placeholder="Nombre del evento">
+							<textarea name="description" id="description" required placeholder="Descripción"></textarea>
+						</div>
+						<div class="block">
+							<select id="category" name="category">
+								<option value="">Categoría</option>
+								<option th:each="c: ${category}" th:value="${c.getId()}"><span th:text="${c.getTag()}"></span></option>
+							</select>
+							<textarea id="tagsAll" name="tagsAll" placeholder="Pulse Enter para añadir un tag nuevo"></textarea>
+						</div>
 					</div>
-					<div class="block">
-						<select id="category" name="category">
-							<option value="">Categoría</option>
-							<option th:each="c: ${category}" th:value="${c.getId()}"><span th:text="${c.getTag()}"></span></option>
-						</select>
-						<textarea id="tagsAll" name="tagsAll" placeholder="Pulse Enter para añadir un tag nuevo"></textarea>
-					</div>
-				</div>
 
-				<div class="cardLowerContainer">
-					<div>
-						<p>Seleccione los campos que desea mantener en privado hasta que el usuario se une al evento</p>
-						<div class="margin">
-							<input type="checkbox" name="isHiddenDate" id="isHiddenDate">Fecha: <input type="date" name="date" id="date" required /> </input>
+					<div class="cardLowerContainer">
+						<div>
+							<p>Seleccione los campos que desea mantener en privado hasta que el usuario se une al evento</p>
+							<div class="margin">
+								<input type="checkbox" name="isHiddenDate" id="isHiddenDate">Fecha: <input type="date" name="date" id="date" required /> </input>
+							</div>
+							<div class="margin">
+								<input type="checkbox" name="isHiddenDirection" id="isHiddenDirection">Dirección: <input type="text" name="location" id="location" required /></input>
+							</div>
 						</div>
-						<div class="margin">
-							<input type="checkbox" name="isHiddenDirection" id="isHiddenDirection">Dirección: <input type="text" name="location" id="location" required /></input>
+						<div>
+							<select id="agePreference" name="agePreference">
+								<option value="">Edad de los participantes</option>
+								<option value="18-24">18 - 24 años</option>
+								<option value="25-29">25 - 29 años</option>
+								<option value="30-39">30 - 39 años</option>
+								<option value=">40">mayores de 40 años</option>
+							</select> <select id="genderPreference" name="genderPreference">
+								<option value="">Genero preferido</option>
+								<option value="Femenino">Femenino</option>
+								<option value="Masculino">Masculino</option>
+							</select>
+						</div>
+						<div class="blockButtons">
+							<div class="marginAuto">
+								<button type="submit" class="button acceptButton" name="action"><span>Crear</span></button>
+							</div>
 						</div>
 					</div>
-					<div>
-						<select id="agePreference" name="agePreference">
-							<option value="">Edad de los participantes</option>
-							<option value="18-24">18 - 24 años</option>
-							<option value="25-29">25 - 29 años</option>
-							<option value="30-39">30 - 39 años</option>
-							<option value=">40">mayores de 40 años</option>
-						</select> <select id="genderPreference" name="genderPreference">
-							<option value="">Genero preferido</option>
-							<option value="Femenino">Femenino</option>
-							<option value="Masculino">Masculino</option>
-						</select>
-					</div>
-					<div class="blockButtons">
-						<div class="marginAuto">
-							<button type="submit" class="button acceptButton" name="action"><span>Crear</span></button>
-						</div>
-					</div>
-				</div>
-			</form>
-		</dialog>
-		<button id="show" onclick="document.getElementById('msAddEvent').showModal()">Mostrar</button>
+				</form>
+			</div>
+		</div>
 		<form id="formSearch">
 			<label>Título o Descripción: </label><input placeholder="Titulo o descripcion a Buscar" id="textS"  type="text" name="title" />
 			<label>Lugar: </label><input placeholder="En un lugar concreto" id="locS"  type="text" name="title" />
