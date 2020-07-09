@@ -50,6 +50,7 @@ input[id^="spoiler"]:checked + label + .spoiler{
 	margin:auto;
 	width:100%;
 	position:fixed;
+	z-index:3;
 }
 #msAddEvent::backdrop {
 	background-color:rgba(0,0,0,0.75);
