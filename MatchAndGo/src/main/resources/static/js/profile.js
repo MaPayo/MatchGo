@@ -52,18 +52,50 @@ document.addEventListener("DOMContentLoaded", () => {
 	});  
 
 
-	const pitchers = document.getElementsByName("por");
+
+	const targets = document.getElementsByClassName("event-item");
+	let pitchers = document.getElementsByName("por");
 	for (j=0;j<pitchers.length;j++){
 		pitchers[j].addEventListener("change",function(){
-			const targets = document.getElementByClassName("event-item");
 			for (i = 0; i < targets.length;i++){
 				targets[i].removeAttribute("hidden");
 			}
-			alert(this.value);
+			for (i=0;i<targets.length;i++){
+				if(this.value == 1){
+					if(targets[i].dataset.me == 0){
+						targets[i].setAttribute("hidden",1);
+					}
+				} else if(this.value == 2){
+					if(targets[i].dataset.me == 1){
+						targets[i].setAttribute("hidden",1);
+					}
+				}
+			}
 		});
 	}
 
 
+	pitchers = document.getElementsByName("cuando");
+	const dateTime = new Date();
+	const now  = dateTime.getFullYear()+"/"+dateTime.getMonth()+"/"+dateTime.getDay()+" "+dateTime.getHours()+":"+dateTime.getMinutes();
+	for (j=0;j<pitchers.length;j++){
+		pitchers[j].addEventListener("change",function(){
+			for (i = 0; i < targets.length;i++){
+				targets[i].removeAttribute("hidden");
+			}
+			for (i=0;i<targets.length;i++){
+				if(this.value == 1){
+					if(targets[i].dataset.when < now){
+						targets[i].setAttribute("hidden",1);
+					}
+				} else if(this.value == 2){
+					if(targets[i].dataset.when > now){
+						targets[i].setAttribute("hidden",1);
+					}
+				}
+			}
+		});
+	}
 
 	document.getElementById("listaTags").addEventListener("click",function() {
 		if(event.target.matches("img")){

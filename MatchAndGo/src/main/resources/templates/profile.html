@@ -112,30 +112,14 @@
 
 					<div id="contEvnts"></div>
 					<div>
-						<h2 class="centrado">Eventos Actuales:</h2>
+						<h2 class="centrado">Eventos</h2>
 						<div class=" displayflex flexwrap">
-							<div class="event-item" hidden th:each="e: ${user_events}">
-								<div th:if="${#temporals.format(e.getDate(),'yyyy-MM-dd HH:mm')} >= ${#temporals.format(localDateTime, 'yyyy-MM-dd HH:mm')}">
+							<div class="event-item" hidden th:data-me="${e.getCreator().getId() eq session.u.id}?'1':'0'" th:data-when="${#temporals.format(e.getDate(),'yyyy-MM-dd HH:mm')}" th:each="e: ${user_events}">
 									<a th:href="@{/event/{id}(id=${e.getId()})}"><div>
 											<div class="event-icon"> <img id="imagenPequeña" th:src="@{/event/{id}/photo(id=${e.getId()})}"></div>
 											<h4  class="event-title"><span th:text="${e.getName()} "></span></h4>
 											<p class="event-description"><span th:text="${e.getDescription()} "></span></p>
 										</div></a>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div>
-						<h2 class="centrado">Eventos Pasados:</h2>
-						<div class=" displayflex flexwrap">
-							<div class="event-item" th:each="e: ${user_events}">
-								<div th:if="${#temporals.format(e.getDate(),'yyyy-MM-dd HH:mm')} < ${#temporals.format(localDateTime, 'yyyy-MM-dd HH:mm')}">
-									<a th:href="@{/event/{id}(id=${e.getId()})}"><div>
-											<div class="event-icon"> <img id="imagenPequeña" th:src="@{/event/{id}/photo(id=${e.getId()})}"></div>
-											<h4  class="event-title"><span th:text="${e.getName()} "></span></h4>
-											<p class="event-description"><span th:text="${e.getDescription()} "></span></p>
-										</div></a>
-								</div>
 							</div>
 						</div>
 					</div>
