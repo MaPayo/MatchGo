@@ -206,93 +206,6 @@ public class EventController {
 		return "redirect:/event/"+id;
 	}
 
-
-	@GetMapping("/search")
-	public String search(@RequestParam String title, Model model){
-
-		TypedQuery<Event> queryEvent= entityManager.createNamedQuery("Event.searchByName", Event.class);
-		queryEvent.setParameter("uname", "%"+title+"%"); //Añadimos el % para que busque una cadena que contenga la palabra
-		List<Event> lista= queryEvent.getResultList();
-		model.addAttribute("event", lista);
-		return "events";
-
-	}
-
-
-
-	//Seguramente haya una forma mas eficiente de hacer esto, ahora mismo es la unica que encuentro
-	@GetMapping("/advanceSearch")
-	public String advanceSearch(@RequestParam String title, @RequestParam String location, @RequestParam String category, Model model ) {
-		List<Event> listaTitle = null;
-		List<Event> listalocation = null;
-		List<Event> listacategories = null;
-		if(title != null){
-			TypedQuery<Event> queryEventt= entityManager.createNamedQuery("Event.searchByName", Event.class);
-			queryEventt.setParameter("uname", "%"+title+"%"); //Añadimos el % para que busque una cadena que contenga la palabra
-			listaTitle= queryEventt.getResultList();
-		}
-		if(location != null){
-			TypedQuery<Event> queryEventl= entityManager.createNamedQuery("Event.searchByLocation", Event.class);
-			queryEventl.setParameter("ulocation", "%"+location+"%"); //Añadimos el % para que busque una cadena que contenga la palabra
-			listalocation= queryEventl.getResultList();
-		}
-
-		if(category != ""){
-			//Buscamos los eventos que tengan esa categoria en concreto
-			TypedQuery<Event> queryEventc= entityManager.createNamedQuery("Tag.getEventTags", Event.class);
-			queryEventc.setParameter("ucategory", Long.parseLong(category)); 
-			//Creamos una lista con los ids de los eventos que contienen esos tags
-			listacategories= queryEventc.getResultList();
-		}
-		List<Event> result = new ArrayList<Event>();
-		List<Event> finalresult = new ArrayList<Event>();
-		//Juntamos los 3 arrays en uno solo que sera el que devolveremos, sin repetir los eventos encontrados
-		if(listaTitle != null){ //Si se ha usado el campo buscar por nombre
-			if(listalocation != null){//Si se usado tambien la localizacion
-				for (Event eventT : listaTitle) 
-					for (Event eventL : listalocation) 
-						if(eventT.getId() == eventL.getId()) //Si los eventos encontrados tienen el mismo id, se añaden al array resultado
-							result.add(eventT);
-
-				if(listacategories != null){ //Se ha buscado por los 3 campos
-					for (Event eventR : result) 
-						for(Event eventC : listacategories)
-							if(eventR.getId() == eventC.getId())
-								finalresult.add(eventR);
-					//incluimos en el modelo el array resultante de juntar los 3 arrays		
-					model.addAttribute("event", finalresult); 
-				}else{ //Si no se ha buscado por categoria el resultado final es result
-					model.addAttribute("event", result);
-				}
-			} else{ //Si solo se ha buscado por titulo
-				model.addAttribute("attributeName", listaTitle);
-			}
-
-		}else{ //No se ha usado titulo
-			if(listalocation != null){//Si se ha usado localizacion
-				if(listacategories !=null){//Y se ha usado categoria
-					for (Event eventT : listalocation) 
-						for(Event eventC : listacategories)
-							if(eventT.getId() == eventC.getId())
-								finalresult.add(eventT);
-					model.addAttribute("event", finalresult);
-				}else{
-					model.addAttribute("event", listalocation); //Si solo se ha usado localizacion
-				}
-			}else{ //Si no se ha usado ni titulo ni localizacion
-				if(listacategories != null){ //Pero si categoria
-					model.addAttribute("event", listacategories);
-				}else{//Si no se ha usado nada pero se ha dado al boton devolvemos vacio
-					model.addAttribute("event", new ArrayList<Event>() );
-				}
-			}
-		}
-
-
-		return "events";
-	}
-
-
 	@GetMapping("/{id}")
 	public String getEventPost(@PathVariable long id, Model model, HttpServletRequest request, HttpSession session) {
 		Event e = entityManager.find(Event.class, id);
@@ -447,7 +360,7 @@ public class EventController {
 				target.setPrivateDate(isHiddenDate != null);
 				target.setPrivateLocation(isHiddenDirection != null);
 				target.setGenderPreference(genderPreference);
-
+				target.setIsAppropriate(null);
 				String[] tagNames = tagsAll.split("\n");
 				List<Tags> tags = addTags(new HashSet<String>(Arrays.asList(tagNames)));
 				tags.add(entityManager.find(Tags.class, category));
