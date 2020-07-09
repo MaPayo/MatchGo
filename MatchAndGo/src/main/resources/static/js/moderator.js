@@ -71,7 +71,7 @@ function appendChild(element, type){
 			var publicationDate =  dt.getDate()+"-"+(dt.getMonth()+1)+"-"+dt.getFullYear();
 			html = `<div class="bggreen eventCard">
 				<div class="cardUpperContainer">
-				<img src="/img/events/${element.id}.png" algt="imagen del evento ${element.id}.png" class="eventImg">
+				<img src="/event/${element.id}/photo" algt="imagen del evento ${element.id}.png" class="eventImg">
 				<h2>${element.name}</h2><div class="width100 textalignright"> Para: <span>${when}</span> Publicada: <span>${publicationDate}</span>
 				<div class="displayflex textalignright">
 				<button class="button acceptButton" onclick="javascript:aceptEvent(${element.id});"><span>Aceptar</span></button>

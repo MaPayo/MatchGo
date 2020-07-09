@@ -144,7 +144,7 @@ function appendChild(where,element, type){
 				html=`<div class="eventCard">
 				<a href="/event/${element.id}">
 				<div class="cardUpperContainer">
-				<img src="/img/${element.id}.png" alt="imagen evento ${element.name}" class="placeImage">
+				<img src="/event/${element.id}/photo" alt="imagen evento ${element.name}" class="placeImage">
 				<h2>${element.name}</h2>
 				</div>
 				<div class="cardLowerContainer">
