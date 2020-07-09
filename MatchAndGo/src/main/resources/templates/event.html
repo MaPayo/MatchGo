@@ -14,7 +14,7 @@
 		<div th:fragment="infoVEvent">
 			<form th:class="${formStyle}" method="POST" onsubmit="return validateStrings(this)" th:action="${action}">
 				<div class="cardUpperContainer">
-					<img th:src="@{/img/noImage.png}" alt="" class="eventImg">
+					<img th:src="@{/event/{id}/photo(id=${event.getId()})}" alt="" class="eventImg">
 					<div class="block">
 						<input type="text" name="name" id="name" required placeholder="Nombre del evento" th:readonly="${viewEvent}" th:value="${event?.getName()}">
 						<textarea name="description" id="description" required placeholder="Descripción" th:readonly="${viewEvent}" th:text="${event?.getDescription()}"></textarea>

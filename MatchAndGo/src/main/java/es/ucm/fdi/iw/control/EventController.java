@@ -158,7 +158,7 @@ public class EventController {
 			@RequestParam String location, @RequestParam Long category,
 			@RequestParam(value = "isHiddenDate", required = false) String isHiddenDate, 
 			@RequestParam(value = "isHiddenDirection", required = false) String isHiddenDirection,
-			@RequestParam String tagsAll, HttpSession session) {
+			@RequestParam String tagsAll, @RequestParam("userPhoto") MultipartFile photo, HttpSession session) {
 
 			List<String> wordsToCheck = Arrays.asList(name,description,date,agePreference,genderPreference,location,tagsAll);
 			if (!Utilities.checkStrings(wordsToCheck)){
@@ -184,7 +184,20 @@ public class EventController {
 				newEvent.setTags(tags);
 
 				entityManager.persist(newEvent);
-				return "redirect:/user/" + requester.getId();
+				File f = localData.getFile("event", ""+newEvent.getId());
+				if (photo.isEmpty()) {
+					log.info("failed to upload photo: emtpy file?");
+				} else {
+					try (BufferedOutputStream stream =
+							new BufferedOutputStream(new FileOutputStream(f))) {
+						byte[] bytes = photo.getBytes();
+						stream.write(bytes);
+					} catch (Exception e) {
+						log.warn("Error uploading " +newEvent.getId()  + " ", e);
+					}
+					log.info("Successfully uploaded photo for {} into {}!", newEvent.getId(), f.getAbsolutePath());
+				}
+				return "redirect:/event/";
 			}
 			return "redirect:/event/newEvent?erno=1";
 	}
@@ -417,7 +430,7 @@ public class EventController {
 					}
 
 			log.info("Updating photo for user {}", id);
-			File f = localData.getFile("user", id);
+			File f = localData.getFile("event", id);
 			if (photo.isEmpty()) {
 				log.info("failed to upload photo: emtpy file?");
 			} else {

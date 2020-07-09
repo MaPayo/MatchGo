@@ -41,7 +41,7 @@
 
 		<div class="principal">
 			<div class="datosPerfil">
-				<img th:src="@{/user/{id}/photo(id=${user.id})}">   <!-- "@{/user/{id}/photo(id=${u.id})}" -->            
+				<img th:src="@{/user/{id}/photo(id=${user.id})}">  
 				<div class="datos_texto displayflex" id="datosBasicosPerfil">
 					<input class="inputBonito" id="nombre" th:value="${user.firstName}" readonly></input>      
 					<input class="inputBonito" id="edad" th:value="${user.birthDate}" readonly></input>	   

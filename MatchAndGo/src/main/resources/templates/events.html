@@ -33,9 +33,9 @@
 			<label for="spoiler" >Nuevo evento</label>
 			<div id="msAddEvent" class="spoiler">
 
-				<form class="eventContainer formEvento" th:method="POST" onsubmit="return validateStrings(this)" th:action="newEvent">
+				<form enctype="multipart/form-data" class="eventContainer formEvento" th:method="POST" onsubmit="return validateStrings(this)" th:action="newEvent">
 					<div class="cardUpperContainer">
-						<img th:src="@{/img/noImage.png}" alt="" class="eventImg">
+                        			<input type="file" accept="image/png" name="userPhoto" id="file_input">
 						<div class="block">
 							<input type="text" name="name" id="name" required placeholder="Nombre del evento">
 							<textarea name="description" id="description" required placeholder="Descripción"></textarea>
