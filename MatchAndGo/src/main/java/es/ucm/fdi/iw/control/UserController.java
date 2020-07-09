@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
+import java.time.LocalDateTime;
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -101,7 +101,7 @@ public class UserController {
 		List<Tags> allTags = (ArrayList<Tags>) entityManager.createQuery("SELECT t FROM Tags t").getResultList();
 
 		model.addAttribute("allTags", allTags);
-
+		model.addAttribute("localDateTime", LocalDateTime.now());
 		final List<Event> user_events = new ArrayList<>(u.getJoinedEvents()); 
 		log.info("Creado listado eventos del usuario");
 		model.addAttribute("user_events", user_events);

@@ -1,139 +1,157 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
-<head>
-	<meta name="author" content="merchf">
-    <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" media="screen">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet">
-    <link rel="stylesheet" href="libs/font-awesome/css/font-awesome.min.css"> 
-    <link rel="shortcut icon" type="image/png" th:href="@{/img/icon.png}">
-     <link rel="stylesheet" type="text/css" th:href="@{/css/stylesindex.css}">
-    <title>Perfil</title>
-  <!--    <th:block th:replace="fragments/header ::header" />   </th:block> -->
- 
- <script type="text/javascript">
-	const config = {
-			socketUrl: "[[${session.ws}?:'']]",	// vacÃ­o indica falso
-			rootUrl: "[[${session.ws}?@{/}:'']]",
-			csrf: {
-				name: "[[${_csrf.parameterName}]]",
-				value: "[[${_csrf.token}]]"
-			},
-			admin: [[${session.u != null && session.u.hasRole('ADMIN')}?true:false]],
-			userId: [[${session.u != null}?${session.u.id}:-1]]
-		};
-	</script>
- 
- 
- 	<script th:src="@{/js/stomp.js}" src="js/stomp.js" type="text/javascript"></script>
-  <script th:src="@{/js/iwclientAdmin.js}" src="js/iwclientAdmin.js" type="text/javascript"></script>
-	<script th:src="@{/js/profile.js}" src="js/profile.js" type="text/javascript"></script>
-	
-</head>
+	<head>
+		<meta name="author" content="merchf">
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" media="screen">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet">
+		<link rel="stylesheet" href="libs/font-awesome/css/font-awesome.min.css"> 
+		<link rel="shortcut icon" type="image/png" th:href="@{/img/icon.png}">
+		<link rel="stylesheet" type="text/css" th:href="@{/css/stylesindex.css}">
+		<title>Perfil</title>
+		<!--    <th:block th:replace="fragments/header ::header" />   </th:block> -->
 
-<body>
+		<script type="text/javascript">
+			const config = {
+				socketUrl: "[[${session.ws}?:'']]",	// vacÃ­o indica falso
+				rootUrl: "[[${session.ws}?@{/}:'']]",
+				csrf: {
+					name: "[[${_csrf.parameterName}]]",
+					value: "[[${_csrf.token}]]"
+				},
+				admin: [[${session.u != null && session.u.hasRole('ADMIN')}?true:false]],
+				userId: [[${session.u != null}?${session.u.id}:-1]]
+			};
+		</script>
 
-    <nav th:replace="fragments/nav.html :: nav">
-        Nav goes here
-    </nav>
-  
-    <div class="principal">
-        <div class="datosPerfil">
-         <img th:src="@{/img/noImage.png}">   <!-- "@{/user/{id}/photo(id=${u.id})}" -->            
-            <div class="datos_texto displayflex" id="datosBasicosPerfil">
-                <input class="inputBonito" id="nombre" th:value="${user.firstName}" readonly></input>      
-                <input class="inputBonito" id="edad" th:value="${user.birthDate}" readonly></input>	   
-                <select class="selectBonito" name="category" id="genderUser" disabled>
-                		<option value="Hombre" th:selected="${user.gender=='Hombre'}"> Hombre </option>
-                		<option value="Mujer" th:selected="${user.gender=='Mujer'}"> Mujer </option>
-                		<option  value="Otro" th:selected="${user.gender=='Otro'}"> Otro </option>
-                		</select>	 
-           <!-- <p id="valoracion">Media de valoraciones<span th:text="${valoracion}"></span></p>  --> 
-            </div>
-        </div>
-        <!-- Este div solo si es tu perfil  -->
-        <div class="modificarPerfil" th:if="(${session.u.id} eq ${user.getId()} and !${session.u.hasRole('GUEST')})">
-            	<input data-action=1 class="btn-rounded-green" type="button" id="ModificarPerfil" value="Modificar perfil">
-        </div>
-        
-         <!-- 
-         
-         <div class="profileWithAjax">
-				<ul class="listasPerfil">
-             	   <li id="mostrarTags"><p>Etiquetas</p></li>  
-             	   <li id="listaEventosCreados" th:if="(${session.u.id} eq ${user.getId()})"><p>Eventos creados</p></li>  
-             	   <li id="listaEventosInscritos" th:if="(${session.u.id} eq ${user.getId()})"><p>Eventos inscritos</p></li>  
-             	   <li id="listaComentarios"><p>Comentarios</p></li>  
-          		</ul>        	
-        		<div id ="contenedorCosas"></div>
-        	</div>
-          --> 
-         <div class="intereses_usuario">
-       		    <h2 class="centrado">Intereses:</h2>
-        	    <ul class="listaIntereses" id ="listaTags">
-             	   <li th:each="tag: ${user_tags}" > 
-                 	    <span th:text="${tag.getTag()}">tag</span> 
-                 	    <img th:data-tag="${tag.getId()}" class="icono" th:src="@{/img/delete.png}">
-              	  </li>  
-          		</ul>
-			<div class= "newTags" th:if="(${session.u.id} eq ${user.getId()} and !${session.u.hasRole('GUEST')})">
-          			<p> Añadir etiquetas al perfil:</p>
-          			<select name="category" id="tagSeleccionada">
-                		<option value="-1">Seleccionar</option>
-                		<option th:each="t: ${allTags}" th:value="${t.getId()}"><span th:text="${t.getTag()}"></span> </option>
+
+		<script th:src="@{/js/stomp.js}" src="js/stomp.js" type="text/javascript"></script>
+		<script th:src="@{/js/iwclientAdmin.js}" src="js/iwclientAdmin.js" type="text/javascript"></script>
+		<script th:src="@{/js/profile.js}" src="js/profile.js" type="text/javascript"></script>
+
+	</head>
+
+	<body>
+
+		<nav th:replace="fragments/nav.html :: nav">
+			Nav goes here
+		</nav>
+
+		<div class="principal">
+			<div class="datosPerfil">
+				<img th:src="@{/img/noImage.png}">   <!-- "@{/user/{id}/photo(id=${u.id})}" -->            
+				<div class="datos_texto displayflex" id="datosBasicosPerfil">
+					<input class="inputBonito" id="nombre" th:value="${user.firstName}" readonly></input>      
+					<input class="inputBonito" id="edad" th:value="${user.birthDate}" readonly></input>	   
+					<select class="selectBonito" name="category" id="genderUser" disabled>
+						<option value="Hombre" th:selected="${user.gender=='Hombre'}"> Hombre </option>
+						<option value="Mujer" th:selected="${user.gender=='Mujer'}"> Mujer </option>
+						<option  value="Otro" th:selected="${user.gender=='Otro'}"> Otro </option>
+					</select>	 
+					<!-- <p id="valoracion">Media de valoraciones<span th:text="${valoracion}"></span></p>  --> 
+				</div>
+			</div>
+			<!-- Este div solo si es tu perfil  -->
+			<div class="modificarPerfil" th:if="(${session.u.id} eq ${user.getId()} and !${session.u.hasRole('GUEST')})">
+				<input data-action=1 class="btn-rounded-green" type="button" id="ModificarPerfil" value="Modificar perfil">
+			</div>
+
+			<!-- 
+
+	   <div class="profileWithAjax">
+	   <ul class="listasPerfil">
+	   <li id="mostrarTags"><p>Etiquetas</p></li>  
+	   <li id="listaEventosCreados" th:if="(${session.u.id} eq ${user.getId()})"><p>Eventos creados</p></li>  
+	   <li id="listaEventosInscritos" th:if="(${session.u.id} eq ${user.getId()})"><p>Eventos inscritos</p></li>  
+	   <li id="listaComentarios"><p>Comentarios</p></li>  
+	   </ul>        	
+	   <div id ="contenedorCosas"></div>
+	   </div>
+			--> 
+			<div class="intereses_usuario">
+				<h2 class="centrado">Intereses:</h2>
+				<ul class="listaIntereses" id ="listaTags">
+					<li th:each="tag: ${user_tags}" > 
+						<span th:text="${tag.getTag()}">tag</span> 
+						<img th:data-tag="${tag.getId()}" class="icono" th:src="@{/img/delete.png}">
+					</li>  
+				</ul>
+				<div class= "newTags" th:if="(${session.u.id} eq ${user.getId()} and !${session.u.hasRole('GUEST')})">
+					<p> Añadir etiquetas al perfil:</p>
+					<select name="category" id="tagSeleccionada">
+						<option value="-1">Seleccionar</option>
+						<option th:each="t: ${allTags}" th:value="${t.getId()}"><span th:text="${t.getTag()}"></span> </option>
 					</select>
-						<input type="button" id="botonAnadirTag" class= " btn-rounded-green" value="Añadir">
-							<p> Crear etiqueta y añadirla al perfil:</p>
+					<input type="button" id="botonAnadirTag" class= " btn-rounded-green" value="Añadir">
+					<p> Crear etiqueta y añadirla al perfil:</p>
 					<div class="anadir_tarea">
-              			<input type="text" name="tag" id="tagInput" placeholder="Pulsa enter para introducir una nueva tag">     
-            		</div>
-						
-					
-               	</div>
-       		</div>
-         
-        <div class="yourProfile" th:if="(!${session.u.hasRole('GUEST')})">
-       		<div class="events_usuario displayflex flexwrap" th:if="(${session.u.id} eq ${user.getId()})">
-       		    <h2 class="centrado">Eventos inscritos:</h2>
-       		    <div class="event-item" th:each="e: ${user_events}">
-              		 <div class="event-icon"> <img id="imagenPequeña" th:src="@{/event/{id}/photo(id=${e.getId()})}"></div>
-              		 <h4  class="event-title"><span th:text="${e.getName()} "></span></h4>
-             		 <p class="event-description"><span th:text="${e.getDescription()} "></span></p>
-             		 <a th:href="@{/event/{id}(id=${e.getId()})}" class="rounded-green">Ver evento</a>
-          		</div>
-          		
-       		</div>
-       		<div id="about" class="background-alt">
-        		<h2 class="heading">Comentarios recibidos:</h2>
-        			<div class="container"  th:each="evaluation: ${user_coments}">
-            			<div class="about shadow-large">                
-               		 		<div class="personal-info">
-                    			<h3><span th:text="${evaluation.getReview()}">review</span></h3>
-                    			<p><span th:text="${evaluation.getScore()}">score</span>
-                    			</p>
-                    		</div>
-                		</div>
-            		</div>
-    		</div> 	
-       	</div>
-       
-	</div>
-	
-    
-        
+						<input type="text" name="tag" id="tagInput" placeholder="Pulsa enter para introducir una nueva tag">     
+					</div>
 
- <!--
-       
-   --> 
-         
-<!-- 
 
-    <footer th:replace="fragments/footer.html :: footer">
-        Footer goes here
-    </footer>
- -->
-</body>
+				</div>
+			</div>
+
+			<div class="yourProfile" th:if="(!${session.u.hasRole('GUEST')})">
+				<div class="events_usuario" th:if="(${session.u.id} eq ${user.getId()})">
+					<div>
+						<h2 class="centrado">Eventos Actuales:</h2>
+						<div class=" displayflex flexwrap">
+							<div class="event-item" th:each="e: ${user_events}">
+								<div th:if="${#temporals.format(e.getDate(),'yyyy-MM-dd HH:mm')} >= ${#temporals.format(localDateTime, 'yyyy-MM-dd HH:mm')}">
+									<div class="event-icon"> <img id="imagenPequeña" th:src="@{/event/{id}/photo(id=${e.getId()})}"></div>
+									<h4  class="event-title"><span th:text="${e.getName()} "></span></h4>
+									<p class="event-description"><span th:text="${e.getDescription()} "></span></p>
+									<a th:href="@{/event/{id}(id=${e.getId()})}" class="rounded-green">Ver evento</a>
+									</div>
+							</div>
+						</div>
+					</div>
+					<div>
+						<h2 class="centrado">Eventos Pasados:</h2>
+						<div class=" displayflex flexwrap">
+							<div class="event-item" th:each="e: ${user_events}">
+								<div th:if="${#temporals.format(e.getDate(),'yyyy-MM-dd HH:mm')} < ${#temporals.format(localDateTime, 'yyyy-MM-dd HH:mm')}">
+									<div class="event-icon"> <img id="imagenPequeña" th:src="@{/event/{id}/photo(id=${e.getId()})}"></div>
+									<h4  class="event-title"><span th:text="${e.getName()} "></span></h4>
+									<p class="event-description"><span th:text="${e.getDescription()} "></span></p>
+									<a th:href="@{/event/{id}(id=${e.getId()})}" class="rounded-green">Ver evento</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="about" class="background-alt">
+					<h2 class="heading">Comentarios recibidos:</h2>
+					<div class="container"  th:each="evaluation: ${user_coments}">
+						<div class="about shadow-large">                
+							<div class="personal-info">
+								<h3><span th:text="${evaluation.getReview()}">review</span></h3>
+								<p><span th:text="${evaluation.getScore()}">score</span>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div> 	
+			</div>
+
+		</div>
+
+
+
+
+		<!--
+
+		--> 
+
+		<!-- 
+
+	  <footer th:replace="fragments/footer.html :: footer">
+	  Footer goes here
+	  </footer>
+		-->
+	</body>
 
 </html>
