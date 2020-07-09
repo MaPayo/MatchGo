@@ -83,7 +83,7 @@ public class MessageController {
 		model.addAttribute("mensajes", new ArrayList<Message> ());
 		return "mensajes";
 	}
-	@GetMapping("/nc/{id}")
+	@PostMapping("/nc/{id}")
 	public String newContactMessage(@PathVariable long id, HttpSession session){
 		session.setAttribute("idContact",id);
 		return "redirect:/messages/";

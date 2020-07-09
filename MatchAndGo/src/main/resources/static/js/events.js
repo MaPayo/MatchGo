@@ -114,6 +114,7 @@ function appendChild(where,element, type){
 				var publicationDate =  dt.getDate()+"-"+(dt.getMonth()+1)+"-"+dt.getFullYear();
 				var textBlockDesblock = (!element.isAppropriate)?('Bloquear'):('Desbloquear');
 				html = `<div class="bggreen eventCard">
+				<a href="/event/${element.id}">
 				<div class="cardUpperContainer">
 				<h2>${element.name}</h2><div class="width100 textalignright"> Para: <span>${when}</span> Publicada: <span>${publicationDate}</span>
 				<div class="displayflex textalignright">
@@ -137,6 +138,7 @@ function appendChild(where,element, type){
 				</div>
 				</div>
 				</div>
+				</a>
 				</div>`;
 			} else {
 				html=`<div class="eventCard">

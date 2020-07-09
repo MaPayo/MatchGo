@@ -3,41 +3,41 @@
 	padding: 0;
 }
 input[id^="spoiler"]{
- display: none;
+	display: none;
 }
 input[id^="spoiler"] + label {
-  display: block;
-  width: 200px;
-  margin: 0 auto;
-  padding: 5px 20px;
-  background: #afeea0;
-  color: #74808a;
-  text-align: center;
-  font-size: 24px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all .6s;
+	display: block;
+	width: 200px;
+	margin: 0 auto;
+	padding: 5px 20px;
+	background: #afeea0;
+	color: #74808a;
+	text-align: center;
+	font-size: 24px;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: all .6s;
 }
 input[id^="spoiler"]:checked + label {
-  color: #333;
-  background: #ccc;
+	color: #333;
+	background: #ccc;
 }
 input[id^="spoiler"] ~ .spoiler {
-  width: 90%;
-  height: 0;
-  overflow: hidden;
-  opacity: 0;
-  margin: 10px auto 0; 
-  padding: 10px; 
-  background: #eee;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  transition: all .6s;
+	width: 90%;
+	height: 0;
+	overflow: hidden;
+	opacity: 0;
+	margin: 10px auto 0; 
+	padding: 10px; 
+	background: #eee;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	transition: all .6s;
 }
 input[id^="spoiler"]:checked + label + .spoiler{
-  height: auto;
-  opacity: 1;
-  padding: 10px;
+	height: auto;
+	opacity: 1;
+	padding: 10px;
 }
 
 .bggreen {
@@ -202,7 +202,47 @@ header h1 {
 .flex50 .anUser span {
 	width: 25%;
 }
+#formSearch{
+	text-align:center;
+	margin-top:30px;
+}
 
+footer {
+	text-align:center;
+}
+		a[href*="intent"] {
+			display:inline-block;
+			margin-top: 0.4em;
+		}
+
+		/*
+		 * Rating styles
+		 */
+		.rating {
+			width: 226px;
+			margin: 0 auto 1em;
+			font-size: 45px;
+			overflow:hidden;
+		}
+.rating input {
+  float: right;
+  opacity: 0;
+  position: absolute;
+}
+
+.rating label {
+	font-size:20px;
+	float:right;
+	color: #aaa;
+	text-decoration: none;
+	-webkit-transition: color .4s;
+	-moz-transition: color .4s;
+	-o-transition: color .4s;
+	transition: color .4s;
+}
+.rating > input:checked ~ label{
+	color:orange;
+}
 .flex50 .messageNewContact .formSendNewMessage {
 	display: flex;
 	flex-direction: row;
@@ -601,7 +641,7 @@ header h1 {
 	border-right: 1px lightgreen solid;
 	background-color: whitesmoke;
 	overflow-x: hidden; 
-    overflow-y: auto;
+	overflow-y: auto;
 }
 
 .contenedorContacto{
@@ -643,7 +683,7 @@ header h1 {
 	padding: 3%;
 	padding-bottom: 0%;
 	overflow-x: hidden; 
-    overflow-y: auto;
+	overflow-y: auto;
 }
 
 .contactoMensaje {

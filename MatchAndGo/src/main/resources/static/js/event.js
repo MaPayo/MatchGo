@@ -30,8 +30,19 @@ document.addEventListener("DOMContentLoaded", () => {
 			}
 		});
 	}
+
 	go(config.rootUrl + "event/m/"+lastURLSegment,"POST",null).then(e => listUsers(e,"updateMessages"));
 	go(config.rootUrl + "user/event/"+lastURLSegment,"POST",null).then(e => listUsers(e,"updateUsersEvent"));
+
+
+
+    let radios = document.querySelectorAll("input[type=radio]");
+	for (i=0;i < radios.length;i++){
+		radios[i].addEventListener("change",function(){
+			document.getElementById("score").value = this.value;
+    		});
+	}
+
 });
 function listUsers(jsonArray, type){
 	switch(type){
@@ -48,11 +59,13 @@ function listUsers(jsonArray, type){
 				node.removeChild(node.lastChild);
 			}
 			jsonArray.forEach(e => appendChild(node,e,type));
-			var elements = document.getElementsByClassName("anUser");
+			var elements = document.getElementsByClassName("valuationButton");
 			for (i = 0; i < elements.length;i++){
 				elements[i].addEventListener("click",function() {
-					if (config.guest == "false" && config.canEvaluate == "true")
+					if (config.guest == "false" && config.canEvaluate == "true"){
+						document.getElementById("writeEvaluationCont").removeAttribute("hidden");
 						document.getElementById("idUs").value = this.dataset.id;
+					}
 					go(config.rootUrl + "reviews/user/"+this.dataset.id,"POST",null).then(e => listUsers(e,"updateListValuations"));
 				});
 			}
@@ -84,15 +97,15 @@ function appendChild(where,element, type){
 				"</div>"];
 			break;
 		case "updateUsersEvent":
-			html = `<div class="anUser" data-id="${element.id}">
+			html = `<div class="anUser">
 				<span>${element.username} - ${element.firstName}</span>`;
 			if (config.guest == "false"){
 					html += `<form action="/messages/nc/${element.id}" method="POST">		
 							<input hidden readonly name="_csrf" value="${config.csrf.value}"/>
-							<button type="submit" class="button acceptButton">Men. Privado</button</form>`;
+							<button type="submit" class="button acceptButton">Men. Privado</button></form>`;
 			}
 			
-			html +=`<button class="interactive button acceptButton">Valoraciones</button></div>`;
+			html +=`<button class="button acceptButton valuationButton" data-id="${element.id}">Valoraciones</button></div>`;
 			break;
 		case "updateMessages":
 			if (element.sender == config.username ) {

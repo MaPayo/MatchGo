@@ -75,7 +75,7 @@ function appendChild(element, type){
 				<h2>${element.name}</h2><div class="width100 textalignright"> Para: <span>${when}</span> Publicada: <span>${publicationDate}</span>
 				<div class="displayflex textalignright">
 				<button class="button acceptButton" onclick="javascript:aceptEvent(${element.id});"><span>Aceptar</span></button>
-				<button type="submit" class="button declineButton"  onclick='javascript:rejectEvent(${element.id});'><span>Rechazar</span></button>
+				<button class="button declineButton"  onclick='javascript:rejectEvent(${element.id});'><span>Rechazar</span></button>
 				</div>
 				</div>
 				</div>

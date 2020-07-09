@@ -23,12 +23,15 @@
 		<script th:src="@{/js/iwclientAdmin.js}" src="js/iwclientAdmin.js" type="text/javascript"></script>
 		<script th:src="@{/js/moderator.js}" src="js/moderator.js" type="text/javascript"></script>
 		<meta name="author" content="GasanNazer">
-		<nav th:replace="fragments/nav.html :: nav">
-		</nav>
 	</head>
 
 	<body>
-		<div class="bglightgrey height80">
+		<header>
+			<nav th:replace="fragments/nav.html :: nav">
+				El navegado
+			</nav>
+		</header>
+		<div class="margintop150px bglightgrey height80">
 			<div class="container bgwhite">
 				<ul class="noliststyle displayflex" id="menuDisplayE">
 					<li id="listEvents" class="brtop  bgdarkgrey bglightgrey padding30" data-action="updateEvents" data-id="moderator/eventlist">Eventos</li>
