@@ -42,12 +42,12 @@
 		<div class="principal">
 			<div class="datosPerfil">
 				<div>
-				<img th:src="@{/user/{id}/photo(id=${user.id})}">  
-                		<form th:if="(${session.u.id} eq ${user.getId()} and !${session.u.hasRole('GUEST')})" th:action="@{/user/{id}/photo(id=${user.id})}" method="POST" enctype="multipart/form-data">
-                        		<input type="file" accept="image/png" name="photo" id="file_input" />
-					<input name="id" id="id" th:value="${user.id}" hidden readonly />      
-					<input type="submit" value="Actualizar Foto" />
-				</form>
+					<img th:src="@{/user/{id}/photo(id=${user.id})}">  
+					<form th:if="(${session.u.id} eq ${user.getId()} and !${session.u.hasRole('GUEST')})" th:action="@{/user/{id}/photo(id=${user.id})}" method="POST" enctype="multipart/form-data">
+						<input type="file" accept="image/png" name="photo" id="file_input" />
+						<input name="id" id="id" th:value="${user.id}" hidden readonly />      
+						<input type="submit" value="Actualizar Foto" />
+					</form>
 				</div>
 				<div class="datos_texto displayflex" id="datosBasicosPerfil">
 					<input class="inputBonito" id="nombre" th:value="${user.firstName}" readonly></input>      
@@ -103,16 +103,25 @@
 
 			<div class="yourProfile" th:if="(!${session.u.hasRole('GUEST')})">
 				<div class="events_usuario" th:if="(${session.u.id} eq ${user.getId()})">
+					<label>Creado por</label><p><input type="radio" value="0" name="por">Todos</p>
+					<p><input type="radio" value="1" name="por">Creados por Mi</p>
+					<p><input type="radio" value="2" name="por">A los que me he unido</p>
+					<label>Cuando se celebran</label><input type="radio" value="0" name="cuando">Pasados y Futuros</p>
+					<p><input type="radio" value="1" name="cuando">Futuros</p>
+					<p><input type="radio" value="2" name="cuando">Pasados</p>
+
+					<div id="contEvnts"></div>
 					<div>
 						<h2 class="centrado">Eventos Actuales:</h2>
 						<div class=" displayflex flexwrap">
-							<div class="event-item" th:each="e: ${user_events}">
+							<div class="event-item" hidden th:each="e: ${user_events}">
 								<div th:if="${#temporals.format(e.getDate(),'yyyy-MM-dd HH:mm')} >= ${#temporals.format(localDateTime, 'yyyy-MM-dd HH:mm')}">
-									<div class="event-icon"> <img id="imagenPequeña" th:src="@{/event/{id}/photo(id=${e.getId()})}"></div>
-									<h4  class="event-title"><span th:text="${e.getName()} "></span></h4>
-									<p class="event-description"><span th:text="${e.getDescription()} "></span></p>
-									<a th:href="@{/event/{id}(id=${e.getId()})}" class="rounded-green">Ver evento</a>
-									</div>
+									<a th:href="@{/event/{id}(id=${e.getId()})}"><div>
+											<div class="event-icon"> <img id="imagenPequeña" th:src="@{/event/{id}/photo(id=${e.getId()})}"></div>
+											<h4  class="event-title"><span th:text="${e.getName()} "></span></h4>
+											<p class="event-description"><span th:text="${e.getDescription()} "></span></p>
+										</div></a>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -121,10 +130,11 @@
 						<div class=" displayflex flexwrap">
 							<div class="event-item" th:each="e: ${user_events}">
 								<div th:if="${#temporals.format(e.getDate(),'yyyy-MM-dd HH:mm')} < ${#temporals.format(localDateTime, 'yyyy-MM-dd HH:mm')}">
-									<div class="event-icon"> <img id="imagenPequeña" th:src="@{/event/{id}/photo(id=${e.getId()})}"></div>
-									<h4  class="event-title"><span th:text="${e.getName()} "></span></h4>
-									<p class="event-description"><span th:text="${e.getDescription()} "></span></p>
-									<a th:href="@{/event/{id}(id=${e.getId()})}" class="rounded-green">Ver evento</a>
+									<a th:href="@{/event/{id}(id=${e.getId()})}"><div>
+											<div class="event-icon"> <img id="imagenPequeña" th:src="@{/event/{id}/photo(id=${e.getId()})}"></div>
+											<h4  class="event-title"><span th:text="${e.getName()} "></span></h4>
+											<p class="event-description"><span th:text="${e.getDescription()} "></span></p>
+										</div></a>
 								</div>
 							</div>
 						</div>
