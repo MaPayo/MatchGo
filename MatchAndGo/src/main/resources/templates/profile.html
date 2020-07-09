@@ -41,13 +41,14 @@
 
 		<div class="principal">
 			<div class="datosPerfil">
+				<div>
 				<img th:src="@{/user/{id}/photo(id=${user.id})}">  
                 		<form th:if="(${session.u.id} eq ${user.getId()} and !${session.u.hasRole('GUEST')})" th:action="@{/user/{id}/photo(id=${user.id})}" method="POST" enctype="multipart/form-data">
                         		<input type="file" accept="image/png" name="photo" id="file_input" />
 					<input name="id" id="id" th:value="${user.id}" hidden readonly />      
 					<input type="submit" value="Actualizar Foto" />
 				</form>
-
+				</div>
 				<div class="datos_texto displayflex" id="datosBasicosPerfil">
 					<input class="inputBonito" id="nombre" th:value="${user.firstName}" readonly></input>      
 					<input class="inputBonito" id="edad" th:value="${user.birthDate}" readonly></input>	   
