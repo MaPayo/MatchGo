@@ -188,7 +188,7 @@ public class UserController {
 				}
 				log.info("Successfully uploaded photo for {} into {}!", id, f.getAbsolutePath());
 			}
-			return "profile";
+			return "redirect:/user/{id}";
 			}
 
 	@GetMapping("/login")

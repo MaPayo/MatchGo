@@ -103,23 +103,27 @@
 
 			<div class="yourProfile" th:if="(!${session.u.hasRole('GUEST')})">
 				<div class="events_usuario" th:if="(${session.u.id} eq ${user.getId()})">
-					<label>Creado por</label><p><input type="radio" value="0" name="who" checked>Todos</p>
-					<p><input type="radio" value="1" name="who">Creados por Mi</p>
-					<p><input type="radio" value="2" name="who">A los que me he unido</p>
-						<label>Cuando se celebran</label><input type="radio" value="0" name="when" checked>Pasados y Futuros</p>
-					<p><input type="radio" value="1" name="when">Futuros</p>
-					<p><input type="radio" value="2" name="when">Pasados</p>
-
-					<div id="contEvnts"></div>
 					<div>
 						<h2 class="centrado">Eventos</h2>
+					<div class="displayflex">
+						<div>
+							<label>Creado por</label><p><input type="radio" value="0" name="who" checked>Todos</p>
+							<p><input type="radio" value="1" name="who">Creados por Mi</p>
+							<p><input type="radio" value="2" name="who">A los que me he unido</p>
+						</div>
+						<div>
+							<label>Cuando se celebran</label><p><input type="radio" value="0" name="when" checked>Pasados y Futuros</p>
+							<p><input type="radio" value="1" name="when">Futuros</p>
+							<p><input type="radio" value="2" name="when">Pasados</p>
+						</div>
+					</div>
 						<div class=" displayflex flexwrap">
 							<div class="event-item" th:data-me="${e.getCreator().getId() eq session.u.id}?'1':'0'" th:data-when="${#temporals.format(e.getDate(),'yyyy-MM-dd HH:mm')}" th:each="e: ${user_events}">
-									<a th:href="@{/event/{id}(id=${e.getId()})}"><div>
-											<div class="event-icon"> <img id="imagenPequeña" th:src="@{/event/{id}/photo(id=${e.getId()})}"></div>
-											<h4  class="event-title"><span th:text="${e.getName()} "></span></h4>
-											<p class="event-description"><span th:text="${e.getDescription()} "></span></p>
-										</div></a>
+								<a th:href="@{/event/{id}(id=${e.getId()})}"><div>
+										<div class="event-icon"> <img id="imagenPequeña" th:src="@{/event/{id}/photo(id=${e.getId()})}"></div>
+										<h4  class="event-title"><span th:text="${e.getName()} "></span></h4>
+										<p class="event-description"><span th:text="${e.getDescription()} "></span></p>
+									</div></a>
 							</div>
 						</div>
 					</div>
