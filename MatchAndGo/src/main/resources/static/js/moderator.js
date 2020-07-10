@@ -48,7 +48,7 @@ function appendChild(element, type){
 				<h2>${element.tag}</h2>
 				</div>
 				<div class="cardLowerContainer">
-				<form method="post" action="/admin/deleteTag">
+				<form method="post" action="/moderator/deleteTag">
 				<input hidden readonly name="_csrf" value="${config.csrf.value}" />
 				<input hidden readonly type="number" name="id" value="${element.id}">
 				<button type="submit" class="button declineButton"><span>Eliminar</span></button>

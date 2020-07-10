@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import org.springframework.core.env.Environment;
@@ -53,6 +54,46 @@ public class ModeratorController {
 		return "moderator";
 	}
 
+	@PostMapping(path = "/taglist", produces = "application/json")
+	@Transactional
+	@ResponseBody
+	public List<Tags.Transfer> retrieveTags(final HttpSession session) {
+		log.info("Generating Tag List");
+		List<Tags> tags = entityManager.createNamedQuery("Tags.all",Tags.class).getResultList();
+		return Tags.asTransferObjects(tags);
+	}
+	@PostMapping("/deleteTag")
+	@Transactional
+	@ResponseBody
+	public String deleteTag(final Model model, @RequestParam final long id, final HttpSession session) {
+		final Tags t = (Tags) entityManager.createNamedQuery("Tags.getTag", Tags.class).setParameter("idTag", id)
+			.getSingleResult();
+	
+		log.info("I will Remove tag from users");
+		final List<User> users = new ArrayList<>(t.getSubscribers());
+		log.info("I will Remove all subcriptors");
+		for (final User u : users) {
+			t.getSubscribers().remove(u);
+			log.info("Remove uer from tag " + t.getId());
+		}
+
+		final List<Event> events = new ArrayList<>(t.getEvents());
+		log.info("I will Remove from all Events");
+		for (final Event e : events) {
+			t.getEvents().remove(e);
+			log.info("Remove event " + e.getId() + " from tag "+ t.getId());
+		}
+		log.info("update Tag");
+		entityManager.flush();
+		log.info("deleting tag");
+		entityManager.createNamedQuery("Tags.deleteTag").setParameter("idTag",id).executeUpdate();
+		log.info("update clients with new info");
+		ResponseTransfer result = new ResponseTransfer("updating list tags");
+		
+		List<Tags> tags = entityManager.createNamedQuery("Tags.all",Tags.class).getResultList();
+		result.setEvents(Tags.asTransferObjects(tags));
+		return "redirect:/moderator";
+	}
 	@PostMapping(path = "/{id}", produces = "application/json")
 	@Transactional
 	@ResponseBody
