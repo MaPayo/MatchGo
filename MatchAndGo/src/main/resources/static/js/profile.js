@@ -54,41 +54,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 	const targets = document.getElementsByClassName("event-item");
-	let pitchers = document.getElementsByName("por");
-	for (j=0;j<pitchers.length;j++){
-		pitchers[j].addEventListener("change",function(){
-			for (i = 0; i < targets.length;i++){
-				targets[i].removeAttribute("hidden");
-			}
-			for (i=0;i<targets.length;i++){
-				if(this.value == 1){
-					if(targets[i].dataset.me == 0){
-						targets[i].setAttribute("hidden",1);
-					}
-				} else if(this.value == 2){
-					if(targets[i].dataset.me == 1){
-						targets[i].setAttribute("hidden",1);
-					}
-				}
-			}
-		});
-	}
-
-
-	pitchers = document.getElementsByName("cuando");
+	let pitchers = document.querySelectorAll("input[type=radio]");
 	const dateTime = new Date();
 	const now  = dateTime.getFullYear()+"/"+dateTime.getMonth()+"/"+dateTime.getDay()+" "+dateTime.getHours()+":"+dateTime.getMinutes();
 	for (j=0;j<pitchers.length;j++){
 		pitchers[j].addEventListener("change",function(){
-			for (i = 0; i < targets.length;i++){
+			const valWho = document.querySelector("input[name=who]:checked").value;
+			const valWhen = document.querySelector("input[name=when]:checked").value;
+			for (i=0;i<targets.length;i++){
 				targets[i].removeAttribute("hidden");
 			}
 			for (i=0;i<targets.length;i++){
-				if(this.value == 1){
+				if(valWho == 1){
+					if(targets[i].dataset.me == 0){
+						targets[i].setAttribute("hidden",1);
+					}
+				} else if(valWho == 2){
+					if(targets[i].dataset.me == 1){
+						targets[i].setAttribute("hidden",1);
+					}
+				}
+
+				if(valWhen == 1){
 					if(targets[i].dataset.when < now){
 						targets[i].setAttribute("hidden",1);
 					}
-				} else if(this.value == 2){
+				} else if(valWhen == 2){
 					if(targets[i].dataset.when > now){
 						targets[i].setAttribute("hidden",1);
 					}
