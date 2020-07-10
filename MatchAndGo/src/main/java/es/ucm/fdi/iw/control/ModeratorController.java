@@ -64,7 +64,6 @@ public class ModeratorController {
 	}
 	@PostMapping("/deleteTag")
 	@Transactional
-	@ResponseBody
 	public String deleteTag(final Model model, @RequestParam final long id, final HttpSession session) {
 		final Tags t = (Tags) entityManager.createNamedQuery("Tags.getTag", Tags.class).setParameter("idTag", id)
 			.getSingleResult();
@@ -91,8 +90,8 @@ public class ModeratorController {
 		ResponseTransfer result = new ResponseTransfer("updating list tags");
 		
 		List<Tags> tags = entityManager.createNamedQuery("Tags.all",Tags.class).getResultList();
-		result.setEvents(Tags.asTransferObjects(tags));
-		return "redirect:/moderator";
+		//result.setEvents(Tags.asTransferObjects(tags));
+		return "redirect:/moderator/";
 	}
 	@PostMapping(path = "/{id}", produces = "application/json")
 	@Transactional

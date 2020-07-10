@@ -12,31 +12,27 @@
 <body>
     <h1>Match&Go</h1>
    <h2>Credencialews de acceso</h2>
-	    Admin => user:n, pass:aa
-	    <p>User => user:SS, pass:aa</p>
+   <ul>
+	   <li>Admin => user:n pass:aa</li>
+	   <li>Usuario => user:n2 pass:aa</li>
+	   <li>Moderador => user:Bn pass:aa</li>
+	</ul>
     <h2>Estado actual del proyecto</h2>
     <ul>
     	
 	<li>Se garantiza que los usuarios propios del sistema (usuario guest y deleted) no son administrables por nadie</li>
 	<li>Para el perfíl se ha creado un filtro de busqueda de eventos y formulario para actualizar foto de perfil.</li>
-	<li>Ahora al crear un evento se le puede seleccionar una foto de perfil.</li>
+	<li>Ahora al crear un evento se le puede asignar una foto</li>
 	<li>Si se modifica un perfil se lanza de nuevo a la cola de eventos de moderadores</li>
-	<li>Para una navegación más natural en la página eventos aparece crear nuevo evento y para los administradores aparecerán los botones de eliminar y bloquear eventos</li>
+	<li>Para una navegación más natural en la página eventos aparece crear nuevo evento (eliminada dicha pagina del menu principal). y para los administradores aparecerán los botones de eliminar y bloquear eventos</li>
 	<li>Ahora los moderadores pueden administrar los tags en una nueva pestaña dentro de Moderadores.</li>
-	<li></li>
 	<li>Ahora en cada participante de un evento aparecen dos botones. Uno para mostrar las valoraciones, el segundo para iniciar una conversacion con dicha persona.</li>
+	<li>En el perfil aparecen todos los eventos creados y a los que te has unido.</li>
+	<li>Creado boton para mostrar y comentar sobre un usuario.</li>
 	<li>Se garantiza que el invitado no puede ni escribir mensaje ni valorar</li>
-	<li></li>
+	<li>Ahora para iniciar una conversacion con una persona nueva puedes pulsar sobre el boton Men. Privado que aparece solo si estas iniciado sesion y no eres invitado en el detalle del evento</li>
 	    
-
-	<li>Añadido enlace de página de eventos en al menú principal, si pinchas sobre el o si accedes desde fuera de la red a las paginas /event y event/id si no habias iniciado sesion te auto logeas como invitado y luego accederas a la pagina que querias ver</li>
-	    <li>Añadido buscador pagina /event => solicitud al servidor la lista completa de eventos (AJAX) y via javascript se realiza el filtrado según los parametros indicados. Ahora el listado de eventos va en funcion de tus intereses o tags, (no finalizado si son pocos los eventos extraidos hay que rellenar con otros). </li>
-	    <li>/event/id => se ha creado toda la estructura basica, dividido en 4 cuadrantes<ul><li>1er cuadrante informacion del evento</li><li>2do cuadrante chat del evento</li><li>3 listado de usuarios suscritos a los que se les puede enviar un mensaje privado</li><li>4 cuadrante al hacer click sobre un usuario se muestra el listado de valoraciones recibidas</li></ul> los mensajes y las valoraciones aparecen difuminadas si eres invitado (se que no es seguro pero me hacia gracia) solo se puede escribir una valoracion si el evento ha sucedido ya. Se ha usado AJAX y WS queda por finalizar la inscripcion al evento para actualizar la lista de usuarios del evento (en consenso no se sabe desde donde se va uno a inscribir).</li>
-	    <li>/user/id => Muestra los datos básicos del usuario junto con sus tags seleccionadas, comentarios recibidos y eventos inscritos(esta última solo si estás en tu perfil). Se ha implementado con AJAX y WS añadir tags al perfil y crear nuevas tags si estas no existían. También puedes modificar los datos básicos del perfil cuando se clica en 'Modificar perfil' y se pueden eliminar los tags de aficiones o intereses.</li>
- <li>Moderador se quiere añadir el control de los tags (ya que son los usuarios quienes pueden crear los tags tiene sentido que alguien pueda supervisarlos) actualmente uso de ajax para aceptar y rechazar el evento.</li>
- <li>nuevo evento sin cambios</li>
- <li>Mensajes uso de ajax para la insercion de nuevo mensaje en la BD y uso de WS para la transmision de dicho mensaje a su destinatario.</li>
- <li>Admin => administracion de usuarios eventos y tags eliminacion de: <ul><li> usuario => si esta logeado se le expulsa, eventos creados por modifica al creador (si se puede) valoraciones hechas se modifican el creador y pasa a ser el DEleted user del sistema.</li><li> eventos y tags => se eliminan por completo(si hay alguna persona visitando el evento se le redirecciona a otra pagina)</li></ul>Creado buscador con JS</li></ul>
+    </ul>
     <h2>Cambios importantes</h2>
  <p>Dado que toda la informacion de nuestra aplicacion web se mantiene actualizada continuamente gracias a AJAX y WS queremos ser mas optimos, actualmente se mandan desde el servidor listas completas (eventos, usuarios, tags...). Tiene mas sentido mandar exclusivamente los registros afectados, y dos modificar los buscadores para que no soliciten las listas al servidor y en su lugar oculten los elementos del dom que no cumplan con los criterios de busqueda puede ser un gran paso a un gran proyecto.<p>
 
