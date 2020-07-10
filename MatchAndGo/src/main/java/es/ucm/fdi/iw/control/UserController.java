@@ -102,7 +102,19 @@ public class UserController {
 
 		model.addAttribute("allTags", allTags);
 		model.addAttribute("localDateTime", LocalDateTime.now());
-		final List<Event> user_events = new ArrayList<>(u.getJoinedEvents()); 
+		final List<Event> user_events = new ArrayList();
+		for(Event e: u.getJoinedEvents()){
+			if(e.getIsAppropriate() != null && e.getIsAppropriate()){
+				user_events.add(e);
+			}
+		}
+
+		for(Event e: u.getCreatedEvents()){
+			if(e.getIsAppropriate() != null && e.getIsAppropriate()){
+				user_events.add(e);
+			}
+		}
+	
 		log.info("Creado listado eventos del usuario");
 		model.addAttribute("user_events", user_events);
 
