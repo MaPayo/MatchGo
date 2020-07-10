@@ -84,7 +84,7 @@ function aceptEvent(id){
 	params[config.csrf.name] = config.csrf.value;
 	
 	return go(config.apiUrl + "/moderator/" + id, 'POST', params)
-			.then(res => refreshPage(res))
+			.then(res => listUsers(res.events,"updateEvents"))
 			.catch(() => "nombre de usuario inválido o duplicado");
 }
 
@@ -93,6 +93,6 @@ function rejectEvent(id){
 	params[config.csrf.name] = config.csrf.value;
 	
 	return go(config.apiUrl + "/moderator/" + id, 'POST', params)
-			.then(res => refreshPage(res))
+			.then(res => listUsers(res.events,"updateEvents"))
 			.catch(() => "nombre de usuario inválido o duplicado");
 }
